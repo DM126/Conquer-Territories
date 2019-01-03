@@ -1,0 +1,3 @@
+Europa Universalis 3/eu3Countries.txt/eu3Provinces.txt/eu3Map.bmp
+Modern Day/modernCountries.txt/v2Provinces.txt/v2Map.bmp
+Victoria 2/v2Countries.txt/v2Provinces.txt/v2Map.bmp
