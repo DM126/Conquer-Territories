@@ -13,14 +13,12 @@ public class MainMenu extends JPanel
 	//TODO: add options for random bonus attacks, strength based on number of provinces, strength based on province value, etc...
 	//TODO: maybe add a seperate settings screen?
 	
-	private JComboBox<Game> gameSelect; //Play with eu3 or victoria 2 map
+	private JComboBox<Game> gameSelect; //Choose a map from Maps.txt
 	private JTextField attackerMax, defenderMax;
 	private JButton play;
 	private JButton selectTeams;
 	private JCheckBox allowDraws;
 	private ConquerFrame parent;
-	
-	//TODO: maybe make a class that combines all the data (countries list, booleans, strengths, etc.) to simplify constructors?
 	
 	public MainMenu(ConquerFrame parent)
 	{
@@ -49,7 +47,7 @@ public class MainMenu extends JPanel
 		defenderMax.setToolTipText("The maximum amount of times the defender can take provinces from the attacker");
 		
 		allowDraws = new JCheckBox("Allow draws?", true);
-		//TODO: maybe make checkbox to remove randomness and just always use the maximum
+		//TODO: maybe make a checkbox to remove randomness and just always use the maximum
 		
 		ButtonListener listener = new ButtonListener();
 		play.addActionListener(listener);
