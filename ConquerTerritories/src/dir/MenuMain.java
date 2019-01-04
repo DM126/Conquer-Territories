@@ -118,8 +118,8 @@ public class MainMenu extends JPanel
 		} 
 		catch (FileNotFoundException e)
 		{
-			//TODO: Display an error message and exit the program by throwing an exception here and catching up up the hierarchy.
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Could not find Maps.txt.", "Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
 		}
 	}
 	

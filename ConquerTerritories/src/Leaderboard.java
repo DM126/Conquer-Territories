@@ -4,6 +4,7 @@ import javax.swing.*;
 
 public class Leaderboard extends JPanel
 {
+	private JLabel title;
 	private ArrayList<Country> remainingCountries; //Countries still alive
 	private ArrayList<Country> vanquishedCountries; //countries removed from the game
 	private JTextArea scores; //Displays the number of provinces of all remaining countries in order
@@ -18,18 +19,23 @@ public class Leaderboard extends JPanel
 		
 		vanquishedCountries = new ArrayList<Country>(countriesList.size());
 		
+		title = new JLabel("Leaderboard");
+		title.setFont(new Font("Arial", Font.PLAIN, 20));
+		
 		scores = new JTextArea(25, 20);
 		scores.setEditable(false);
 		scores.setFont(new Font("Arial", Font.PLAIN, 16));
 		JScrollPane scroll = new JScrollPane();
 		scroll.setViewportView(scores);
 		
+		add(title);
 		add(scroll);
 		
 		sortList();
 		setLeaderboardText();
 		
-		setPreferredSize(new Dimension(scroll.getPreferredSize().width, scroll.getPreferredSize().height + 20));
+		setPreferredSize(new Dimension(scroll.getPreferredSize().width, 
+										title.getPreferredSize().height + scroll.getPreferredSize().height + 20));
 	}
 	
 	/**
