@@ -16,7 +16,8 @@ public class Team
 	/**
 	 * Creates a team.
 	 * 
-	 * @param num the number used for the generic team name (i.e. 'Team 2')
+	 * @param name the team name
+	 * @param color the team color
 	 */
 	public Team(String name, Color color)
 	{
@@ -25,12 +26,15 @@ public class Team
 		team = new ArrayList<Country>();
 	}
 	
+	/**
+	 * @return the list of countries on the team
+	 */
 	public ArrayList<Country> getCountries()
 	{
 		return team;
 	}
 	
-	//TODO: DUPLICATE CODE IN TeamSelectPanel!!!
+	//TODO: Duplicate code in TeamSelectPanel
 	/**
 	 * Adds a country to this team in the correct alphabetical location
 	 * 
@@ -38,7 +42,6 @@ public class Team
 	 */
 	public void addCountry(Country country)
 	{
-		//TODO: binary search?
 		boolean added = false;
 		for (int i = 0; !added && i < team.size(); i++)
 		{
@@ -55,6 +58,12 @@ public class Team
 		}
 	}
 	
+	/**
+	 * Removes a country from the team.
+	 * 
+	 * @param country the country to remove
+	 * @return true if the country was on the team
+	 */
 	public boolean removeCountry(Country country)
 	{
 		return team.remove(country);

@@ -6,14 +6,14 @@ import java.awt.*;
 import java.awt.event.*;
 
 //TODO: fix comboboxes resetting after victory/vanquishing?
-//then: maybe make combo2 only display countries that share a border with combo1 country? <- might cause issues with rapid gameplay
+//then: maybe make defenderList only display countries that share a border with combo1 country? <- might cause issues with rapid gameplay
 //TODO: give comboboxes a minimum size so they don't mess up the panel organization, or reorganize the panel into two panels? buttons/comboboxes?
 public class SimulationPanel extends JPanel
 {
 	private ConquerFrame parent;
 	private MapPanel mapPanel;
-	private JComboBox<Country> combo1;
-	private JComboBox<Country> combo2;
+	private JComboBox<Country> attackerList;
+	private JComboBox<Country> defenderList;
 	private JButton attack;
 	private JButton vanquishDefender;
 	private JButton undo;
@@ -52,11 +52,11 @@ public class SimulationPanel extends JPanel
 		
 		rand = new Random();
 		
-		combo1 = new JComboBox<Country>();
-		combo2 = new JComboBox<Country>();
+		attackerList = new JComboBox<Country>();
+		defenderList = new JComboBox<Country>();
 		setComboBoxes();
 		SelectionListener selectionListener = new SelectionListener();
-		combo2.addActionListener(selectionListener);
+		defenderList.addActionListener(selectionListener);
 		
 		ButtonListener listener = new ButtonListener();
 		
@@ -77,9 +77,9 @@ public class SimulationPanel extends JPanel
 		JPanel interfacePanel = new JPanel();
 		
 		JPanel attackInterface = new JPanel(); //left side of interface
-		attackInterface.setPreferredSize(new Dimension(combo1.getPreferredSize().width * 2 + 20, 100));
-		attackInterface.add(combo1);
-		attackInterface.add(combo2);
+		attackInterface.setPreferredSize(new Dimension(attackerList.getPreferredSize().width * 2 + 20, 100));
+		attackInterface.add(attackerList);
+		attackInterface.add(defenderList);
 		attackInterface.add(attack);
 		attackInterface.add(undo);
 		attackInterface.add(vanquishDefender);
@@ -90,7 +90,7 @@ public class SimulationPanel extends JPanel
 		provinceScroll.setViewportView(defenderProvinceList);
 		provinceScroll.setPreferredSize(new Dimension(200, 100));
 		defenderProvinceList.addListSelectionListener(selectionListener);
-		setDefenderJList((Country)combo2.getSelectedItem());
+		setDefenderJList((Country)defenderList.getSelectedItem());
 		takeProvince = new JButton("Take province");
 		takeProvince.setEnabled(false);
 		takeProvince.addActionListener(selectionListener);
@@ -102,7 +102,7 @@ public class SimulationPanel extends JPanel
 		
 		//jpanel that holds the description jlabel
 		JPanel descriptionPanel = new JPanel();
-		descriptionPanel.setPreferredSize(new Dimension(250, 20));
+		descriptionPanel.setPreferredSize(new Dimension(500, 20));
 		descriptionPanel.add(attackDescription);
 		
 		//JPanel that holds the interface, map and description
@@ -154,21 +154,21 @@ public class SimulationPanel extends JPanel
 	private void setComboBoxes()
 	{
 		//Store the currently selected item to keep it selected after updating the combo boxes.
-		Country currentlySelected = (Country)combo1.getSelectedItem();
+		Country currentlySelected = (Country)attackerList.getSelectedItem();
 		
-		combo1.removeAllItems();
-		combo2.removeAllItems();
+		attackerList.removeAllItems();
+		defenderList.removeAllItems();
 		
 		for (Country c : mapPanel.getCountries())
 		{
-			combo1.addItem(c);
-			combo2.addItem(c);
+			attackerList.addItem(c);
+			defenderList.addItem(c);
 		}
 		
 		//Reselect the country that was selected if it's still on the map.
 		if (mapPanel.getCountries().contains(currentlySelected))
 		{
-			combo1.setSelectedItem(currentlySelected);
+			attackerList.setSelectedItem(currentlySelected);
 		}
 	}
 	
@@ -212,8 +212,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void beginAttack()
 	{
-		Country c1 = combo1.getItemAt(combo1.getSelectedIndex());
-		Country c2 = combo2.getItemAt(combo2.getSelectedIndex());
+		Country c1 = attackerList.getItemAt(attackerList.getSelectedIndex());
+		Country c2 = defenderList.getItemAt(defenderList.getSelectedIndex());
 		
 		if (canAttack(c1, c2))
 		{
@@ -287,7 +287,7 @@ public class SimulationPanel extends JPanel
 		}
 		else
 		{
-			setDefenderJList((Country)combo2.getSelectedItem());
+			setDefenderJList((Country)defenderList.getSelectedItem());
 		}
 		
 		leaderboard.sortList();
@@ -314,7 +314,7 @@ public class SimulationPanel extends JPanel
 				setComboBoxes();
 			}
 			
-			setDefenderJList((Country)combo2.getSelectedItem());
+			setDefenderJList((Country)defenderList.getSelectedItem());
 			
 			mapPanel.repaint();
 		}
@@ -327,8 +327,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void vanquishDefender()
 	{
-		Country c1 = combo1.getItemAt(combo1.getSelectedIndex());
-		Country c2 = combo2.getItemAt(combo2.getSelectedIndex());
+		Country c1 = attackerList.getItemAt(attackerList.getSelectedIndex());
+		Country c2 = defenderList.getItemAt(defenderList.getSelectedIndex());
 		
 		if (canAttack(c1, c2))
 		{
@@ -358,6 +358,9 @@ public class SimulationPanel extends JPanel
 		defenderProvinceList.setModel(model);
 	}
 	
+	/**
+	 * Ends the game and display the final scores.
+	 */
 	private void quit()
 	{
 		int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit?", "Quit", JOptionPane.OK_CANCEL_OPTION);
@@ -374,8 +377,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void takeProvince(Province province)
 	{
-		Country c1 = combo1.getItemAt(combo1.getSelectedIndex());
-		Country c2 = combo2.getItemAt(combo2.getSelectedIndex());
+		Country c1 = attackerList.getItemAt(attackerList.getSelectedIndex());
+		Country c2 = defenderList.getItemAt(defenderList.getSelectedIndex());
 		
 		if (canAttack(c1, c2)) //TODO: Allow non-adjacent countries to take provinces or no???
 		{
@@ -397,9 +400,9 @@ public class SimulationPanel extends JPanel
 		//Combobox selection is changed
 		public void actionPerformed(ActionEvent event)
 		{
-			if (event.getSource() == combo2)
+			if (event.getSource() == defenderList)
 			{
-				setDefenderJList((Country)combo2.getSelectedItem());
+				setDefenderJList((Country)defenderList.getSelectedItem());
 				if (highlightedProvince != null) //TODO: test if this is necessary.
 				{
 					highlightedProvince.setHighlighted(false);

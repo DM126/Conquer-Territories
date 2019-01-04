@@ -69,14 +69,18 @@ public class FinalResultsPanel extends JPanel
 			}
 		}
 		
+		Font titleFont = new Font("Arial", Font.PLAIN, 24);
+		
 		JPanel endResultsPanel = new JPanel();
 		JLabel endResultsTitle = new JLabel("End Results");
+		endResultsTitle.setFont(titleFont);
 		endResultsPanel.add(endResultsTitle);
 		endResultsPanel.add(resultsScroll);
 		endResultsPanel.setPreferredSize(new Dimension(resultsScroll.getPreferredSize().width + 20, resultsScroll.getPreferredSize().height + endResultsTitle.getPreferredSize().height + 20));
 		
 		JPanel peakSizesPanel = new JPanel();
 		JLabel peakSizesTitle = new JLabel("Peak Sizes");
+		peakSizesTitle.setFont(titleFont);
 		peakSizesPanel.add(peakSizesTitle);
 		peakSizesPanel.add(peakScroll);
 		peakSizesPanel.setPreferredSize(endResultsPanel.getPreferredSize());
@@ -97,7 +101,6 @@ public class FinalResultsPanel extends JPanel
 		endResults.setCaretPosition(0);
 		peakSizes.setCaretPosition(0);
 	}
-
 	
 	/**
 	 * sort the list of countries by peak size using a bubble sort (I think?).

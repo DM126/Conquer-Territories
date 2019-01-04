@@ -14,7 +14,7 @@ import javax.imageio.*;
 public class WorldBuilder
 {
 	private BufferedImage map;
-	private int sea;
+	private int seaColor;
 	private int[][] pixels;
 	private Game game;
 	
@@ -32,7 +32,7 @@ public class WorldBuilder
 		
 		File mapFile = new File("Map Data/" + game.getMapImageName());
 		map = ImageIO.read(mapFile);
-		sea = map.getRGB(0, 0);
+		seaColor = map.getRGB(0, 0);
 		pixels = new int[map.getHeight()][map.getWidth()];
 		for (int y = 0; y < map.getHeight(); y++)
 		{
@@ -52,7 +52,7 @@ public class WorldBuilder
 		for (int i = 0; i < provinces.size(); i++)
 		{
 			//debug
-			System.out.println((i + 1) + "/" + provinces.size());
+			//System.out.println((i + 1) + "/" + provinces.size());
 			
 			createProvince(rgbProvinces, provinces.get(i));
 		}
@@ -101,7 +101,7 @@ public class WorldBuilder
 							for (int bx = x - 1; bx <= x + 1; bx++)
 							{
 								int adj = pixels[by][bx];
-								if (adj != sea && adj != provinceColor)
+								if (adj != seaColor && adj != provinceColor)
 								{
 									adjColors.add(adj);
 								}

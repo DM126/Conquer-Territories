@@ -119,7 +119,7 @@ public class ConquerFrame extends JFrame
 		catch (FileNotFoundException e)
 		{
 			JOptionPane.showMessageDialog(null, "Could not find " + game.getCountriesFileName(), "Error", JOptionPane.ERROR_MESSAGE);
-			System.exit(0);
+			System.exit(1);
 		}
 		
 		return countries;

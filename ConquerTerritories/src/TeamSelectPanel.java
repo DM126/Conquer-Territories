@@ -10,25 +10,25 @@ public class TeamSelectPanel extends JPanel
 	private static String INVALID_NAME = "";
 	private static Color INVALID_COLOR = Color.WHITE;
 	
-	//this stuff gets sent to the territories panel
+	//This stuff gets sent to the simulation panel
 	private ConquerFrame parent;
 	private ArrayList<Country> countries;
 	private Settings settings;
 	
-	//private JCheckBox keepNeutrals;
 	private JLabel teamName;
 	private JButton changeName;
-	private JList<Country> countryChoices; //all countries not part of a team
-	private JList<Country> countriesOnTeam; //countries part of the currently selected team
-	private Team currentTeam;
-	private JComboBox<Team> teamComboBox;
-	private JButton selectTeam;
+	private JList<Country> countryChoices; //displays all countries not part of a team
+	private JList<Country> countriesOnTeam; //displays countries on the currently selected team
+	private Team currentTeam;	//The team currently being displayed (null if no teams exist)
+	private JComboBox<Team> teamComboBox; //lists all the teams
+	private JButton selectTeam;	//Sets the current team to be the one selected in teamComboBox
 	private ArrayList<Team> teams;
-	private JButton addTeam;
-	private JButton addCountry, removeCountry;
+	private JButton addTeam;	//Creates a new team
+	private JButton addCountry, removeCountry;	//Adds and removes countries from the current team
 	private JButton chooseColor;
 	private JButton deleteTeam;
-	private JButton start;
+	private JButton startGame;
+	private JButton returnToMenu;
 	
 	public TeamSelectPanel(ConquerFrame parent, ArrayList<Country> countries, Settings settings)
 	{
@@ -37,10 +37,6 @@ public class TeamSelectPanel extends JPanel
 		this.settings = settings;
 		
 		teams = new ArrayList<Team>();
-		
-		//keepNeutrals = new JCheckBox("Allow neutral countries to stay in the game?", true);
-		//keepNeutrals.setToolTipText("If checked, countries not on a team will stay in the game,"
-		//								+ "if unchecked, only created teams will be on the map.");
 		
 		ButtonListener listener = new ButtonListener();
 		
@@ -90,9 +86,12 @@ public class TeamSelectPanel extends JPanel
 		deleteTeam.setEnabled(false);
 		deleteTeam.setToolTipText("Deletes this team");
 		deleteTeam.addActionListener(listener);
-		start = new JButton("Start game!");
-		start.setToolTipText("Begin the game");
-		start.addActionListener(listener);
+		startGame = new JButton("Start game!");
+		startGame.setToolTipText("Begin the game");
+		startGame.addActionListener(listener);
+		returnToMenu = new JButton("Return to menu");
+		returnToMenu.setToolTipText("Return to the main menu");
+		returnToMenu.addActionListener(listener);
 		
 		JPanel namePanel = new JPanel();
 		namePanel.add(teamName);
@@ -124,9 +123,11 @@ public class TeamSelectPanel extends JPanel
 		JPanel selectionPanel = new JPanel();
 		selectionPanel.add(teamComboBox);
 		selectionPanel.add(selectTeam);
+		selectionPanel.add(addTeam);
 		selectionPanel.setPreferredSize(new Dimension(selectTeam.getPreferredSize().width + 10, 
 														teamComboBox.getPreferredSize().height +
-														selectTeam.getPreferredSize().height + 10));
+														selectTeam.getPreferredSize().height + 
+														addTeam.getPreferredSize().height + 15));
 		
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.add(selectionPanel);
@@ -138,19 +139,18 @@ public class TeamSelectPanel extends JPanel
 													teamPanel.getPreferredSize().height + 50));
 		
 		add(optionsPanel);
-		//add(keepNeutrals);
-		add(addTeam);
-		add(start);
+		add(startGame);
+		add(returnToMenu);
 		
 		setPreferredSize(new Dimension(optionsPanel.getPreferredSize().width, 
 										optionsPanel.getPreferredSize().height + 
 										//keepNeutrals.getPreferredSize().height +
 										addTeam.getPreferredSize().height +
-										start.getPreferredSize().height + 10));
+										startGame.getPreferredSize().height + 10));
 	}
 	
 	/**
-	 * Sets the countries JList to display all countries not currently on a team.
+	 * Sets the countryChoices JList to display all countries not currently on a team.
 	 */
 	private void setCountriesJList()
 	{
@@ -255,7 +255,7 @@ public class TeamSelectPanel extends JPanel
 		}
 	}
 	
-	//TODO: DUPLICATE CODE IN Team CLASS
+	//TODO: duplicate code in Team class
 	/**
 	 * Add a country or team to a list in the correct alphabetical location.
 	 * 
@@ -264,7 +264,6 @@ public class TeamSelectPanel extends JPanel
 	 */
 	private void addToCorrectLocation(ArrayList<Country> list, Country c)
 	{
-		//TODO: binary search?
 		boolean added = false;
 		for (int i = 0; !added && i < list.size(); i++)
 		{
@@ -283,13 +282,13 @@ public class TeamSelectPanel extends JPanel
 	
 	/**
 	 * Used for determining if a name chosen for a team by the user is already in use.
+	 * Checks the lists of countries and teams for the name.
 	 * 
 	 * @param name the name chosen
 	 * @return true if the name is used by another country/team already
 	 */
 	private boolean isDuplicateName(String name)
 	{
-		//TODO: use a binary search?
 		for (Country c : countries)
 		{
 			if (name.equals(c.getName()))
@@ -311,16 +310,16 @@ public class TeamSelectPanel extends JPanel
 	
 	/**
 	 * Used for determining if a color chosen for a team by the user is already in use.
+	 * Checks the lists of countries and teams for the color.
 	 * 
 	 * @param color the name chosen
 	 * @return true if the color is used by another country/team already
 	 */
 	private boolean isDuplicateColor(Color color)
 	{
-		//TODO: use a binary search?
-		for (Country c : countries)
+		for (Country country : countries)
 		{
-			if (color.equals(c.getColor()))
+			if (color.equals(country.getColor()))
 			{
 				return true;
 			}
@@ -373,7 +372,7 @@ public class TeamSelectPanel extends JPanel
 	 * Displays a JColorChooser for the user to choose a team color
 	 * Displays error messages for invalid input.
 	 * 
-	 * @returns the color of a team, or null if an invalid color is entered
+	 * @returns the color of a team, INVALID_COLOR if an invalid color is entered, or null if cancel is chosen
 	 */
 	private Color inputColor()
 	{
@@ -409,7 +408,7 @@ public class TeamSelectPanel extends JPanel
 		}
 		while (name != null && name.equals(INVALID_NAME));
 		
-		if (name != null)
+		if (name != null) //If the user did not click cancel
 		{
 			Color color;
 			do
@@ -418,7 +417,7 @@ public class TeamSelectPanel extends JPanel
 			}
 			while (color != null && color.equals(INVALID_COLOR));
 			
-			if (color != null)
+			if (color != null) //If the user did not click cancel
 			{
 				Team newTeam = new Team(name, color);
 				currentTeam = newTeam;
@@ -498,6 +497,25 @@ public class TeamSelectPanel extends JPanel
 		setTeamJList(currentTeam);
 	}
 	
+	/**
+	 * Displays a confirmation dialog box and returns to the main menu.
+	 */
+	private void returnToMenu()
+	{
+		String message = "Are you sure you want to return to the menu?";
+		if (!teams.isEmpty())
+		{
+			message += "\n(all created teams will be lost)";
+		}
+		
+		int choice = JOptionPane.showConfirmDialog(this, message, "Return to menu", JOptionPane.OK_CANCEL_OPTION);
+		
+		if (choice == JOptionPane.OK_OPTION)
+		{
+			parent.returnToMenu();
+		}
+	}
+	
 	private class ButtonListener implements ActionListener, ListSelectionListener
 	{
 		public void actionPerformed(ActionEvent event)
@@ -541,7 +559,7 @@ public class TeamSelectPanel extends JPanel
 			{
 				deleteTeam();
 			}
-			else if (event.getSource() == start)
+			else if (event.getSource() == startGame)
 			{
 				for (Team team : teams)
 				{
@@ -552,6 +570,10 @@ public class TeamSelectPanel extends JPanel
 				}
 				
 				parent.startGame(countries, settings);
+			}
+			else if (event.getSource() == returnToMenu)
+			{
+				returnToMenu();
 			}
 		}
 
