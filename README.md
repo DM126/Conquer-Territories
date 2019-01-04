@@ -3,9 +3,9 @@ Map simulation game
 
 (This version is not playable)*
 
-The game creates the map by reading an image file containing provinces with a unique color. A polygon for each province is created and every province in the image file is compared to a province in a text file containing the data for every province. Then, Another text file containing the list of countries is scanned and each province is made to belong to a single country.
+How it works:  The program requires three files to scan: an image file containing all the provinces of the world represented with unique colors, a text file containing information on every province in the game (i.e. its color on the image file), and another text file containing information on every country (name, representative color, and all owned provinces). First, the image file is scanned to create polygons for every province and determine which province they share a border with. Next, the provinces text file is scanned and each province is matched with a polygon using the unique color as a key. Finally, the countries are created and assigned their provinces by scanning the countries text file.  
 
-To add a map: Update Maps.txt with the name of the map, the text files containing information on the countries and provinces, and the map image file (bmp). Place the three files in the Map Data folder.
+Adding a custom map is simple: just update Maps.txt with the name of the map, the names of the text files containing information on the countries and provinces, and the name of the map image file (.bmp). Place the three files in the Map Data folder.
 
 *The map images used were originally created by Paradox Interactive, I have omitted them to avoid infringing on their intellectual property. Unfortunately, the game doesn't work without the image files.
 
