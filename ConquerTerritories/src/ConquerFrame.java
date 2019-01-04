@@ -34,8 +34,6 @@ public class ConquerFrame extends JFrame
 		setLocationRelativeTo(null);
 	}
 	
-	//TODO: DOCUMENT THESE METHODS
-	
 	/**
 	 * Starts the game. Called from teamSelectPanel.
 	 * This version will take the arraylist of countries as an argument.
@@ -64,10 +62,7 @@ public class ConquerFrame extends JFrame
 	/**
 	 * Takes the user to the team select screen.
 	 * 
-	 * @param game the map to use
-	 * @param attackerMax the maximum attack strength
-	 * @param defenderMax the maximum defense strength
-	 * @param allowDraws if draws are allowed or not
+	 * @param settings the settings chosen by the user in the main menu
 	 */
 	public void selectTeams(Settings settings)
 	{
