@@ -12,7 +12,7 @@ public class Country
 	private int peakSize;
 	private int vanquishes; //number of countries vanquished by this one
 	private Color highlightColor;
-	//private final double LIGHTEN = 1.25;
+	//private final double LIGHTEN = 1.25; //Scale to lighten the color when highlighting
 	
 	//TODO: maybe think about keeping this in an array in the worldbuilder?
 	private String provinceIDs;
@@ -261,7 +261,7 @@ public class Country
 	
 	/**
 	 * Take a single province in an attack.
-	 * (Not to be used for simply adding a province, using addProvince() instead)
+	 * (Not to be used for simply adding a province, use addProvince() instead)
 	 * 
 	 * @param province the province to take
 	 * @return a record of the attack
