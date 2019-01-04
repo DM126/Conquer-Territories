@@ -16,7 +16,7 @@ public class MapPanel extends JPanel
 	{
 		this.countries = countries;
 		
-		//Create the list provinces by reading the text file.
+		//Create the list of provinces by reading the text file.
 		File provinceFile = new File("Map Data/" + game.getProvincesFileName());
 		Scanner scan = new Scanner(provinceFile);
 		provinces = new ArrayList<Province>();

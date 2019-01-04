@@ -3,6 +3,9 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
+/**
+ * Displays the results of a game: ending size and peak size.
+ */
 public class FinalResultsPanel extends JPanel
 {
 	private ConquerFrame parent;
@@ -25,11 +28,13 @@ public class FinalResultsPanel extends JPanel
 		JScrollPane peakScroll = new JScrollPane();
 		peakScroll.setViewportView(peakSizes);
 		
+		ButtonListener listener = new ButtonListener();
+		
 		exit = new JButton("Exit Game");
-		exit.addActionListener(new ButtonListener());
+		exit.addActionListener(listener);
 		
 		returnToMenu = new JButton("Main Menu");
-		returnToMenu.addActionListener(new ButtonListener());
+		returnToMenu.addActionListener(listener);
 		
 		//Write the end sizes in the endResults text area
 		for (int i = countries.size() - 1; i >= 0; i--)
