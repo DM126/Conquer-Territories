@@ -20,7 +20,7 @@ public class Country
 	/**
 	 * Creates a country by reading from the Countries.txt file
 	 * 
-	 * @param data the data from the text file including the name and color (Hex)
+	 * @param data the data from the text file including the name and color
 	 */
 	public Country(String data)
 	{
@@ -35,12 +35,34 @@ public class Country
 		int green = scan.nextInt();
 		int blue = scan.nextInt();
 		setColor(new Color(red, green, blue));
-		provinceIDs = scan.next();
+		if (scan.hasNext())
+		{
+			provinceIDs = scan.next();
+		}
+		else
+		{
+			provinceIDs = "";
+		}
 		
 		scan.close();
 		
 		peakSize = 0;
 		vanquishes = 0;
+	}
+	
+	/**
+	 * Loads the country's data from the save game file.
+	 * 
+	 * @param data a string including the name and color to be sent to the other constructor
+	 * @param peakSize the peak size of this country
+	 * @param vanquishes the number of times this country vanquished another
+	 */
+	public Country(String data, int peakSize, int vanquishes)
+	{
+		this(data);
+		
+		this.peakSize = peakSize;
+		this.vanquishes = vanquishes;
 	}
 	
 	/**
@@ -356,16 +378,24 @@ public class Country
 	}
 	
 	/**
-	 * Returns a string containing all the data of this country for debug purposes.
+	 * Gets the country's data in a string of format: 
+	 * name/red/green/blue/provinces
 	 * 
-	 * @return the name, color, and provinces of this country as a string
+	 * @return a string representing the data of the country to be saved.
 	 */
-	public String getData()
+	public String getSaveData()
 	{
-		String data = name + ": " + color + ". ";
-		for (Province province : provinces)
+		//get the name and rgb color values
+		String data = name + "/" + color.getRed() + "/" + color.getGreen() + "/" + color.getBlue() + "/";
+		
+		//get the provinces
+		for (int i = 0; i < provinces.size(); i++)
 		{
-			data += province + ", ";
+			data += provinces.get(i).getID();
+			if (i < provinces.size() - 1)
+			{
+				data += ",";
+			}
 		}
 		
 		return data;

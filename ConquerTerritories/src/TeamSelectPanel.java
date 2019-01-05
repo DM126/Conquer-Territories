@@ -358,6 +358,11 @@ public class TeamSelectPanel extends JPanel
 				JOptionPane.showMessageDialog(this, "Name is too long.", "Error", JOptionPane.ERROR_MESSAGE);
 				name = INVALID_NAME;
 			}
+			else if (name.contains(";") || name.contains("/")) //These characters are used as delimiters for the data files
+			{
+				JOptionPane.showMessageDialog(this, "Name contains invalid characters.", "Error", JOptionPane.ERROR_MESSAGE);
+				name = INVALID_NAME;
+			}
 			else if (isDuplicateName(name))
 			{
 				JOptionPane.showMessageDialog(this, "The name \"" + name + "\" is already in use.", "Error", JOptionPane.ERROR_MESSAGE);

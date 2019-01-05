@@ -1,7 +1,11 @@
 import java.awt.*;
+import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
+/**
+ * Displays the countries in order of number of provinces.
+ */
 public class Leaderboard extends JPanel
 {
 	private JLabel title;
@@ -39,7 +43,7 @@ public class Leaderboard extends JPanel
 	}
 	
 	/**
-	 * Removes the specified country from the leaderboard.
+	 * Removes the specified country from the leaderboard display.
 	 * 
 	 * @param c the country to remove
 	 */
@@ -107,7 +111,7 @@ public class Leaderboard extends JPanel
 	 */
 	public void reviveCountry(Country revived)
 	{
-		remainingCountries.add(revived); //LAZY CODE, REDO
+		remainingCountries.add(revived);
 		vanquishedCountries.remove(revived);
 		sortList();
 		setLeaderboardText();
@@ -129,5 +133,41 @@ public class Leaderboard extends JPanel
 		}
 		
 		return finalResults;
+	}
+	
+	/**
+	 * Saves all the information about a game to a text file to be scanned upon loading
+	 * 
+	 * @param settings the settings to save
+	 * @throws IOException if there was an error writing to the save file
+	 */
+	public void saveGame(Settings settings) throws IOException
+	{
+		File saveData = new File("GameData.save");
+		saveData.createNewFile();
+		PrintWriter writer = new PrintWriter(saveData);
+		
+		//Write the game info to the text file
+		writer.println(settings.toString());
+		saveCountries(writer, remainingCountries);
+		saveCountries(writer, vanquishedCountries);
+		
+		writer.close();
+	}
+	
+	/**
+	 * Saves an arraylist of countries to a text file.
+	 * 
+	 * @param writer writer to a text file
+	 * @param countries a list of countries
+	 */
+	private void saveCountries(PrintWriter writer, ArrayList<Country> countries)
+	{
+		for (Country country : countries)
+		{
+			writer.println(country.getSaveData());
+			writer.println(country.getPeakSize());
+			writer.println(country.getVanquishes());
+		}
 	}
 }
