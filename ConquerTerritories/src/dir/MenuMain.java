@@ -17,6 +17,7 @@ public class MainMenu extends JPanel
 	private JTextField attackerMax, defenderMax;
 	private JButton play;
 	private JButton selectTeams;
+	private JButton loadGame;
 	private JCheckBox allowDraws;
 	private ConquerFrame parent;
 	
@@ -39,6 +40,12 @@ public class MainMenu extends JPanel
 		
 		play = new JButton("Play!");
 		
+		loadGame = new JButton("Load game");
+		loadGame.setToolTipText("Load a saved game");
+		File saveFile = new File("GameData.save");
+		loadGame.setEnabled(saveFile.exists());
+		//TODO: add functionality to delete a save?
+		
 		attackerMax = new JTextField(3);
 		attackerMax.setText("3");
 		attackerMax.setToolTipText("The maximum amount of times the attacker can take provinces from the defender");
@@ -52,6 +59,7 @@ public class MainMenu extends JPanel
 		ButtonListener listener = new ButtonListener();
 		play.addActionListener(listener);
 		selectTeams.addActionListener(listener);
+		loadGame.addActionListener(listener);
 		attackerMax.getDocument().addDocumentListener(listener);
 		defenderMax.getDocument().addDocumentListener(listener);
 		
@@ -75,10 +83,11 @@ public class MainMenu extends JPanel
 		JPanel uiPanel = new JPanel();
 		uiPanel.add(optionsPanel);
 		uiPanel.add(selectTeams);
+		uiPanel.add(loadGame);
 		uiPanel.add(play);
 		
 		uiPanel.setPreferredSize(new Dimension(optionsPanel.getPreferredSize().width, 
-												optionsPanel.getPreferredSize().height + play.getPreferredSize().height + 10));
+												optionsPanel.getPreferredSize().height + play.getPreferredSize().height * 2 + 20));
 		add(title);
 		add(uiPanel);
 		
@@ -155,6 +164,10 @@ public class MainMenu extends JPanel
 				{
 					showErrorMessage();
 				}
+			}
+			else if (event.getSource() == loadGame)
+			{
+				parent.loadGame();
 			}
 		}
 
