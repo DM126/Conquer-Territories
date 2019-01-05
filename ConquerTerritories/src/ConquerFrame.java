@@ -1,7 +1,5 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 import javax.swing.*;
 
 public class ConquerFrame extends JFrame
@@ -57,6 +55,43 @@ public class ConquerFrame extends JFrame
 	{
 		ArrayList<Country> countries = getCountries(settings.getGame());
 		startGame(countries, settings);
+	}
+	
+	/**
+	 * Loads a saved game from the save file
+	 */
+	public void loadGame()
+	{
+		try
+		{
+			File saveFile = new File("GameData.save");
+			Scanner scan = new Scanner(saveFile);
+			Settings settings = new Settings(scan.nextLine());
+			
+			ArrayList<Country> countries = new ArrayList<Country>();
+			while (scan.hasNext())
+			{
+				String countryData = scan.nextLine();
+				int peakSize = Integer.parseInt(scan.nextLine());
+				int vanquishes = Integer.parseInt(scan.nextLine());
+				
+				countries.add(new Country(countryData, peakSize, vanquishes));
+			}
+			scan.close();
+			
+			sortCountries(countries);
+			
+			startGame(countries, settings);
+		}
+		catch (FileNotFoundException e)
+		{
+			JOptionPane.showMessageDialog(null, "Error: The save file could not be found.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		catch (InputMismatchException e)
+		{
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error: The save data could not be read.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	/**
@@ -117,6 +152,30 @@ public class ConquerFrame extends JFrame
 			System.exit(1);
 		}
 		
+		sortCountries(countries);
+		
 		return countries;
+	}
+	
+	/**
+	 * Sorts the list of countries to be in alphabetical order
+	 * 
+	 * @param countries the list of countries to sort
+	 */
+	private void sortCountries(ArrayList<Country> countries)
+	{
+		boolean swapped = true;
+		for (int i = 0; i < countries.size() - 1 && swapped; i++)
+		{	
+			swapped = false;
+			for (int j = countries.size() - 1; j > i; j--)
+			{
+				if (countries.get(j).getName().compareToIgnoreCase(countries.get(j-1).getName()) < 0)
+				{
+					Collections.swap(countries, j, j-1);
+					swapped = true;
+				}
+			}
+		}
 	}
 }

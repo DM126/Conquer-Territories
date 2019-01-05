@@ -8,12 +8,15 @@ import java.awt.event.*;
 //TODO: fix comboboxes resetting after victory/vanquishing?
 //then: maybe make defenderList only display countries that share a border with combo1 country? <- might cause issues with rapid gameplay
 //TODO: give comboboxes a minimum size so they don't mess up the panel organization, or reorganize the panel into two panels? buttons/comboboxes?
+/**
+ * Represents the main panel for the simulation.
+ */
 public class SimulationPanel extends JPanel
 {
 	private ConquerFrame parent;
 	private MapPanel mapPanel;
-	private JComboBox<Country> attackerList;
-	private JComboBox<Country> defenderList;
+	private JComboBox<Country> attackerSelect;
+	private JComboBox<Country> defenderSelect;
 	private JButton attack;
 	private JButton vanquishDefender;
 	private JButton undo;
@@ -22,6 +25,7 @@ public class SimulationPanel extends JPanel
 	private JLabel attackDescription;
 	private Leaderboard leaderboard;
 	private JButton quit;
+	private JButton saveGame;
 	private Settings settings;
 	
 	private JList<Province> defenderProvinceList;
@@ -52,24 +56,24 @@ public class SimulationPanel extends JPanel
 		
 		rand = new Random();
 		
-		attackerList = new JComboBox<Country>();
-		defenderList = new JComboBox<Country>();
+		attackerSelect = new JComboBox<Country>();
+		defenderSelect = new JComboBox<Country>();
 		setComboBoxes();
 		SelectionListener selectionListener = new SelectionListener();
-		defenderList.addActionListener(selectionListener);
+		defenderSelect.addActionListener(selectionListener);
 		
-		ButtonListener listener = new ButtonListener();
+		ButtonListener buttonListener = new ButtonListener();
 		
 		attack = new JButton("Attack!");
-		attack.addActionListener(listener);
+		attack.addActionListener(buttonListener);
 		attack.setMnemonic(KeyEvent.VK_A);
 		
 		vanquishDefender = new JButton("Vanquish defender!");
-		vanquishDefender.addActionListener(listener);
+		vanquishDefender.addActionListener(buttonListener);
 		
 		undo = new JButton("Undo");
 		undo.setEnabled(false);
-		undo.addActionListener(listener);
+		undo.addActionListener(buttonListener);
 		
 		attackDescription = new JLabel("Click 'attack' to begin.");
 		
@@ -77,9 +81,9 @@ public class SimulationPanel extends JPanel
 		JPanel interfacePanel = new JPanel();
 		
 		JPanel attackInterface = new JPanel(); //left side of interface
-		attackInterface.setPreferredSize(new Dimension(attackerList.getPreferredSize().width * 2 + 20, 100));
-		attackInterface.add(attackerList);
-		attackInterface.add(defenderList);
+		attackInterface.setPreferredSize(new Dimension(attackerSelect.getPreferredSize().width * 2 + 20, 100));
+		attackInterface.add(attackerSelect);
+		attackInterface.add(defenderSelect);
 		attackInterface.add(attack);
 		attackInterface.add(undo);
 		attackInterface.add(vanquishDefender);
@@ -90,7 +94,7 @@ public class SimulationPanel extends JPanel
 		provinceScroll.setViewportView(defenderProvinceList);
 		provinceScroll.setPreferredSize(new Dimension(200, 100));
 		defenderProvinceList.addListSelectionListener(selectionListener);
-		setDefenderJList((Country)defenderList.getSelectedItem());
+		setDefenderJList((Country)defenderSelect.getSelectedItem());
 		takeProvince = new JButton("Take province");
 		takeProvince.setEnabled(false);
 		takeProvince.addActionListener(selectionListener);
@@ -134,10 +138,15 @@ public class SimulationPanel extends JPanel
 		
 		//Set up the side panel with the leaderboard and the quit button
 		leaderboard = new Leaderboard(mapPanel.getCountries());
+		saveGame = new JButton("Save game");
+		saveGame.setToolTipText("Save the game");
+		saveGame.addActionListener(buttonListener);
 		quit = new JButton("Quit");
-		quit.addActionListener(new ButtonListener());
+		quit.setToolTipText("End the game and display the results");
+		quit.addActionListener(buttonListener);
 		JPanel sidePanel = new JPanel();
 		sidePanel.add(leaderboard);
+		sidePanel.add(saveGame);
 		sidePanel.add(quit);
 		sidePanel.setPreferredSize(new Dimension(leaderboard.getPreferredSize().width + 10, 
 													leaderboard.getPreferredSize().height + quit.getPreferredSize().height + 20));
@@ -146,29 +155,59 @@ public class SimulationPanel extends JPanel
 		add(sidePanel);
 		setPreferredSize(new Dimension(gamePanel.getPreferredSize().width + sidePanel.getPreferredSize().width + 20, 
 										gamePanel.getPreferredSize().height + 20));
+		
+		removeEmptyCountries(countries);
 	}
 	
 	/**
-	 * Sets the combo boxes with all the countries in the arraylist of countries
+	 * Delete any countries that start with no provinces
+	 * 
+	 * @param countries the list of countries
+	 */
+	private void removeEmptyCountries(ArrayList<Country> countries)
+	{
+		//Find the empty countries
+		ArrayList<Country> emptyCountries = new ArrayList<Country>();
+		for (Country country : countries)
+		{
+			if (!country.hasProvinces())
+			{
+				emptyCountries.add(country);
+			}
+		}
+		
+		//Remove any empty countries found
+		for (Country emptyCountry : emptyCountries)
+		{
+			mapPanel.getCountries().remove(emptyCountry);
+			leaderboard.removeCountry(emptyCountry);
+		}
+		
+		setComboBoxes();
+		leaderboard.setLeaderboardText();
+	}
+	
+	/**
+	 * Sets the combo boxes to display all the countries in the list of countries
 	 */
 	private void setComboBoxes()
 	{
 		//Store the currently selected item to keep it selected after updating the combo boxes.
-		Country currentlySelected = (Country)attackerList.getSelectedItem();
+		Country currentlySelected = (Country)attackerSelect.getSelectedItem();
 		
-		attackerList.removeAllItems();
-		defenderList.removeAllItems();
+		attackerSelect.removeAllItems();
+		defenderSelect.removeAllItems();
 		
 		for (Country c : mapPanel.getCountries())
 		{
-			attackerList.addItem(c);
-			defenderList.addItem(c);
+			attackerSelect.addItem(c);
+			defenderSelect.addItem(c);
 		}
 		
 		//Reselect the country that was selected if it's still on the map.
 		if (mapPanel.getCountries().contains(currentlySelected))
 		{
-			attackerList.setSelectedItem(currentlySelected);
+			attackerSelect.setSelectedItem(currentlySelected);
 		}
 	}
 	
@@ -212,8 +251,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void beginAttack()
 	{
-		Country c1 = attackerList.getItemAt(attackerList.getSelectedIndex());
-		Country c2 = defenderList.getItemAt(defenderList.getSelectedIndex());
+		Country c1 = attackerSelect.getItemAt(attackerSelect.getSelectedIndex());
+		Country c2 = defenderSelect.getItemAt(defenderSelect.getSelectedIndex());
 		
 		if (canAttack(c1, c2))
 		{
@@ -267,7 +306,6 @@ public class SimulationPanel extends JPanel
 		return true;
 	}
 	
-	
 	/**
 	 * Determines if the defending country still exists and removes it if it doesn't. Also sets the leaderboard.
 	 * 
@@ -287,7 +325,7 @@ public class SimulationPanel extends JPanel
 		}
 		else
 		{
-			setDefenderJList((Country)defenderList.getSelectedItem());
+			setDefenderJList((Country)defenderSelect.getSelectedItem());
 		}
 		
 		leaderboard.sortList();
@@ -314,7 +352,7 @@ public class SimulationPanel extends JPanel
 				setComboBoxes();
 			}
 			
-			setDefenderJList((Country)defenderList.getSelectedItem());
+			setDefenderJList((Country)defenderSelect.getSelectedItem());
 			
 			mapPanel.repaint();
 		}
@@ -327,8 +365,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void vanquishDefender()
 	{
-		Country c1 = attackerList.getItemAt(attackerList.getSelectedIndex());
-		Country c2 = defenderList.getItemAt(defenderList.getSelectedIndex());
+		Country c1 = attackerSelect.getItemAt(attackerSelect.getSelectedIndex());
+		Country c2 = defenderSelect.getItemAt(defenderSelect.getSelectedIndex());
 		
 		if (canAttack(c1, c2))
 		{
@@ -359,11 +397,33 @@ public class SimulationPanel extends JPanel
 	}
 	
 	/**
+	 * Displays a confirmation message and saves the game data in a text file.
+	 */
+	private void saveGame()
+	{
+		int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to save? \n(saved data will be overwritten)", "Save game", JOptionPane.OK_CANCEL_OPTION);
+		
+		if (choice == JOptionPane.OK_OPTION)
+		{
+			try
+			{
+				leaderboard.saveGame(settings);
+				JOptionPane.showMessageDialog(this, "The game was saved.", "Save game", JOptionPane.INFORMATION_MESSAGE);
+			}
+			catch (IOException e)
+			{
+				//e.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Error: The game could not be saved.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
+	/**
 	 * Ends the game and display the final scores.
 	 */
 	private void quit()
 	{
-		int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit?", "Quit", JOptionPane.OK_CANCEL_OPTION);
+		int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit? \n(All unsaved progress will be lost)", "Quit", JOptionPane.OK_CANCEL_OPTION);
 		
 		if (choice == JOptionPane.OK_OPTION)
 		{
@@ -377,8 +437,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void takeProvince(Province province)
 	{
-		Country c1 = attackerList.getItemAt(attackerList.getSelectedIndex());
-		Country c2 = defenderList.getItemAt(defenderList.getSelectedIndex());
+		Country c1 = attackerSelect.getItemAt(attackerSelect.getSelectedIndex());
+		Country c2 = defenderSelect.getItemAt(defenderSelect.getSelectedIndex());
 		
 		if (canAttack(c1, c2)) //TODO: Allow non-adjacent countries to take provinces or no???
 		{
@@ -400,9 +460,9 @@ public class SimulationPanel extends JPanel
 		//Combobox selection is changed
 		public void actionPerformed(ActionEvent event)
 		{
-			if (event.getSource() == defenderList)
+			if (event.getSource() == defenderSelect)
 			{
-				setDefenderJList((Country)defenderList.getSelectedItem());
+				setDefenderJList((Country)defenderSelect.getSelectedItem());
 				if (highlightedProvince != null) //TODO: test if this is necessary.
 				{
 					highlightedProvince.setHighlighted(false);
@@ -456,6 +516,10 @@ public class SimulationPanel extends JPanel
 			else if (event.getSource() == vanquishDefender)
 			{
 				vanquishDefender();
+			}
+			else if (event.getSource() == saveGame)
+			{
+				saveGame();
 			}
 			else if (event.getSource() == quit)
 			{

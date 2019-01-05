@@ -49,6 +49,14 @@ public class Game
 		return mapImageName;
 	}
 	
+	/**
+	 * @return a string represtation of the game to be scanned from a text file
+	 */
+	public String serialize()
+	{
+		return gameName + "/" + countriesFileName + "/" + provincesFileName + "/" + mapImageName;
+	}
+	
 	public String toString()
 	{
 		return gameName;

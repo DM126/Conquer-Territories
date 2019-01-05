@@ -1,7 +1,6 @@
 
 /**
  * Represents an x,y coordinate on the map image.
- *
  */
 public class MapPoint
 {
