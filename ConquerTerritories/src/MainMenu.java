@@ -23,22 +23,16 @@ public class MainMenu extends JPanel
 		JLabel title = new JLabel("Conquer Territories");
 		title.setFont(new Font("Arial", Font.BOLD, 32));
 		
-		selectTeams = new JButton("Select Teams");
-		selectTeams.setToolTipText("Combine countries into teams (optional)");
+		ButtonListener listener = new ButtonListener();
 		
-		loadGame = new JButton("Load game");
-		loadGame.setToolTipText("Load a saved game");
+		selectTeams = ButtonFactory.createButton("Select Teams", "Combine countries into teams (optional)", listener, true);
+		
+		loadGame = ButtonFactory.createButton("Load game", "Load a saved game", listener, true);
 		File saveFile = new File("GameData.save");
 		loadGame.setEnabled(saveFile.exists());
 		//TODO: add functionality to delete a save
 		
-		play = new JButton("Play!");
-		play.setToolTipText("Start a new game with the chosen settings");
-		
-		ButtonListener listener = new ButtonListener();
-		play.addActionListener(listener);
-		selectTeams.addActionListener(listener);
-		loadGame.addActionListener(listener);
+		play = ButtonFactory.createButton("Play!", "Start a new game with the chosen settings", listener, true);
 		
 		settingsPanel = new SettingsPanel(this);
 		
