@@ -68,8 +68,8 @@ public class SimulationPanel extends JPanel
 		attack.addActionListener(buttonListener);
 		attack.setMnemonic(KeyEvent.VK_A);
 		
-		vanquishDefender = ButtonFactory.createButton("Vanquish defender!", "take all provinces from the defender", buttonListener, true);
-		undo = ButtonFactory.createButton("Undo", "Undo the last attack", buttonListener, false);
+		vanquishDefender = ComponentFactory.createButton("Vanquish defender!", "take all provinces from the defender", buttonListener, true);
+		undo = ComponentFactory.createButton("Undo", "Undo the last attack", buttonListener, false);
 		
 		attackDescription = new JLabel("Click 'attack' to begin.");
 		
@@ -90,7 +90,7 @@ public class SimulationPanel extends JPanel
 		provinceScroll.setPreferredSize(new Dimension(200, 100));
 		defenderProvinceList.addListSelectionListener(selectionListener);
 		setDefenderJList((Country)defenderSelect.getSelectedItem());
-		takeProvince = ButtonFactory.createButton("Take province", "Take the highlighted province", buttonListener, false);
+		takeProvince = ComponentFactory.createButton("Take province", "Take the highlighted province", buttonListener, false);
 		provinceChooserInterface.add(provinceScroll);
 		provinceChooserInterface.add(takeProvince);
 		
@@ -133,8 +133,8 @@ public class SimulationPanel extends JPanel
 		
 		//Set up the side panel with the leaderboard and the save and quit buttons
 		leaderboard = new Leaderboard(mapPanel.getCountries());
-		saveGame = ButtonFactory.createButton("Save game", "Save the game", buttonListener, true);
-		quit = ButtonFactory.createButton("Quit", "End the game and display the results", buttonListener, true);
+		saveGame = ComponentFactory.createButton("Save game", "Save the game", buttonListener, true);
+		quit = ComponentFactory.createButton("Quit", "End the game and display the results", buttonListener, true);
 		JPanel sidePanel = new JPanel();
 		sidePanel.add(leaderboard);
 		sidePanel.add(saveGame);

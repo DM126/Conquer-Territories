@@ -54,22 +54,22 @@ public class TeamSelectPanel extends JPanel
 		countriesOnTeam.addListSelectionListener(listener);
 		
 		teamComboBox = new JComboBox<Team>();
-		teamComboBox.addActionListener(listener);
+		//teamComboBox.addActionListener(listener);
 		teamComboBox.setEnabled(false);
-		selectTeam = ButtonFactory.createButton("Select team", "Open the selected team for viewing", listener, false);
+		selectTeam = ComponentFactory.createButton("Select team", "Open the selected team for viewing", listener, false);
 		
 		teamName = new JLabel();
 		setNameLabel();
-		changeName = ButtonFactory.createButton("Change name", "Change the name of this team", listener, false);
+		changeName = ComponentFactory.createButton("Change name", "Change the name of this team", listener, false);
 		
 		//Set up the buttons
-		addTeam = ButtonFactory.createButton("New team", "Create another team.", listener, true);
-		chooseColor = ButtonFactory.createButton("Choose a color", "Set the color of the currently selected team.", listener, false);
-		addCountry =  ButtonFactory.createButton("Add country", "Add this country to the currently selected team", listener, false);
-		removeCountry = ButtonFactory.createButton("Remove country", "Remove the selected country from this team.", listener, false);
-		deleteTeam = ButtonFactory.createButton("Delete team", "Deletes this team", listener, false);
-		startGame = ButtonFactory.createButton("Start game!", "Begin the game", listener, true);
-		returnToMenu = ButtonFactory.createButton("Return to menu", "Return to the main menu", listener, true);
+		addTeam = ComponentFactory.createButton("New team", "Create another team.", listener, true);
+		chooseColor = ComponentFactory.createButton("Choose a color", "Set the color of the currently selected team.", listener, false);
+		addCountry =  ComponentFactory.createButton("Add country", "Add this country to the currently selected team", listener, false);
+		removeCountry = ComponentFactory.createButton("Remove country", "Remove the selected country from this team.", listener, false);
+		deleteTeam = ComponentFactory.createButton("Delete team", "Deletes this team", listener, false);
+		startGame = ComponentFactory.createButton("Start game!", "Begin the game", listener, true);
+		returnToMenu = ComponentFactory.createButton("Return to menu", "Return to the main menu", listener, true);
 		
 		JPanel namePanel = new JPanel();
 		namePanel.add(teamName);
@@ -235,31 +235,6 @@ public class TeamSelectPanel extends JPanel
 		}
 	}
 	
-	//TODO: duplicate code in Team class
-	/**
-	 * Add a country or team to a list in the correct alphabetical location.
-	 * 
-	 * @param list the list of countries or teams
-	 * @param x the playable country/team to add to the list
-	 */
-	private void addToCorrectLocation(ArrayList<Country> list, Country c)
-	{
-		boolean added = false;
-		for (int i = 0; !added && i < list.size(); i++)
-		{
-			if (list.get(i).getName().compareToIgnoreCase(c.getName()) > 0)
-			{
-				list.add(i, c);
-				added = true;
-			}
-		}
-		
-		if (!added)
-		{
-			list.add(c);
-		}
-	}
-	
 	/**
 	 * Used for determining if a name chosen for a team by the user is already in use.
 	 * Checks the lists of countries and teams for the name.
@@ -419,11 +394,7 @@ public class TeamSelectPanel extends JPanel
 				{
 					addCountry.setEnabled(false);
 				}
-				selectTeam.setEnabled(true);
-				deleteTeam.setEnabled(true);
-				chooseColor.setEnabled(true);
-				changeName.setEnabled(true);
-				teamComboBox.setEnabled(true);
+				enableComponents(true);
 			}
 		}
 	}
@@ -438,10 +409,11 @@ public class TeamSelectPanel extends JPanel
 		if (choice == JOptionPane.OK_OPTION)
 		{
 			teams.remove(currentTeam);
-			for (Country c : currentTeam.getCountries())
+			for (Country c : currentTeam.getCountries()) //Add the team's countries back to the main list, then sort the list
 			{
-				addToCorrectLocation(countries, c);
+				countries.add(c);
 			}
+			ListSorter.sortCountries(countries, ListSorter.Methods.ALPHABETICAL);
 			
 			if (!teams.isEmpty())
 			{	
@@ -450,11 +422,7 @@ public class TeamSelectPanel extends JPanel
 			else
 			{
 				currentTeam = null;
-				selectTeam.setEnabled(false);
-				deleteTeam.setEnabled(false);
-				chooseColor.setEnabled(false);
-				changeName.setEnabled(false);
-				teamComboBox.setEnabled(false);
+				enableComponents(false);
 			}
 			
 			setTeamJList(currentTeam);
@@ -463,6 +431,20 @@ public class TeamSelectPanel extends JPanel
 			teamComboBox.setSelectedItem(currentTeam);
 			setNameLabel();
 		}
+	}
+	
+	/**
+	 * Enables or disables the buttons on the team display panel.
+	 * 
+	 * @param enabled true if the components should be enabled
+	 */
+	private void enableComponents(boolean enabled)
+	{
+		selectTeam.setEnabled(enabled);
+		deleteTeam.setEnabled(enabled);
+		chooseColor.setEnabled(enabled);
+		changeName.setEnabled(enabled);
+		teamComboBox.setEnabled(enabled);
 	}
 	
 	/**
@@ -491,7 +473,7 @@ public class TeamSelectPanel extends JPanel
 		Country c = countriesOnTeam.getSelectedValue();
 		currentTeam.removeCountry(c);
 		
-		addToCorrectLocation(countries, c);
+		ListSorter.addToCorrectLocation(countries, c, ListSorter.Methods.ALPHABETICAL);
 		
 		setCountriesJList();
 		setTeamJList(currentTeam);
@@ -559,7 +541,7 @@ public class TeamSelectPanel extends JPanel
 				{
 					if (!team.getCountries().isEmpty()) //TODO: display a confirmation box before starting if there are any empty teams
 					{
-						addToCorrectLocation(countries, new Country(team));
+						ListSorter.addToCorrectLocation(countries, new Country(team), ListSorter.Methods.ALPHABETICAL);
 					}
 				}
 				
