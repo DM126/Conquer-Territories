@@ -14,7 +14,6 @@ public class ConquerFrame extends JFrame
 		
 		setPanel(new MainMenu(this));
 		
-		setLocationRelativeTo(null);
 		setFocusable(true);
 	}
 	
