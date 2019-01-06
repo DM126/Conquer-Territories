@@ -29,12 +29,8 @@ public class FinalResultsPanel extends JPanel
 		peakScroll.setViewportView(peakSizes);
 		
 		ButtonListener listener = new ButtonListener();
-		
-		exit = new JButton("Exit Game");
-		exit.addActionListener(listener);
-		
-		returnToMenu = new JButton("Main Menu");
-		returnToMenu.addActionListener(listener);
+		exit = ButtonFactory.createButton("Exit Game", "Close the program", listener, true);
+		returnToMenu = ButtonFactory.createButton("Main Menu", "Return to the main menu", listener, true);
 		
 		//Write the end sizes in the endResults text area
 		for (int i = countries.size() - 1; i >= 0; i--)
