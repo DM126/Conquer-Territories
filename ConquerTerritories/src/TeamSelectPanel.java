@@ -36,9 +36,12 @@ public class TeamSelectPanel extends JPanel
 		this.countries = countries;
 		this.settings = settings;
 		
+		JLabel title = new JLabel("Team Creation");
+		title.setFont(new Font("Arial", Font.BOLD, 32));
+		
 		teams = new ArrayList<Team>();
 		
-		ButtonListener listener = new ButtonListener();
+		EventListener listener = new EventListener();
 		
 		countryChoices = new JList<Country>();
 		JScrollPane countryScroll = new JScrollPane();
@@ -47,106 +50,105 @@ public class TeamSelectPanel extends JPanel
 		setCountriesJList();
 		
 		countriesOnTeam = new JList<Country>();
-		JScrollPane currentCountriesScroll = new JScrollPane();
-		currentCountriesScroll.setViewportView(countriesOnTeam);
+		JScrollPane currentCountriesScrollPane = new JScrollPane();
+		currentCountriesScrollPane.setViewportView(countriesOnTeam);
 		countriesOnTeam.addListSelectionListener(listener);
 		
 		teamComboBox = new JComboBox<Team>();
 		teamComboBox.addActionListener(listener);
 		teamComboBox.setEnabled(false);
-		selectTeam = new JButton("Select team");
-		selectTeam.setEnabled(false);
-		selectTeam.setToolTipText("Open the selected team for viewing");
-		selectTeam.addActionListener(listener);
+		selectTeam =  createButton("Select team", "Open the selected team for viewing", listener, false);
 		
 		teamName = new JLabel();
 		setNameLabel();
-		changeName = new JButton("Change name");
-		changeName.setEnabled(false);
-		changeName.setToolTipText("Change the name of this team");
-		changeName.addActionListener(listener);
+		changeName = createButton("Change name", "Change the name of this team", listener, false);
 		
 		//Set up the buttons
-		addTeam = new JButton("New team");
-		addTeam.setToolTipText("Create another team.");
-		addTeam.addActionListener(listener);
-		chooseColor = new JButton("Choose a color");
-		chooseColor.setEnabled(false);
-		chooseColor.setToolTipText("Set the color of the currently selected team.");
-		chooseColor.addActionListener(listener);
-		addCountry = new JButton("Add country");
-		addCountry.setEnabled(false);
-		addCountry.setToolTipText("Add this country to the currently selected team");
-		addCountry.addActionListener(listener);
-		removeCountry = new JButton("Remove country");
-		removeCountry.setEnabled(false);
-		removeCountry.setToolTipText("Remove the selected country from this team.");
-		removeCountry.addActionListener(listener);
-		deleteTeam = new JButton("Delete team");
-		deleteTeam.setEnabled(false);
-		deleteTeam.setToolTipText("Deletes this team");
-		deleteTeam.addActionListener(listener);
-		startGame = new JButton("Start game!");
-		startGame.setToolTipText("Begin the game");
-		startGame.addActionListener(listener);
-		returnToMenu = new JButton("Return to menu");
-		returnToMenu.setToolTipText("Return to the main menu");
-		returnToMenu.addActionListener(listener);
+		addTeam = createButton("New team", "Create another team.", listener, true);
+		chooseColor = createButton("Choose a color", "Set the color of the currently selected team.", listener, false);
+		addCountry =  createButton("Add country", "Add this country to the currently selected team", listener, false);
+		removeCountry = createButton("Remove country", "Remove the selected country from this team.", listener, false);
+		deleteTeam = createButton("Delete team", "Deletes this team", listener, false);
+		startGame = createButton("Start game!", "Begin the game", listener, true);
+		returnToMenu = createButton("Return to menu", "Return to the main menu", listener, true);
 		
 		JPanel namePanel = new JPanel();
 		namePanel.add(teamName);
 		namePanel.add(changeName);
-		namePanel.setPreferredSize(new Dimension(teamName.getPreferredSize().width, 
+		namePanel.setPreferredSize(new Dimension(teamName.getPreferredSize().width + 30, 
 												teamName.getPreferredSize().height + 
 												changeName.getPreferredSize().height + 10));
 		
+		//Panel containing the current team's info
 		JPanel teamPanel = new JPanel();
 		teamPanel.add(namePanel);
-		teamPanel.add(currentCountriesScroll);
+		teamPanel.add(currentCountriesScrollPane);
 		teamPanel.add(removeCountry);
 		teamPanel.add(chooseColor);
 		teamPanel.add(deleteTeam);
-		teamPanel.setPreferredSize(new Dimension(currentCountriesScroll.getPreferredSize().width + 20, 
+		teamPanel.setPreferredSize(new Dimension(currentCountriesScrollPane.getPreferredSize().width + 20, 
 												namePanel.getPreferredSize().height + 
-												currentCountriesScroll.getPreferredSize().height + 
+												currentCountriesScrollPane.getPreferredSize().height + 
 												chooseColor.getPreferredSize().height + 
 												deleteTeam.getPreferredSize().height + 
 												removeCountry.getPreferredSize().height + 10));
 		
+		//Panel containing the list of countries
 		JPanel countryPanel = new JPanel();
 		countryPanel.add(countryScroll);
 		countryPanel.add(addCountry);
-		countryPanel.setPreferredSize(new Dimension(countryScroll.getPreferredSize().width + 10,
+		countryPanel.setPreferredSize(new Dimension(countryScroll.getPreferredSize().width + 20,
 													countryScroll.getPreferredSize().height + 
 													addCountry.getPreferredSize().height + 10));
 		
-		JPanel selectionPanel = new JPanel();
-		selectionPanel.add(teamComboBox);
-		selectionPanel.add(selectTeam);
-		selectionPanel.add(addTeam);
-		selectionPanel.setPreferredSize(new Dimension(selectTeam.getPreferredSize().width + 10, 
+		//Panel for selecting which team to edit
+		JPanel teamSelectionPanel = new JPanel();
+		teamSelectionPanel.add(teamComboBox);
+		teamSelectionPanel.add(selectTeam);
+		teamSelectionPanel.add(addTeam);
+		teamSelectionPanel.setPreferredSize(new Dimension(selectTeam.getPreferredSize().width + 40, 
 														teamComboBox.getPreferredSize().height +
 														selectTeam.getPreferredSize().height + 
 														addTeam.getPreferredSize().height + 15));
 		
 		JPanel optionsPanel = new JPanel();
-		optionsPanel.add(selectionPanel);
+		optionsPanel.add(teamSelectionPanel);
 		optionsPanel.add(countryPanel);
 		optionsPanel.add(teamPanel);
-		optionsPanel.setPreferredSize(new Dimension(selectionPanel.getPreferredSize().width + 
+		optionsPanel.setPreferredSize(new Dimension(teamSelectionPanel.getPreferredSize().width + 
 													countryPanel.getPreferredSize().width + 
-													teamPanel.getPreferredSize().width + 100,
-													teamPanel.getPreferredSize().height + 50));
+													teamPanel.getPreferredSize().width + 70,
+													teamPanel.getPreferredSize().height + 10));
 		
+		add(title);
 		add(optionsPanel);
 		add(startGame);
 		add(returnToMenu);
-		
-		setPreferredSize(new Dimension(optionsPanel.getPreferredSize().width, 
+		setPreferredSize(new Dimension(optionsPanel.getPreferredSize().width,
+										title.getPreferredSize().height +
 										optionsPanel.getPreferredSize().height + 
-										//keepNeutrals.getPreferredSize().height +
-										addTeam.getPreferredSize().height +
-										startGame.getPreferredSize().height + 10));
+										startGame.getPreferredSize().height + 25));
+	}
+	
+	/**
+	 * Creates a new button.
+	 * 
+	 * @param text the text written on the button
+	 * @param tooltip the tooltip text when hovering over the button
+	 * @param listener the actionlistener to get click events
+	 * @param isEnabled true if the button starts off enabled
+	 * @return the new button
+	 */
+	private JButton createButton(String text, String tooltip, ActionListener listener, boolean isEnabled)
+	{
+		//TODO: Maybe create a ButtonFactory class to make buttons
+		JButton button = new JButton(text);
+		
+		button.setToolTipText(tooltip);
+		button.addActionListener(listener);
+		button.setEnabled(isEnabled);
+		
+		return button;
 	}
 	
 	/**
@@ -358,7 +360,7 @@ public class TeamSelectPanel extends JPanel
 				JOptionPane.showMessageDialog(this, "Name is too long.", "Error", JOptionPane.ERROR_MESSAGE);
 				name = INVALID_NAME;
 			}
-			else if (name.contains(";") || name.contains("/")) //These characters are used as delimiters for the data files
+			else if (name.contains("/")) //Characters used as delimiters for the data files
 			{
 				JOptionPane.showMessageDialog(this, "Name contains invalid characters.", "Error", JOptionPane.ERROR_MESSAGE);
 				name = INVALID_NAME;
@@ -449,7 +451,7 @@ public class TeamSelectPanel extends JPanel
 	}
 	
 	/**
-	 * Deletes the currently selected team.
+	 * Deletes the currently displayed team.
 	 */
 	private void deleteTeam()
 	{
@@ -503,6 +505,21 @@ public class TeamSelectPanel extends JPanel
 	}
 	
 	/**
+	 * Remove the selected country from the current team and add it back 
+	 * to the list of countries.
+	 */
+	private void removeSelectedCountry()
+	{
+		Country c = countriesOnTeam.getSelectedValue();
+		currentTeam.removeCountry(c);
+		
+		addToCorrectLocation(countries, c);
+		
+		setCountriesJList();
+		setTeamJList(currentTeam);
+	}
+	
+	/**
 	 * Displays a confirmation dialog box and returns to the main menu.
 	 */
 	private void returnToMenu()
@@ -521,7 +538,7 @@ public class TeamSelectPanel extends JPanel
 		}
 	}
 	
-	private class ButtonListener implements ActionListener, ListSelectionListener
+	private class EventListener implements ActionListener, ListSelectionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
@@ -552,13 +569,7 @@ public class TeamSelectPanel extends JPanel
 			}
 			else if (event.getSource() == removeCountry)
 			{
-				Country c = countriesOnTeam.getSelectedValue();
-				currentTeam.removeCountry(c);
-				
-				addToCorrectLocation(countries, c);
-				
-				setCountriesJList();
-				setTeamJList(currentTeam);
+				removeSelectedCountry();
 			}
 			else if (event.getSource() == deleteTeam)
 			{
