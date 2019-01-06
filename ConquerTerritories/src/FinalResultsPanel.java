@@ -18,10 +18,8 @@ public class FinalResultsPanel extends JPanel
 	{
 		this.parent = parent;
 		
-		endResults = new JTextArea(20, 20);
-		peakSizes = new JTextArea(20, 20);
-		initializeTextArea(endResults);
-		initializeTextArea(peakSizes);
+		endResults = createTextArea();
+		peakSizes = createTextArea();
 		
 		JScrollPane resultsScroll = new JScrollPane();
 		resultsScroll.setViewportView(endResults);
@@ -126,15 +124,19 @@ public class FinalResultsPanel extends JPanel
 	}
 	
 	/**
-	 * Initialize a JTextArea to be uneditable with plain size 20 arial font.
+	 * create a new JTextArea to be uneditable with plain size 20 arial font,
+	 * 20 rows and 20 columns.
 	 * 
-	 * @param text the JTextArea to initialize.
+	 * @return a new JTextArea
 	 */
-	private void initializeTextArea(JTextArea text)
+	private JTextArea createTextArea()
 	{
+		JTextArea text = new JTextArea(20, 20);
 		text.setEditable(false);
 		text.setFont(new Font("Arial", Font.PLAIN, 20));
 		text.setText("");
+		
+		return text;
 	}
 	
 	private class ButtonListener implements ActionListener
