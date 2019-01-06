@@ -4,7 +4,7 @@ import java.util.Scanner;
  * Represents the settings for a game
  */
 public class Settings
-{
+{	
 	private int attackerMax;
 	private int defenderMax;
 	private boolean allowDraws;
