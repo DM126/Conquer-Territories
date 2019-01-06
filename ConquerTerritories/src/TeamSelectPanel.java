@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
-//TODO add a back button to go back to the main menu (display dialog to tell the user they will lose the teams)
 public class TeamSelectPanel extends JPanel
 {
 	private static String INVALID_NAME = "";
@@ -57,20 +56,20 @@ public class TeamSelectPanel extends JPanel
 		teamComboBox = new JComboBox<Team>();
 		teamComboBox.addActionListener(listener);
 		teamComboBox.setEnabled(false);
-		selectTeam =  createButton("Select team", "Open the selected team for viewing", listener, false);
+		selectTeam = ButtonFactory.createButton("Select team", "Open the selected team for viewing", listener, false);
 		
 		teamName = new JLabel();
 		setNameLabel();
-		changeName = createButton("Change name", "Change the name of this team", listener, false);
+		changeName = ButtonFactory.createButton("Change name", "Change the name of this team", listener, false);
 		
 		//Set up the buttons
-		addTeam = createButton("New team", "Create another team.", listener, true);
-		chooseColor = createButton("Choose a color", "Set the color of the currently selected team.", listener, false);
-		addCountry =  createButton("Add country", "Add this country to the currently selected team", listener, false);
-		removeCountry = createButton("Remove country", "Remove the selected country from this team.", listener, false);
-		deleteTeam = createButton("Delete team", "Deletes this team", listener, false);
-		startGame = createButton("Start game!", "Begin the game", listener, true);
-		returnToMenu = createButton("Return to menu", "Return to the main menu", listener, true);
+		addTeam = ButtonFactory.createButton("New team", "Create another team.", listener, true);
+		chooseColor = ButtonFactory.createButton("Choose a color", "Set the color of the currently selected team.", listener, false);
+		addCountry =  ButtonFactory.createButton("Add country", "Add this country to the currently selected team", listener, false);
+		removeCountry = ButtonFactory.createButton("Remove country", "Remove the selected country from this team.", listener, false);
+		deleteTeam = ButtonFactory.createButton("Delete team", "Deletes this team", listener, false);
+		startGame = ButtonFactory.createButton("Start game!", "Begin the game", listener, true);
+		returnToMenu = ButtonFactory.createButton("Return to menu", "Return to the main menu", listener, true);
 		
 		JPanel namePanel = new JPanel();
 		namePanel.add(teamName);
@@ -128,27 +127,6 @@ public class TeamSelectPanel extends JPanel
 										title.getPreferredSize().height +
 										optionsPanel.getPreferredSize().height + 
 										startGame.getPreferredSize().height + 25));
-	}
-	
-	/**
-	 * Creates a new button.
-	 * 
-	 * @param text the text written on the button
-	 * @param tooltip the tooltip text when hovering over the button
-	 * @param listener the actionlistener to get click events
-	 * @param isEnabled true if the button starts off enabled
-	 * @return the new button
-	 */
-	private JButton createButton(String text, String tooltip, ActionListener listener, boolean isEnabled)
-	{
-		//TODO: Maybe create a ButtonFactory class to make buttons
-		JButton button = new JButton(text);
-		
-		button.setToolTipText(tooltip);
-		button.addActionListener(listener);
-		button.setEnabled(isEnabled);
-		
-		return button;
 	}
 	
 	/**

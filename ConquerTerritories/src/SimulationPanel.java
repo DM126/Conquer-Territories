@@ -68,18 +68,12 @@ public class SimulationPanel extends JPanel
 		attack.addActionListener(buttonListener);
 		attack.setMnemonic(KeyEvent.VK_A);
 		
-		vanquishDefender = new JButton("Vanquish defender!");
-		vanquishDefender.addActionListener(buttonListener);
-		
-		undo = new JButton("Undo");
-		undo.setEnabled(false);
-		undo.addActionListener(buttonListener);
+		vanquishDefender = ButtonFactory.createButton("Vanquish defender!", "take all provinces from the defender", buttonListener, true);
+		undo = ButtonFactory.createButton("Undo", "Undo the last attack", buttonListener, false);
 		
 		attackDescription = new JLabel("Click 'attack' to begin.");
 		
-		//jpanel that holds the comboboxes, buttons, and province list
-		JPanel interfacePanel = new JPanel();
-		
+		//Panel to choose which countries to attack and defend
 		JPanel attackInterface = new JPanel(); //left side of interface
 		attackInterface.setPreferredSize(new Dimension(attackerSelect.getPreferredSize().width * 2 + 20, 100));
 		attackInterface.add(attackerSelect);
@@ -88,6 +82,7 @@ public class SimulationPanel extends JPanel
 		attackInterface.add(undo);
 		attackInterface.add(vanquishDefender);
 		
+		//Panel to select and take single provinces
 		JPanel provinceChooserInterface = new JPanel(); //right side of interface
 		defenderProvinceList = new JList<Province>();
 		JScrollPane provinceScroll = new JScrollPane();
@@ -95,16 +90,16 @@ public class SimulationPanel extends JPanel
 		provinceScroll.setPreferredSize(new Dimension(200, 100));
 		defenderProvinceList.addListSelectionListener(selectionListener);
 		setDefenderJList((Country)defenderSelect.getSelectedItem());
-		takeProvince = new JButton("Take province");
-		takeProvince.setEnabled(false);
-		takeProvince.addActionListener(selectionListener);
+		takeProvince = ButtonFactory.createButton("Take province", "Take the highlighted province", buttonListener, false);
 		provinceChooserInterface.add(provinceScroll);
 		provinceChooserInterface.add(takeProvince);
 		
+		//jpanel that holds the comboboxes, buttons, and province list
+		JPanel interfacePanel = new JPanel();
 		interfacePanel.add(attackInterface);
 		interfacePanel.add(provinceChooserInterface);
 		
-		//jpanel that holds the description jlabel
+		//jpanel that holds the description label
 		JPanel descriptionPanel = new JPanel();
 		descriptionPanel.setPreferredSize(new Dimension(500, 20));
 		descriptionPanel.add(attackDescription);
@@ -136,14 +131,10 @@ public class SimulationPanel extends JPanel
 		gamePanel.setPreferredSize(new Dimension(mapScroll.getPreferredSize().width + 20, 
 												interfacePanel.getPreferredSize().height + mapScroll.getPreferredSize().height + descriptionPanel.getPreferredSize().height + 40));
 		
-		//Set up the side panel with the leaderboard and the quit button
+		//Set up the side panel with the leaderboard and the save and quit buttons
 		leaderboard = new Leaderboard(mapPanel.getCountries());
-		saveGame = new JButton("Save game");
-		saveGame.setToolTipText("Save the game");
-		saveGame.addActionListener(buttonListener);
-		quit = new JButton("Quit");
-		quit.setToolTipText("End the game and display the results");
-		quit.addActionListener(buttonListener);
+		saveGame = ButtonFactory.createButton("Save game", "Save the game", buttonListener, true);
+		quit = ButtonFactory.createButton("Quit", "End the game and display the results", buttonListener, true);
 		JPanel sidePanel = new JPanel();
 		sidePanel.add(leaderboard);
 		sidePanel.add(saveGame);
@@ -474,10 +465,6 @@ public class SimulationPanel extends JPanel
 				
 				takeProvince.setEnabled(false);
 			}
-			else if (event.getSource() == takeProvince)
-			{
-				takeProvince(highlightedProvince);
-			}
 		}
 
 		//JList selection is changed
@@ -524,6 +511,10 @@ public class SimulationPanel extends JPanel
 			else if (event.getSource() == quit)
 			{
 				quit();
+			}
+			else if (event.getSource() == takeProvince)
+			{
+				takeProvince(highlightedProvince);
 			}
 		}
 	}
