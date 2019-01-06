@@ -1,14 +1,11 @@
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 public class MainMenu extends JPanel
 {	
 	//TODO: add options for random bonus attacks, strength based on number of provinces, strength based on province value, etc...
-	//TODO: maybe add a seperate settings screen?
 	
 	private JButton play;
 	private JButton selectTeams;
@@ -27,9 +24,8 @@ public class MainMenu extends JPanel
 		
 		selectTeams = ButtonFactory.createButton("Select Teams", "Combine countries into teams (optional)", listener, true);
 		
-		loadGame = ButtonFactory.createButton("Load game", "Load a saved game", listener, true);
 		File saveFile = new File("GameData.save");
-		loadGame.setEnabled(saveFile.exists());
+		loadGame = ButtonFactory.createButton("Load game", "Load a saved game", listener, saveFile.exists());
 		//TODO: add functionality to delete a save
 		
 		play = ButtonFactory.createButton("Play!", "Start a new game with the chosen settings", listener, true);
@@ -48,7 +44,7 @@ public class MainMenu extends JPanel
 		add(title);
 		add(uiPanel);
 		
-		setPreferredSize(new Dimension(title.getPreferredSize().width + 10, 
+		setPreferredSize(new Dimension(title.getPreferredSize().width + 40, 
 										title.getPreferredSize().height + uiPanel.getPreferredSize().height + 20));
 	}
 	
