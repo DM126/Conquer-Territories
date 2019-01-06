@@ -78,7 +78,7 @@ public class ConquerFrame extends JFrame
 			}
 			scan.close();
 			
-			sortCountries(countries);
+			ListSorter.sortCountries(countries, ListSorter.Methods.ALPHABETICAL);
 			
 			startGame(countries, settings);
 		}
@@ -151,30 +151,8 @@ public class ConquerFrame extends JFrame
 			System.exit(1);
 		}
 		
-		sortCountries(countries);
+		ListSorter.sortCountries(countries, ListSorter.Methods.ALPHABETICAL);
 		
 		return countries;
-	}
-	
-	/**
-	 * Sorts the list of countries to be in alphabetical order
-	 * 
-	 * @param countries the list of countries to sort
-	 */
-	private void sortCountries(ArrayList<Country> countries)
-	{
-		boolean swapped = true;
-		for (int i = 0; i < countries.size() - 1 && swapped; i++)
-		{	
-			swapped = false;
-			for (int j = countries.size() - 1; j > i; j--)
-			{
-				if (countries.get(j).getName().compareToIgnoreCase(countries.get(j-1).getName()) < 0)
-				{
-					Collections.swap(countries, j, j-1);
-					swapped = true;
-				}
-			}
-		}
 	}
 }

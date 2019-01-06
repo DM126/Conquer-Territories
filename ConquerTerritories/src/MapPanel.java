@@ -40,10 +40,6 @@ public class MapPanel extends JPanel
 		//Create polygons and set adjacencies by reading the map image file
 		WorldBuilder wb = new WorldBuilder(provinces, game);
 		
-		//DEBUG:
-		//for (Country c : countries)
-		//	System.out.println(c);
-		
 		setPreferredSize(wb.getDimensions());
 		setBackground(Color.WHITE);
 		
@@ -57,7 +53,8 @@ public class MapPanel extends JPanel
 		//Draw provinces
 		for (Province p : provinces)
 		{
-			//If an exception is thrown here it means you forgot to update map.bmp, or you left a province out of countries.txt
+			//If an exception is thrown here it means you forgot to update the map image file, 
+			//or you left a province out of the countries text file
 			//try
 			//{
 				page.setColor(p.getColor());
@@ -80,21 +77,6 @@ public class MapPanel extends JPanel
 	 */
 	public void reviveCountry(Country c)
 	{
-		//TODO: DUPLICATE CODE IN 2 OTHER CLASSES
-		//TODO: Binary search?
-		boolean added = false;
-		for (int i = 0; !added && i < countries.size(); i++)
-		{
-			if (countries.get(i).getName().compareTo(c.getName()) > 0)
-			{
-				countries.add(i, c);
-				added = true;
-			}
-		}
-		
-		if (!added)
-		{
-			countries.add(c);
-		}
+		ListSorter.addToCorrectLocation(countries, c, ListSorter.Methods.ALPHABETICAL);
 	}
 }

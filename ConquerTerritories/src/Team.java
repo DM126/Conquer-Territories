@@ -34,7 +34,6 @@ public class Team
 		return team;
 	}
 	
-	//TODO: Duplicate code in TeamSelectPanel
 	/**
 	 * Adds a country to this team in the correct alphabetical location
 	 * 
@@ -42,20 +41,7 @@ public class Team
 	 */
 	public void addCountry(Country country)
 	{
-		boolean added = false;
-		for (int i = 0; !added && i < team.size(); i++)
-		{
-			if (team.get(i).getName().compareToIgnoreCase(country.getName()) > 0)
-			{
-				team.add(i, country);
-				added = true;
-			}
-		}
-		
-		if (!added)
-		{
-			team.add(country);
-		}
+		ListSorter.addToCorrectLocation(team, country, ListSorter.Methods.ALPHABETICAL);
 	}
 	
 	/**

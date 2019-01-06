@@ -1,10 +1,10 @@
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
+import javax.swing.*;
 
 /**
- * Used to simplify creation of buttons and keep code looking clean.
+ * Used to simplify creation of Swing components and keep code looking clean.
  */
-public class ButtonFactory
+public class ComponentFactory
 {
 	/**
 	 * Creates a new button.
