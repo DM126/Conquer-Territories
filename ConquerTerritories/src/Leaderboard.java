@@ -53,6 +53,11 @@ public class Leaderboard extends JPanel
 		vanquishedCountries.add(c);
 	}
 	
+	public void sortList()
+	{
+		ListSorter.sortCountries(remainingCountries, ListSorter.Methods.SIZE);
+	}
+	
 	/**
 	 * Sets the text area to display the countries in order of size.
 	 */
@@ -66,42 +71,6 @@ public class Leaderboard extends JPanel
 		}
 		
 		scores.setCaretPosition(0);
-	}
-	
-	/**
-	 * Sorts the list of countries into descending order using a bubble sort.
-	 */
-	public void sortList()
-	{
-		boolean swapped = true;
-		for (int i = 0; i < remainingCountries.size() - 1 && swapped; i++)
-		{	
-			swapped = false;
-			for (int j = remainingCountries.size() - 1; j > i; j--)
-			{
-				if (remainingCountries.get(j).getSize() > remainingCountries.get(j-1).getSize())
-				{
-					Collections.swap(remainingCountries, j, j-1);
-					swapped = true;
-				}
-			}
-		}
-	}
-	
-	/**
-	 * @return true if the array list of countries is in order by size
-	 */
-	public boolean isInOrder()
-	{
-		for (int i = 0; i < remainingCountries.size() - 1; i++)
-		{
-			if (remainingCountries.get(i).getSize() < remainingCountries.get(i+1).getSize())
-			{
-				return false;
-			}
-		}
-		
-		return true;
 	}
 	
 	/**
@@ -149,8 +118,8 @@ public class Leaderboard extends JPanel
 		
 		//Write the game info to the text file
 		writer.println(settings.toString());
-		saveCountries(writer, remainingCountries);
-		saveCountries(writer, vanquishedCountries);
+		saveCountries(remainingCountries, writer);
+		saveCountries(vanquishedCountries, writer);
 		
 		writer.close();
 	}
@@ -161,7 +130,7 @@ public class Leaderboard extends JPanel
 	 * @param writer writer to a text file
 	 * @param countries a list of countries
 	 */
-	private void saveCountries(PrintWriter writer, ArrayList<Country> countries)
+	private void saveCountries(ArrayList<Country> countries, PrintWriter writer)
 	{
 		for (Country country : countries)
 		{

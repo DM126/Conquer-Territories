@@ -27,46 +27,17 @@ public class FinalResultsPanel extends JPanel
 		peakScroll.setViewportView(peakSizes);
 		
 		ButtonListener listener = new ButtonListener();
-		exit = ButtonFactory.createButton("Exit Game", "Close the program", listener, true);
-		returnToMenu = ButtonFactory.createButton("Main Menu", "Return to the main menu", listener, true);
+		exit = ComponentFactory.createButton("Exit Game", "Close the program", listener, true);
+		returnToMenu = ComponentFactory.createButton("Main Menu", "Return to the main menu", listener, true);
 		
 		//Write the end sizes in the endResults text area
-		for (int i = countries.size() - 1; i >= 0; i--)
-		{
-			Country c = countries.get(i);
-			endResults.append((countries.size() - i) + ". " + c.getName() + " - ");
-			int size = c.getSize();
-			if (size == 1)
-			{
-				endResults.append(c.getSize() + " province\n");
-			}
-			else if (size > 1)
-			{
-				endResults.append(c.getSize() + " provinces\n");
-			}
-			else //size == 0
-			{
-				endResults.append("Vanquished!\n");
-			}
-		}
+		writeToTextArea(endResults, countries, (country) -> country.getSize());
 		
-		sortByPeakSize(countries);
+		//Sort countries by peak size
+		ListSorter.sortCountries(countries, ListSorter.Methods.PEAK_SIZE);
 		
 		//Write the peak sizes in the peakSizes text area
-		for (int i = 0; i < countries.size(); i++)
-		{
-			Country country = countries.get(i);
-			peakSizes.append((i+1) + ". " + country + " - ");
-			int peak = country.getPeakSize();
-			if (peak > 1)
-			{
-				peakSizes.append(peak + " provinces\n");
-			}
-			else //peak == 1
-			{
-				peakSizes.append(peak + " province\n");
-			}
-		}
+		writeToTextArea(peakSizes, countries, (country) -> country.getPeakSize());
 		
 		Font titleFont = new Font("Arial", Font.PLAIN, 24);
 		
@@ -97,28 +68,48 @@ public class FinalResultsPanel extends JPanel
 		setPreferredSize(new Dimension(endResultsPanel.getPreferredSize().width * 2 + 16, 
 										endResultsPanel.getPreferredSize().height + buttonPanel.getPreferredSize().height + 30));
 		
+		//Display the top of the text areas first
 		endResults.setCaretPosition(0);
 		peakSizes.setCaretPosition(0);
 	}
 	
-	/**
-	 * sort the list of countries by peak size using a bubble sort (I think?).
-	 * 
-	 * @param countries the list of all the countries
-	 */
-	private void sortByPeakSize(ArrayList<Country> countries)
+	//Functional Interface for a lambda expression
+	private interface Size
 	{
-		boolean swapped = true;
-		for (int i = 0; i < countries.size() - 1 && swapped; i++)
-		{	
-			swapped = false;
-			for (int j = countries.size() - 1; j > i; j--)
+		/**
+		 * Determines which size to write to a text area (current size or peak size)
+		 * 
+		 * @param country the country whose size to return
+		 * @return the current or peak size of the country
+		 */
+		int size(Country country);
+	}
+	
+	/**
+	 * Writes the list of countries and their size (current or peak) to a JTextArea
+	 * 
+	 * @param textArea the JTextArea to write to
+	 * @param countries the list of countries to display
+	 * @param sizeMethod the method that returns a country's size (Country.getSize() or Country.getPeakSize())
+	 */
+	private void writeToTextArea(JTextArea textArea, ArrayList<Country> countries, Size sizeMethod)
+	{
+		for (int i = countries.size() - 1; i >= 0; i--)
+		{
+			Country c = countries.get(i);
+			textArea.append((countries.size() - i) + ". " + c.getName() + " - ");
+			int size = sizeMethod.size(c);
+			if (size == 1)
 			{
-				if (countries.get(j).getPeakSize() > countries.get(j-1).getPeakSize())
-				{
-					Collections.swap(countries, j, j-1);
-					swapped = true;
-				}
+				textArea.append(size + " province\n");
+			}
+			else if (size > 1)
+			{
+				textArea.append(size + " provinces\n");
+			}
+			else //size == 0
+			{
+				textArea.append("Vanquished!\n");
 			}
 		}
 	}
