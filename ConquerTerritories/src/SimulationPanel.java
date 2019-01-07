@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 //TODO: fix comboboxes resetting after victory/vanquishing?
-//then: maybe make defenderList only display countries that share a border with combo1 country? <- might cause issues with rapid gameplay
+//then: maybe make defenderSelect only display countries that share a border with combo1 country? <- might cause issues with rapid gameplay
 //TODO: give comboboxes a minimum size so they don't mess up the panel organization, or reorganize the panel into two panels? buttons/comboboxes?
 /**
  * Represents the main panel for the simulation.
@@ -20,14 +20,14 @@ public class SimulationPanel extends JPanel
 	private JButton attack;
 	private JButton vanquishDefender;
 	private JButton undo;
-	private Move lastMove; //TODO: maybe add multiple moves to a stack? //TODO: add a redo button?
+	private JButton redo;
+	private Move lastMove; //TODO: maybe add multiple moves to a stack?
 	private Random rand;
 	private JLabel attackDescription;
 	private Leaderboard leaderboard;
 	private JButton quit;
 	private JButton saveGame;
 	private Settings settings;
-	
 	private JList<Province> defenderProvinceList;
 	private JButton takeProvince;
 	private Province highlightedProvince;
@@ -43,13 +43,11 @@ public class SimulationPanel extends JPanel
 		} 
 		catch (IOException e)
 		{
-			JOptionPane.showMessageDialog(this, "Error: " + settings.getGame().getMapImageName() + " could not be found.", "Error", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
+			parent.closeWithError("Error: " + settings.getGame().getMapImageName() + " could not be found.");
 		}
 		catch (ColorNotFoundException e)
 		{
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
+			parent.closeWithError(e.getMessage());
 		}
 		
 		highlightedProvince = null;
@@ -58,6 +56,9 @@ public class SimulationPanel extends JPanel
 		
 		attackerSelect = new JComboBox<Country>();
 		defenderSelect = new JComboBox<Country>();
+		Dimension comboBoxDimensions = new Dimension(140, 25);
+		attackerSelect.setPreferredSize(comboBoxDimensions);
+		defenderSelect.setPreferredSize(comboBoxDimensions);
 		setComboBoxes();
 		SelectionListener selectionListener = new SelectionListener();
 		defenderSelect.addActionListener(selectionListener);
@@ -70,8 +71,7 @@ public class SimulationPanel extends JPanel
 		
 		vanquishDefender = ComponentFactory.createButton("Vanquish defender!", "take all provinces from the defender", buttonListener, true);
 		undo = ComponentFactory.createButton("Undo", "Undo the last attack", buttonListener, false);
-		
-		attackDescription = new JLabel("Click 'attack' to begin.");
+		redo = ComponentFactory.createButton("Redo", "Redo the last undone attack", buttonListener, false);
 		
 		//Panel to choose which countries to attack and defend
 		JPanel attackInterface = new JPanel(); //left side of interface
@@ -80,6 +80,7 @@ public class SimulationPanel extends JPanel
 		attackInterface.add(defenderSelect);
 		attackInterface.add(attack);
 		attackInterface.add(undo);
+		attackInterface.add(redo);
 		attackInterface.add(vanquishDefender);
 		
 		//Panel to select and take single provinces
@@ -93,6 +94,8 @@ public class SimulationPanel extends JPanel
 		takeProvince = ComponentFactory.createButton("Take province", "Take the highlighted province", buttonListener, false);
 		provinceChooserInterface.add(provinceScroll);
 		provinceChooserInterface.add(takeProvince);
+		provinceChooserInterface.setPreferredSize(new Dimension(provinceScroll.getPreferredSize().width + 20,
+																provinceScroll.getPreferredSize().height + takeProvince.getPreferredSize().height + 10));
 		
 		//jpanel that holds the comboboxes, buttons, and province list
 		JPanel interfacePanel = new JPanel();
@@ -101,31 +104,16 @@ public class SimulationPanel extends JPanel
 		
 		//jpanel that holds the description label
 		JPanel descriptionPanel = new JPanel();
+		attackDescription = new JLabel("Click 'attack' to begin.");
 		descriptionPanel.setPreferredSize(new Dimension(500, 20));
 		descriptionPanel.add(attackDescription);
 		
-		//JPanel that holds the interface, map and description
+		//JPanel that holds the interface, map, and description
 		JPanel gamePanel = new JPanel();
 		gamePanel.add(interfacePanel);
 		JScrollPane mapScroll = new JScrollPane();
 		mapScroll.setViewportView(mapPanel);
-		Dimension mapDimension;
-		int mapWidth = mapPanel.getPreferredSize().width;
-		int mapHeight = mapPanel.getPreferredSize().height;
-		if (mapWidth > 1200 || mapHeight > 800)
-		{
-			mapDimension = new Dimension(1200, 800);
-		}
-		else if (mapWidth < 600 || mapHeight < 600)
-		{
-			mapDimension = new Dimension(600, 600);
-		}
-		else
-		{
-			mapDimension = new Dimension(mapPanel.getPreferredSize().width, mapPanel.getPreferredSize().height);
-		}
-		
-		mapScroll.setPreferredSize(mapDimension);
+		mapScroll.setPreferredSize(mapPanel.getViewportSize());
 		gamePanel.add(mapScroll);
 		gamePanel.add(descriptionPanel);
 		gamePanel.setPreferredSize(new Dimension(mapScroll.getPreferredSize().width + 20, 
@@ -242,35 +230,47 @@ public class SimulationPanel extends JPanel
 	 */
 	private void beginAttack()
 	{
-		Country c1 = attackerSelect.getItemAt(attackerSelect.getSelectedIndex());
-		Country c2 = defenderSelect.getItemAt(defenderSelect.getSelectedIndex());
+		Country c1 = (Country)attackerSelect.getSelectedItem();
+		Country c2 = (Country)defenderSelect.getSelectedItem();
 		
 		if (canAttack(c1, c2))
 		{
-			int strength;
-			do
-			{
-				strength = rand.nextInt(settings.getAttackerMax() + settings.getDefenderMax() + 1) - settings.getDefenderMax();
-			}
-			while (!settings.drawsAllowed() && strength == 0); //loop will only run once if allowDraws is false
+			int strength = getAttackStrength();
 			
 			if (strength > 0)
 			{
 				attackSequence(c1, c2, strength);
-				undo.setEnabled(true);
 			}
 			else if (strength < 0)
 			{
 				attackSequence(c2, c1, -strength);
-				undo.setEnabled(true);
 			}
-			else
+			else //strength == 0 (draw)
 			{
 				attackDescription.setText(c1 + " and " + c2 + " draw!");
 				lastMove = null;
-				undo.setEnabled(false); //Remove this if an undo stack is added.
+				undo.setEnabled(false); //TODO: Remove this if an undo stack is added.
 			}
 		}
+	}
+	
+	/**
+	 * Gets the strength of the attack.
+	 * 
+	 * @return a value from negative max defender strength to max attacker strength
+	 */
+	int getAttackStrength()
+	{
+		int strength;
+		
+		do
+		{
+			//get a random number from -defenderMax to attackerMax
+			strength = rand.nextInt(settings.getAttackerMax() + settings.getDefenderMax() + 1) - settings.getDefenderMax();
+		}
+		while (!settings.drawsAllowed() && strength == 0); //loop will only run once if allowDraws is false
+		
+		return strength;
 	}
 	
 	/**
@@ -298,9 +298,9 @@ public class SimulationPanel extends JPanel
 	}
 	
 	/**
-	 * Determines if the defending country still exists and removes it if it doesn't. Also sets the leaderboard.
+	 * Sets the UI after an attack, vanquishing, or province exchange.
 	 * 
-	 * @param defender
+	 * @param defender the country that lost provinces in the attack
 	 */
 	private void endAttack(Country defender)
 	{
@@ -321,6 +321,8 @@ public class SimulationPanel extends JPanel
 		
 		leaderboard.sortList();
 		leaderboard.setLeaderboardText();
+		undo.setEnabled(true);
+		redo.setEnabled(false);
 	}
 	
 	/**
@@ -328,27 +330,35 @@ public class SimulationPanel extends JPanel
 	 */
 	private void undo()
 	{
-		if (undo != null)
+		lastMove.undo();
+		
+		//If the original owner was vanquished on the last move, add them back
+		//to the list of countries.
+		if (lastMove.wasVanquishing())
 		{
-			lastMove.undo();
+			Country revived = lastMove.getOriginalOwner();
+			mapPanel.reviveCountry(revived);
+			leaderboard.reviveCountry(revived);
 			
-			//If the original owner was vanquished on the last move, add them back
-			//to the list of countries.
-			if (lastMove.wasVanquishing())
-			{
-				Country revived = lastMove.getOriginalOwner();
-				mapPanel.reviveCountry(revived);
-				leaderboard.reviveCountry(revived);
-				
-				setComboBoxes();
-			}
-			
-			setDefenderJList((Country)defenderSelect.getSelectedItem());
-			
-			mapPanel.repaint();
+			setComboBoxes();
 		}
 		
+		setDefenderJList((Country)defenderSelect.getSelectedItem());
+		
+		mapPanel.repaint();
+		
 		undo.setEnabled(false);
+		redo.setEnabled(true);
+	}
+	
+	/**
+	 * Redo the last undo
+	 */
+	private void redo()
+	{
+		lastMove.redo();
+		endAttack(lastMove.getOriginalOwner());
+		mapPanel.repaint();
 	}
 	
 	/**
@@ -356,15 +366,14 @@ public class SimulationPanel extends JPanel
 	 */
 	private void vanquishDefender()
 	{
-		Country c1 = attackerSelect.getItemAt(attackerSelect.getSelectedIndex());
-		Country c2 = defenderSelect.getItemAt(defenderSelect.getSelectedIndex());
+		Country c1 = (Country)attackerSelect.getSelectedItem();
+		Country c2 = (Country)defenderSelect.getSelectedItem();
 		
 		if (canAttack(c1, c2))
 		{
 			lastMove = c1.vanquish(c2);
 			attackDescription.setText(c1 + " vanquishes " + c2 + "!");
 			endAttack(c2);
-			undo.setEnabled(true);
 		}
 	}
 	
@@ -425,16 +434,17 @@ public class SimulationPanel extends JPanel
 	
 	/**
 	 * Takes the currently highlighted province from the defender and gives it to the attacker.
+	 * 
+	 * @param province the province to exchange
 	 */
 	private void takeProvince(Province province)
 	{
-		Country c1 = attackerSelect.getItemAt(attackerSelect.getSelectedIndex());
-		Country c2 = defenderSelect.getItemAt(defenderSelect.getSelectedIndex());
+		Country c1 = (Country)attackerSelect.getSelectedItem();
+		Country c2 = (Country)defenderSelect.getSelectedItem();
 		
 		if (canAttack(c1, c2)) //TODO: Allow non-adjacent countries to take provinces or no???
 		{
 			lastMove = c1.takeProvince(province);
-			undo.setEnabled(true);
 			
 			attackDescription.setText(c1 + " took " + province.getName() + " from " + c2 + "!");
 			
@@ -499,6 +509,10 @@ public class SimulationPanel extends JPanel
 			else if (event.getSource() == undo)
 			{
 				undo();
+			}
+			else if (event.getSource() == redo)
+			{
+				redo();
 			}
 			else if (event.getSource() == vanquishDefender)
 			{

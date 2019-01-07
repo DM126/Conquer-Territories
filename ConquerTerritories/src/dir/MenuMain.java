@@ -50,11 +50,10 @@ public class MainMenu extends JPanel
 	
 	/**
 	 * Shows an error message if the user enters invalid strength values.
-	 * TODO: maybe make a different error message if the user enters 0 for attack max?
 	 */
 	private void showErrorMessage()
 	{
-		JOptionPane.showMessageDialog(this, "Attack strength must be greater than 0 and defense strength", "Invalid Input", JOptionPane.OK_OPTION);
+		JOptionPane.showMessageDialog(this, "Attack strength must be greater than defense strength and cannot equal 0.", "Invalid Input", JOptionPane.OK_OPTION);
 	}
 	
 	/**
