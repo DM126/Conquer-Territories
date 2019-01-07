@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.*;
-import javax.swing.event.*;
 
 /**
  * Displays the settings on the main menu

@@ -147,12 +147,23 @@ public class ConquerFrame extends JFrame
 		}
 		catch (FileNotFoundException e)
 		{
-			JOptionPane.showMessageDialog(null, "Could not find " + game.getCountriesFileName(), "Error", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
+			closeWithError("Could not find " + game.getCountriesFileName());
 		}
 		
 		ListSorter.sortCountries(countries, ListSorter.Methods.ALPHABETICAL);
 		
 		return countries;
+	}
+	
+	/**
+	 * Displays an error message and closes the program in the case of an
+	 * unrecoverable error. (i.e. files could not be found, map could not be created, etc.)
+	 * 
+	 * @param message the error message to display.
+	 */
+	public void closeWithError(String message)
+	{
+		JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+		System.exit(1);
 	}
 }
