@@ -63,7 +63,7 @@ public class ConquerFrame extends JFrame
 	{
 		try
 		{
-			File saveFile = new File("GameData.save");
+			File saveFile = new File("Saved Games/GameData.save");
 			Scanner scan = new Scanner(saveFile);
 			Settings settings = new Settings(scan.nextLine());
 			

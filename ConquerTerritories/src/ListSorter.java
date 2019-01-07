@@ -58,7 +58,7 @@ public class ListSorter
 		boolean added = false;
 		for (int i = 0; !added && i < list.size(); i++)
 		{
-			if (criteria.compare(list.get(i), country))
+			if (!criteria.compare(list.get(i), country))
 			{
 				list.add(i, country);
 				added = true;
