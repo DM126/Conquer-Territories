@@ -6,8 +6,8 @@ import java.util.*;
 
 public class TeamSelectPanel extends JPanel
 {
-	private static String INVALID_NAME = "";
-	private static Color INVALID_COLOR = Color.WHITE;
+	private static final String INVALID_NAME = "";
+	private static final Color INVALID_COLOR = Color.WHITE;
 	
 	//This stuff gets sent to the simulation panel
 	private ConquerFrame parent;

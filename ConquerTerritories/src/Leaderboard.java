@@ -112,7 +112,7 @@ public class Leaderboard extends JPanel
 	 */
 	public void saveGame(Settings settings) throws IOException
 	{
-		File saveData = new File("GameData.save");
+		File saveData = new File("Saved Games/GameData.save");
 		saveData.createNewFile();
 		PrintWriter writer = new PrintWriter(saveData);
 		

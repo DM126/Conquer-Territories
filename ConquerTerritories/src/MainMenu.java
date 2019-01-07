@@ -24,7 +24,7 @@ public class MainMenu extends JPanel
 		
 		selectTeams = ComponentFactory.createButton("Select Teams", "Combine countries into teams (optional)", listener, true);
 		
-		File saveFile = new File("GameData.save");
+		File saveFile = new File("Saved Games/GameData.save");
 		loadGame = ComponentFactory.createButton("Load game", "Load a saved game", listener, saveFile.exists());
 		//TODO: add functionality to delete a save
 		
