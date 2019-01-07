@@ -64,12 +64,7 @@ public class Leaderboard extends JPanel
 	public void setLeaderboardText()
 	{
 		scores.setText("");
-		
-		for (int i = 0; i < remainingCountries.size(); i++)
-		{
-			scores.append((i+1) + ". " + remainingCountries.get(i).getName() + " - " + remainingCountries.get(i).getSize() + " provinces\n");
-		}
-		
+		ComponentFactory.writeToTextArea(scores, remainingCountries, (country) -> country.getSize());
 		scores.setCaretPosition(0);
 	}
 	
@@ -96,7 +91,7 @@ public class Leaderboard extends JPanel
 	{
 		ArrayList<Country> finalResults = new ArrayList<Country>(vanquishedCountries);
 		
-		for (int i = remainingCountries.size() - 1; i >= 0; i--)
+		for (int i = 0; i < remainingCountries.size(); i++)
 		{
 			finalResults.add(remainingCountries.get(i));
 		}

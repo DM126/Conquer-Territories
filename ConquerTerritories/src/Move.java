@@ -65,6 +65,17 @@ public class Move
 	}
 	
 	/**
+	 * 
+	 */
+	public void redo()
+	{
+		for (Province p : provincesTaken)
+		{
+			newOwner.addProvince(p);
+		}
+	}
+	
+	/**
 	 * @return true if this move resulted in the vanquishing of the original owner
 	 */
 	public boolean wasVanquishing()

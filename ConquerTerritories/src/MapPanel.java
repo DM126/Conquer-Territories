@@ -8,6 +8,11 @@ import java.util.*;
  */
 public class MapPanel extends JPanel
 {
+	private static final int MIN_WIDTH = 600;
+	private static final int MIN_HEIGHT = 600;
+	private static final int MAX_WIDTH = 1500;
+	private static final int MAX_HEIGHT = 800;
+	
 	private ArrayList<Country> countries;
 	private ArrayList<Province> provinces;
 	
@@ -67,6 +72,9 @@ public class MapPanel extends JPanel
 		}
 	}
 	
+	/**
+	 * @return the list of countries currently being displayed on the map
+	 */
 	public ArrayList<Country> getCountries()
 	{
 		return countries;
@@ -78,5 +86,27 @@ public class MapPanel extends JPanel
 	public void reviveCountry(Country c)
 	{
 		ListSorter.addToCorrectLocation(countries, c, ListSorter.Methods.ALPHABETICAL);
+	}
+	
+	/**
+	 * @return the preferred size to display this panel within a JScrollPane
+	 */
+	public Dimension getViewportSize()
+	{
+		int mapWidth = getPreferredSize().width;
+		int mapHeight = getPreferredSize().height;
+		
+		if (mapWidth > MAX_WIDTH || mapHeight > MAX_HEIGHT)
+		{
+			return new Dimension(MAX_WIDTH, MAX_HEIGHT);
+		}
+		else if (mapWidth < MIN_WIDTH || mapHeight < MIN_HEIGHT)
+		{
+			return new Dimension(MIN_WIDTH, MIN_HEIGHT);
+		}
+		else
+		{
+			return new Dimension(mapWidth, mapHeight);
+		}
 	}
 }

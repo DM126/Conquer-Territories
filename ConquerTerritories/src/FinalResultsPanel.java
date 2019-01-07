@@ -31,13 +31,13 @@ public class FinalResultsPanel extends JPanel
 		returnToMenu = ComponentFactory.createButton("Main Menu", "Return to the main menu", listener, true);
 		
 		//Write the end sizes in the endResults text area
-		writeToTextArea(endResults, countries, (country) -> country.getSize());
+		ComponentFactory.writeToTextArea(endResults, countries, (country) -> country.getSize());
 		
 		//Sort countries by peak size
 		ListSorter.sortCountries(countries, ListSorter.Methods.PEAK_SIZE);
 		
 		//Write the peak sizes in the peakSizes text area
-		writeToTextArea(peakSizes, countries, (country) -> country.getPeakSize());
+		ComponentFactory.writeToTextArea(peakSizes, countries, (country) -> country.getPeakSize());
 		
 		Font titleFont = new Font("Arial", Font.PLAIN, 24);
 		
@@ -71,47 +71,6 @@ public class FinalResultsPanel extends JPanel
 		//Display the top of the text areas first
 		endResults.setCaretPosition(0);
 		peakSizes.setCaretPosition(0);
-	}
-	
-	//Functional Interface for a lambda expression
-	private interface Size
-	{
-		/**
-		 * Determines which size to write to a text area (current size or peak size)
-		 * 
-		 * @param country the country whose size to return
-		 * @return the current or peak size of the country
-		 */
-		int size(Country country);
-	}
-	
-	/**
-	 * Writes the list of countries and their size (current or peak) to a JTextArea
-	 * 
-	 * @param textArea the JTextArea to write to
-	 * @param countries the list of countries to display
-	 * @param sizeMethod the method that returns a country's size (Country.getSize() or Country.getPeakSize())
-	 */
-	private void writeToTextArea(JTextArea textArea, ArrayList<Country> countries, Size sizeMethod)
-	{
-		for (int i = countries.size() - 1; i >= 0; i--)
-		{
-			Country c = countries.get(i);
-			textArea.append((countries.size() - i) + ". " + c.getName() + " - ");
-			int size = sizeMethod.size(c);
-			if (size == 1)
-			{
-				textArea.append(size + " province\n");
-			}
-			else if (size > 1)
-			{
-				textArea.append(size + " provinces\n");
-			}
-			else //size == 0
-			{
-				textArea.append("Vanquished!\n");
-			}
-		}
 	}
 	
 	/**

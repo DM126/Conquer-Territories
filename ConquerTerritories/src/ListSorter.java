@@ -1,8 +1,14 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Responsible for sorting lists and adding items to sorted lists.
+ */
 public class ListSorter
 {
+	/**
+	 * Methods for comparing countries to sort them
+	 */
 	public enum Methods { ALPHABETICAL, SIZE, PEAK_SIZE };
 	
 	//Functional interface for a Lambda expression
@@ -84,7 +90,7 @@ public class ListSorter
 		case ALPHABETICAL: 
 			return (c1, c2) -> (c1.getName().compareToIgnoreCase(c2.getName()) < 0);
 		case SIZE: 
-			return (c1, c2) -> c1.getSize() > c2.getSize();
+			return (c1, c2) -> c1.getSize() < c2.getSize();
 		case PEAK_SIZE: 
 			return (c1, c2) -> c1.getPeakSize() < c2.getPeakSize();
 		default: 
