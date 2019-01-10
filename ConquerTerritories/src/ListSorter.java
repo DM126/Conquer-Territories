@@ -53,7 +53,7 @@ public class ListSorter
 	/**
 	 * Adds a country to the correct location in a sorted list using the specified comparison criteria.
 	 * 
-	 * @param list the list of countries to add the country
+	 * @param list the list to add the country to
 	 * @param country the country to add to the list
 	 * @param method the method for comparing two countries (alphabetical, size, peak size)
 	 */

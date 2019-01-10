@@ -35,8 +35,8 @@ public class ConquerFrame extends JFrame
 	 * Starts the game. Called from teamSelectPanel.
 	 * This version will take the arraylist of countries as an argument.
 	 * 
-	 * @param countries
-	 * @param settings
+	 * @param countries the list of countries
+	 * @param settings the game settings
 	 */
 	public void startGame(ArrayList<Country> countries, Settings settings)
 	{
@@ -48,7 +48,7 @@ public class ConquerFrame extends JFrame
 	 * Starts the game. Called from main menu.
 	 * This version will create the arraylist of countries using the chosen settings.
 	 * 
-	 * @param settings
+	 * @param settings the game settings
 	 */
 	public void startGame(Settings settings)
 	{

@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -25,6 +26,14 @@ public class ComponentFactory
 		button.setEnabled(isEnabled);
 		
 		return button;
+	}
+	
+	/**
+	 * @return the optimal combobox dimension for displaying country names
+	 */
+	public static Dimension getComboBoxDimensions()
+	{
+		return new Dimension(140, 25);
 	}
 	
 	//Functional Interface for a lambda expression
