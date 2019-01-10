@@ -479,7 +479,7 @@ public class SimulationPanel extends JPanel
 	 * Update the list of selected provinces.
 	 * Allows the user to select multiple provinces when using ctrl+click.
 	 */
-	private void updateSelections()
+	private void updateSelectedProvinces()
 	{
 		//TODO: only unhighlight if the selection changed, not if selections were added.
 		
@@ -518,7 +518,7 @@ public class SimulationPanel extends JPanel
 		{	
 			if (!event.getValueIsAdjusting())
 			{
-				updateSelections();
+				updateSelectedProvinces();
 			}
 		}
 	}
