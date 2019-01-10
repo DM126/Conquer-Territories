@@ -65,7 +65,7 @@ public class Move
 	}
 	
 	/**
-	 * 
+	 * Redo this move after it was undone and retake all provinces.
 	 */
 	public void redo()
 	{

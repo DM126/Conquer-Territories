@@ -31,12 +31,7 @@ public class Province
 		
 		id = scan.nextInt();
 		bmpColor = new Color(scan.nextInt(), scan.nextInt(), scan.nextInt());
-		
-		//DEBUG: uncomment this if statement when there are provinces without names in Provinces.txt
-		//if (scan.hasNext())
-		//{
-			name = scan.next();
-		//}
+		name = scan.next();
 		
 		if (scan.hasNext())
 		{
@@ -89,7 +84,8 @@ public class Province
 			
 			while (scan.hasNext())
 			{
-				neighbors.add(provinces.get(scan.nextInt() - 1));
+				int provinceID = scan.nextInt() - 1;
+				neighbors.add(provinces.get(provinceID));
 			}
 			
 			scan.close();

@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
@@ -30,7 +31,7 @@ public class SimulationPanel extends JPanel
 	private Settings settings;
 	private JList<Province> defenderProvinceList;
 	private JButton takeProvince;
-	private Province highlightedProvince;
+	private ArrayList<Province> highlightedProvinces;
 	
 	public SimulationPanel(ConquerFrame parent, ArrayList<Country> countries, Settings settings)
 	{	
@@ -50,15 +51,14 @@ public class SimulationPanel extends JPanel
 			parent.closeWithError(e.getMessage());
 		}
 		
-		highlightedProvince = null;
+		highlightedProvinces = new ArrayList<Province>();
 		
 		rand = new Random();
 		
 		attackerSelect = new JComboBox<Country>();
+		attackerSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
 		defenderSelect = new JComboBox<Country>();
-		Dimension comboBoxDimensions = new Dimension(140, 25);
-		attackerSelect.setPreferredSize(comboBoxDimensions);
-		defenderSelect.setPreferredSize(comboBoxDimensions);
+		defenderSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
 		setComboBoxes();
 		SelectionListener selectionListener = new SelectionListener();
 		defenderSelect.addActionListener(selectionListener);
@@ -259,7 +259,7 @@ public class SimulationPanel extends JPanel
 	 * 
 	 * @return a value from negative max defender strength to max attacker strength
 	 */
-	int getAttackStrength()
+	private int getAttackStrength()
 	{
 		int strength;
 		
@@ -437,21 +437,66 @@ public class SimulationPanel extends JPanel
 	 * 
 	 * @param province the province to exchange
 	 */
-	private void takeProvince(Province province)
+	private void takeProvinces(ArrayList<Province> provinces)
 	{
 		Country c1 = (Country)attackerSelect.getSelectedItem();
 		Country c2 = (Country)defenderSelect.getSelectedItem();
 		
 		if (canAttack(c1, c2)) //TODO: Allow non-adjacent countries to take provinces or no???
 		{
-			lastMove = c1.takeProvince(province);
+			lastMove = c1.takeProvinces(provinces);
 			
-			attackDescription.setText(c1 + " took " + province.getName() + " from " + c2 + "!");
+			if (provinces.size() == 1)
+			{
+				attackDescription.setText(c1 + " took " + provinces.get(0).getName() + " from " + c2 + "!");
+			}
+			else
+			{
+				attackDescription.setText(c1 + " took multiple provinces from " + c2 + "!");
+			}
 			
 			endAttack(c2);
 			
 			takeProvince.setEnabled(false);
 		}
+	}
+	
+	/**
+	 * Clears the list of highlighted provinces and unhighlights all provinces in the list.
+	 */
+	private void clearHighlightedProvinces()
+	{
+		for (int i = highlightedProvinces.size() - 1; i >= 0; i--)
+		{
+			highlightedProvinces.get(i).setHighlighted(false);
+			highlightedProvinces.remove(i);
+		}
+		
+		takeProvince.setEnabled(false);
+	}
+	
+	/**
+	 * Update the list of selected provinces.
+	 * Allows the user to select multiple provinces when using ctrl+click.
+	 */
+	private void updateSelections()
+	{
+		//TODO: only unhighlight if the selection changed, not if selections were added.
+		
+		//unhighlight the old highlighted provinces
+		clearHighlightedProvinces();
+		
+		//get the new selections (list will be empty if the JList is updated for a new country)
+		List<Province> selections = defenderProvinceList.getSelectedValuesList();
+		for (int i = 0; i < selections.size(); i++)
+		{
+			Province selectedProvince = selections.get(i);
+			highlightedProvinces.add(selectedProvince);
+			selectedProvince.setHighlighted(true);
+			takeProvince.setEnabled(true);
+		}
+		
+		mapPanel.repaint();
 	}
 	
 	//Event Listeners----------------------------------------------------------
@@ -464,37 +509,17 @@ public class SimulationPanel extends JPanel
 			if (event.getSource() == defenderSelect)
 			{
 				setDefenderJList((Country)defenderSelect.getSelectedItem());
-				if (highlightedProvince != null) //TODO: test if this is necessary.
-				{
-					highlightedProvince.setHighlighted(false);
-				}
-				else
-				{
-					highlightedProvince = null;
-				}
-				
-				takeProvince.setEnabled(false);
+				clearHighlightedProvinces();
 			}
 		}
-
+		
 		//JList selection is changed
 		public void valueChanged(ListSelectionEvent event)
 		{	
-			//unhighlight the old highlighted province
-			if (highlightedProvince != null)
+			if (!event.getValueIsAdjusting())
 			{
-				highlightedProvince.setHighlighted(false);
+				updateSelections();
 			}
-			
-			//get the new selection (will be null if the JList is updated)
-			highlightedProvince = defenderProvinceList.getSelectedValue();
-			if (highlightedProvince != null)
-			{
-				highlightedProvince.setHighlighted(true);
-				takeProvince.setEnabled(true);
-			}
-			
-			mapPanel.repaint();
 		}
 	}
 	
@@ -528,7 +553,7 @@ public class SimulationPanel extends JPanel
 			}
 			else if (event.getSource() == takeProvince)
 			{
-				takeProvince(highlightedProvince);
+				takeProvinces(highlightedProvinces);
 			}
 		}
 	}

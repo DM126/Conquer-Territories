@@ -12,12 +12,15 @@ public class Game
 	private String countriesFileName;
 	private String provincesFileName;
 	private String mapImageName;
+	private String serialization; //data stored in the text file for loading/saving
 	
 	/**
 	 * @param mapData a string containing the game data delimited by '/'
 	 */
 	public Game(String gameData)
 	{
+		serialization = gameData;
+		
 		Scanner scan = new Scanner(gameData);
 		scan.useDelimiter("/");
 		
@@ -54,7 +57,7 @@ public class Game
 	 */
 	public String serialize()
 	{
-		return gameName + "/" + countriesFileName + "/" + provincesFileName + "/" + mapImageName;
+		return serialization;
 	}
 	
 	public String toString()
