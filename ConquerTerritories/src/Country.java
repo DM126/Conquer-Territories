@@ -53,13 +53,13 @@ public class Country
 	/**
 	 * Loads the country's data from the save game file.
 	 * 
-	 * @param data a string including the name and color to be sent to the other constructor
+	 * @param savedata a string including the name and color to be sent to the other constructor
 	 * @param peakSize the peak size of this country
 	 * @param vanquishes the number of times this country vanquished another
 	 */
-	public Country(String data, int peakSize, int vanquishes)
+	public Country(String savedata, int peakSize, int vanquishes)
 	{
-		this(data);
+		this(savedata);
 		
 		this.peakSize = peakSize;
 		this.vanquishes = vanquishes;
@@ -175,8 +175,6 @@ public class Country
 	/**
 	 * Undo a vanquish after bringing a vanquished country back to life.
 	 * Should only ever be called during Move.undo()
-	 * 
-	 * @param lastMove the previous move
 	 */
 	public void undoVanquish()
 	{
@@ -282,18 +280,22 @@ public class Country
 	}
 	
 	/**
-	 * Take a single province in an attack.
-	 * (Not to be used for simply adding a province, use addProvince() instead)
+	 * Take a list of specific province in an attack.
+	 * Differs from attack() in that this method can take any provinces,
+	 * not just provinces along the border.
 	 * 
-	 * @param province the province to take
+	 * @param selectedProvinces the list of provinces to take
 	 * @return a record of the attack
 	 */
-	public Move takeProvince(Province province)
+	public Move takeProvinces(ArrayList<Province> selectedProvinces)
 	{
-		Move move = new Move(province.getOwner(), this);
+		Move move = new Move(selectedProvinces.get(0).getOwner(), this);
 		
-		addProvince(province);
-		move.add(province);
+		for (Province province : selectedProvinces)
+		{
+			addProvince(province);
+			move.add(province);
+		}
 		
 		if (move.wasVanquishing())
 		{
@@ -317,6 +319,7 @@ public class Country
 		//TODO: check the provinces of the country with less provinces
 		for (Province p : other.getProvinces())
 		{
+			//TODO: put this in Province class?
 			boolean adjacent = false;
 			for (int j = 0; j < p.getNeighbors().size() && !adjacent; j++)
 			{

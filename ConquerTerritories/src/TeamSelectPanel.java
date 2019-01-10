@@ -56,6 +56,7 @@ public class TeamSelectPanel extends JPanel
 		teamComboBox = new JComboBox<Team>();
 		//teamComboBox.addActionListener(listener);
 		teamComboBox.setEnabled(false);
+		teamComboBox.setPreferredSize(ComponentFactory.getComboBoxDimensions());
 		selectTeam = ComponentFactory.createButton("Select team", "Open the selected team for viewing", listener, false);
 		
 		teamName = new JLabel();

@@ -95,10 +95,9 @@ public class SettingsPanel extends JPanel
 		try
 		{
 			Scanner fileScan = new Scanner(dataFile);
-			Game game;
 			while (fileScan.hasNext())
 			{
-				game = new Game(fileScan.nextLine());
+				Game game = new Game(fileScan.nextLine());
 				gameSelect.addItem(game);
 			}
 			
