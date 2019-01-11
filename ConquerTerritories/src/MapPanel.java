@@ -17,8 +17,16 @@ public class MapPanel extends JPanel
 	private ArrayList<Country> countries;
 	private ArrayList<Province> provinces;
 	
-	//TODO: comment this explaining where the exceptions can come from
-	public MapPanel(ArrayList<Country> countries, Game game) throws IOException, ColorNotFoundException
+	/**
+	 * Creates the panel to display the map and instantiates the provinces.
+	 * 
+	 * @param countries the list of every country on the map
+	 * @param game the chosen game
+	 * @throws IOException If there is an issue reading the province text file
+	 * @throws ColorNotFoundException if a province's color is entered incorrectly in the text file
+	 * @throws NoSuchElementException if a province's data in the text file is missing information
+	 */
+	public MapPanel(ArrayList<Country> countries, Game game) throws IOException, ColorNotFoundException, NoSuchElementException
 	{
 		this.countries = countries;
 		
@@ -95,8 +103,9 @@ public class MapPanel extends JPanel
 	 */
 	public Dimension getViewportSize()
 	{
-		int mapWidth = getValidLength(getPreferredSize().width, MIN_WIDTH, MAX_WIDTH);
-		int mapHeight = getValidLength(getPreferredSize().height, MIN_HEIGHT, MAX_HEIGHT);
+		//The +5 offsets are to prevent a scrollbar from showing up on a size within the valid range
+		int mapWidth = getValidLength(getPreferredSize().width + 5, MIN_WIDTH, MAX_WIDTH);
+		int mapHeight = getValidLength(getPreferredSize().height + 5, MIN_HEIGHT, MAX_HEIGHT);
 		
 		return new Dimension(mapWidth, mapHeight);
 	}

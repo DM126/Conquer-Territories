@@ -21,8 +21,9 @@ public class Province
 	 * Creates a province with data from a text file.
 	 * 
 	 * @param data the data from the text file
+	 * @throws NoSuchElementException if the text file data is missing the id, color, or name
 	 */
-	public Province(String data)
+	public Province(String data) throws NoSuchElementException
 	{
 		neighbors = new ArrayList<Province>();
 		
