@@ -50,6 +50,11 @@ public class SimulationPanel extends JPanel
 		{
 			parent.closeWithError(e.getMessage());
 		}
+		catch (NoSuchElementException e)
+		{
+			parent.closeWithError("Error: " + settings.getGame().getProvincesFileName() + 
+									" contains invalid or missing data on a province and could not be read.");
+		}
 		
 		highlightedProvinces = new ArrayList<Province>();
 		
