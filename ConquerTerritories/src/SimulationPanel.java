@@ -6,9 +6,6 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 
-//TODO: fix comboboxes resetting after victory/vanquishing?
-//then: maybe make defenderSelect only display countries that share a border with combo1 country? <- might cause issues with rapid gameplay
-//TODO: give comboboxes a minimum size so they don't mess up the panel organization, or reorganize the panel into two panels? buttons/comboboxes?
 /**
  * Represents the main panel for the simulation.
  */
@@ -22,6 +19,7 @@ public class SimulationPanel extends JPanel
 	private JButton vanquishDefender;
 	private JButton undo;
 	private JButton redo;
+	private JCheckBox displayNeighborsOnly; // if checked, Only display neighboring countries in the defender combobox
 	private Move lastMove; //TODO: maybe add multiple moves to a stack?
 	private Random rand;
 	private JLabel attackDescription;
@@ -60,13 +58,16 @@ public class SimulationPanel extends JPanel
 		
 		rand = new Random();
 		
+		displayNeighborsOnly = new JCheckBox("Only display neighboring countries? ", false);
 		attackerSelect = new JComboBox<Country>();
 		attackerSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
 		defenderSelect = new JComboBox<Country>();
 		defenderSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
 		setComboBoxes();
 		SelectionListener selectionListener = new SelectionListener();
+		attackerSelect.addActionListener(selectionListener);
 		defenderSelect.addActionListener(selectionListener);
+		displayNeighborsOnly.addActionListener(selectionListener);
 		
 		ButtonListener buttonListener = new ButtonListener();
 		
@@ -80,13 +81,17 @@ public class SimulationPanel extends JPanel
 		
 		//Panel to choose which countries to attack and defend
 		JPanel attackInterface = new JPanel(); //left side of interface
-		attackInterface.setPreferredSize(new Dimension(attackerSelect.getPreferredSize().width * 2 + 20, 100));
 		attackInterface.add(attackerSelect);
 		attackInterface.add(defenderSelect);
 		attackInterface.add(attack);
 		attackInterface.add(undo);
 		attackInterface.add(redo);
 		attackInterface.add(vanquishDefender);
+		attackInterface.add(displayNeighborsOnly);
+		attackInterface.setPreferredSize(new Dimension(attackerSelect.getPreferredSize().width * 2 + 20, 
+														attackerSelect.getPreferredSize().height + 
+														attack.getPreferredSize().height * 2 +
+														displayNeighborsOnly.getPreferredSize().height + 20));
 		
 		//Panel to select and take single provinces
 		JPanel provinceChooserInterface = new JPanel(); //right side of interface
@@ -177,21 +182,65 @@ public class SimulationPanel extends JPanel
 	private void setComboBoxes()
 	{
 		//Store the currently selected item to keep it selected after updating the combo boxes.
-		Country currentlySelected = (Country)attackerSelect.getSelectedItem();
+		Country attacker = (Country)attackerSelect.getSelectedItem();
 		
 		attackerSelect.removeAllItems();
-		defenderSelect.removeAllItems();
 		
 		for (Country c : mapPanel.getCountries())
 		{
 			attackerSelect.addItem(c);
-			defenderSelect.addItem(c);
 		}
 		
 		//Reselect the country that was selected if it's still on the map.
-		if (mapPanel.getCountries().contains(currentlySelected))
+		if (mapPanel.getCountries().contains(attacker))
 		{
-			attackerSelect.setSelectedItem(currentlySelected);
+			attackerSelect.setSelectedItem(attacker);
+		}
+		else
+		{
+			attackerSelect.setSelectedIndex(0);
+			attacker = (Country)attackerSelect.getSelectedItem();
+		}
+		
+		setDefenderComboBox(attacker);
+	}
+	
+	/**
+	 * Sets the defender combobox. will display only neighbors if the checkbox
+	 * is selected, otherwise it will display every country.
+	 * 
+	 * @param attacker the currently selected country in the other combo box
+	 */
+	private void setDefenderComboBox(Country attacker)
+	{
+		Country originalDefender = (Country)defenderSelect.getSelectedItem();
+		defenderSelect.removeAllItems();
+		
+		//Determine which countries should be displayed: all or just neighbors.
+		ArrayList<Country> countriesToDisplay;
+		if (displayNeighborsOnly.isSelected())
+		{
+			countriesToDisplay = attacker.getNeighbors();
+		}
+		else
+		{
+			countriesToDisplay = mapPanel.getCountries();
+		}
+		
+		//Display the countries
+		for (Country c : countriesToDisplay)
+		{
+			defenderSelect.addItem(c);
+		}
+		
+		//Reselect the original defender if it is still being displayed
+		if (countriesToDisplay.contains(originalDefender))
+		{
+			defenderSelect.setSelectedItem(originalDefender);
+		}
+		else
+		{
+			defenderSelect.setSelectedIndex(0);
 		}
 	}
 	
@@ -314,9 +363,9 @@ public class SimulationPanel extends JPanel
 		//if the defender has no provinces left, remove it from the list of countries and update the combo boxes.
 		if (!defender.hasProvinces())
 		{
+			//TODO: fix comboboxes resetting after vanquishing?
 			mapPanel.getCountries().remove(defender);
 			leaderboard.removeCountry(defender);
-			setComboBoxes();
 			showMessage(defender + " has been vanquished!");
 		}
 		else
@@ -324,6 +373,7 @@ public class SimulationPanel extends JPanel
 			setDefenderJList((Country)defenderSelect.getSelectedItem());
 		}
 		
+		setComboBoxes();
 		leaderboard.sortList();
 		leaderboard.setLeaderboardText();
 		undo.setEnabled(true);
@@ -515,6 +565,21 @@ public class SimulationPanel extends JPanel
 			{
 				setDefenderJList((Country)defenderSelect.getSelectedItem());
 				clearHighlightedProvinces();
+			}
+			else if (event.getSource() == attackerSelect)
+			{
+				if (displayNeighborsOnly.isSelected())
+				{
+					Country attacker = (Country)attackerSelect.getSelectedItem();
+					if (attacker != null)
+					{
+						setDefenderComboBox((Country)attackerSelect.getSelectedItem());
+					}
+				}
+			}
+			else if (event.getSource() == displayNeighborsOnly)
+			{
+				setDefenderComboBox((Country)attackerSelect.getSelectedItem());
 			}
 		}
 		
