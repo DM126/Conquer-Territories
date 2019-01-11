@@ -152,6 +152,28 @@ public class Country
 	}
 	
 	/**
+	 * @return a list of countries that share a border with this one
+	 */
+	public ArrayList<Country> getNeighbors()
+	{
+		ArrayList<Country> neighboringCountries = new ArrayList<Country>();
+		for (Province p : provinces)
+		{
+			for (Province adjacentProvince : p.getNeighbors())
+			{
+				Country provinceOwner = adjacentProvince.getOwner();
+				if (!provinceOwner.equals(this) && !neighboringCountries.contains(provinceOwner))
+				{
+					neighboringCountries.add(provinceOwner);
+				}
+			}
+		}
+
+		ListSorter.sortCountries(neighboringCountries, ListSorter.Methods.ALPHABETICAL);
+		return neighboringCountries;
+	}
+	
+	/**
 	 * @return the number of provinces owned by this country
 	 */
 	public int getSize()
