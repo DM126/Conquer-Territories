@@ -95,21 +95,34 @@ public class MapPanel extends JPanel
 	 */
 	public Dimension getViewportSize()
 	{
-		int mapWidth = getPreferredSize().width;
-		int mapHeight = getPreferredSize().height;
+		int mapWidth = getValidLength(getPreferredSize().width, MIN_WIDTH, MAX_WIDTH);
+		int mapHeight = getValidLength(getPreferredSize().height, MIN_HEIGHT, MAX_HEIGHT);
 		
-		//TODO: allow height and width to differ if only one is outside the valid range
-		if (mapWidth > MAX_WIDTH || mapHeight > MAX_HEIGHT)
+		return new Dimension(mapWidth, mapHeight);
+	}
+	
+	/**
+	 * Fits a side length to be within a minimum or maximum value.
+	 * If the original value is greater than the maximum, the maximum will be returned.
+	 * If the original value is less than the minimum, the minimum will be returned.
+	 * otherwise the original value is valid and will be returned
+	 * 
+	 * @param originalValue the side length to fit within the range
+	 * @param maxValue the maximum side length
+	 * @param minValue the minimum side length
+	 * @return a value within the specified range
+	 */
+	private int getValidLength(int originalValue, int minValue, int maxValue)
+	{
+		if (originalValue >= maxValue)
 		{
-			return new Dimension(MAX_WIDTH, MAX_HEIGHT);
+			return maxValue;
 		}
-		else if (mapWidth < MIN_WIDTH || mapHeight < MIN_HEIGHT)
+		else if (originalValue <= minValue)
 		{
-			return new Dimension(MIN_WIDTH, MIN_HEIGHT);
+			return minValue;
 		}
-		else
-		{
-			return new Dimension(mapWidth, mapHeight);
-		}
+		
+		return originalValue;
 	}
 }
