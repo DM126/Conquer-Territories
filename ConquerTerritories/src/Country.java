@@ -143,6 +143,9 @@ public class Country
 		provinces.remove(p);
 	}
 	
+	/**
+	 * @return a list of all the provinces belonging to this country
+	 */
 	public ArrayList<Province> getProvinces()
 	{
 		return provinces;
@@ -324,7 +327,8 @@ public class Country
 			for (int j = 0; j < p.getNeighbors().size() && !adjacent; j++)
 			{
 				//check if each of the other country's individual provinces borders a province of this country
-				if (p.getNeighbors().get(j).getOwner().equals(this))
+				Country neighborCountry = p.getNeighbors().get(j).getOwner();
+				if (neighborCountry != null && neighborCountry.equals(this))
 				{
 					adjacent = true;
 					border.add(p);
@@ -370,7 +374,8 @@ public class Country
 			//check the neighbors of each province to see if their owner matches the parameter
 			for (Province neighbor : p.getNeighbors())//Refactor?
 			{
-				if (neighbor.getOwner().equals(otherCountry))
+				Country neighborCountry = neighbor.getOwner();
+				if (neighborCountry != null && neighborCountry.equals(otherCountry))
 				{
 					return true;
 				}
