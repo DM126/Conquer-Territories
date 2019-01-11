@@ -116,11 +116,7 @@ public class Province
 	 * @return the color of this province's owner
 	 */
 	public Color getColor()
-	{
-		//DEBUG: If this is thrown, check to make sure this province is part of a country in the countries text file
-		//if (owner == null)
-		//	System.out.println(this.id);
-		
+	{	
 		if (isHighlighted)
 		{
 			return owner.getHighlightColor();
@@ -140,6 +136,9 @@ public class Province
 		return bmpColor;
 	}
 	
+	/**
+	 * @return the unique ID of this province
+	 */
 	public int getID()
 	{
 		return id;

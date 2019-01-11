@@ -12,11 +12,12 @@ public class MapPanel extends JPanel
 	private static final int MIN_HEIGHT = 600;
 	private static final int MAX_WIDTH = 1500;
 	private static final int MAX_HEIGHT = 800;
+	private static final Color NO_OWNER = Color.LIGHT_GRAY; //Used to draw provinces that don't belong to any country
 	
 	private ArrayList<Country> countries;
 	private ArrayList<Province> provinces;
 	
-	//TODO: comment this explaning where the exceptions can come from
+	//TODO: comment this explaining where the exceptions can come from
 	public MapPanel(ArrayList<Country> countries, Game game) throws IOException, ColorNotFoundException
 	{
 		this.countries = countries;
@@ -58,22 +59,23 @@ public class MapPanel extends JPanel
 		//Draw provinces
 		for (Province p : provinces)
 		{
-			//If an exception is thrown here it means you forgot to update the map image file, 
-			//or you left a province out of the countries text file
-			//try
-			//{
+			//If an exception is thrown here it means you forgot to update the map image file.
+			if (p.getOwner() != null)
+			{
 				page.setColor(p.getColor());
-			//}
-			//catch (NullPointerException e)
-			//{
-			//	System.out.println(p.getID());
-			//}
+			}
+			else
+			{
+				page.setColor(NO_OWNER);
+				//DEBUG:
+				//System.out.println(p);
+			}
 			page.drawPolygon(p.getPolygon());
 		}
 	}
 	
 	/**
-	 * @return the list of countries currently being displayed on the map
+	 * @return the list of countries currently on the map
 	 */
 	public ArrayList<Country> getCountries()
 	{
@@ -96,6 +98,7 @@ public class MapPanel extends JPanel
 		int mapWidth = getPreferredSize().width;
 		int mapHeight = getPreferredSize().height;
 		
+		//TODO: allow height and width to differ if only one is outside the valid range
 		if (mapWidth > MAX_WIDTH || mapHeight > MAX_HEIGHT)
 		{
 			return new Dimension(MAX_WIDTH, MAX_HEIGHT);
