@@ -73,8 +73,9 @@ public class ConquerFrame extends JFrame
 				String countryData = scan.nextLine();
 				int peakSize = Integer.parseInt(scan.nextLine());
 				int vanquishes = Integer.parseInt(scan.nextLine());
+				int largestAttack = Integer.parseInt(scan.nextLine());
 				
-				countries.add(new Country(countryData, peakSize, vanquishes));
+				countries.add(new Country(countryData, peakSize, vanquishes, largestAttack));
 			}
 			scan.close();
 			
@@ -86,9 +87,9 @@ public class ConquerFrame extends JFrame
 		{
 			JOptionPane.showMessageDialog(null, "Error: The save file could not be found.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		catch (InputMismatchException e)
+		catch (NumberFormatException e)
 		{
-			e.printStackTrace();
+			e.printStackTrace(); //debug
 			JOptionPane.showMessageDialog(null, "Error: The save data could not be read.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
