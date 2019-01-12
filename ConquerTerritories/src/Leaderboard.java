@@ -132,6 +132,7 @@ public class Leaderboard extends JPanel
 			writer.println(country.getSaveData());
 			writer.println(country.getPeakSize());
 			writer.println(country.getVanquishes());
+			writer.println(country.getLargestAttack());
 		}
 	}
 }

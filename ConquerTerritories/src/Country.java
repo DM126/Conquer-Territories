@@ -12,8 +12,8 @@ public class Country
 	private int peakSize;
 	private int vanquishes; //number of countries vanquished by this one //TODO: display after game
 	private Color highlightColor;
+	private int largestAttack;
 	//private final double LIGHTEN = 1.25; //Scale to lighten the color when highlighting
-	//TODO: keep track of most provinces taken in one attack
 	
 	//TODO: maybe think about keeping this in an array in the worldbuilder?
 	private String provinceIDs;
@@ -49,6 +49,7 @@ public class Country
 		
 		peakSize = 0;
 		vanquishes = 0;
+		largestAttack = 0;
 	}
 	
 	/**
@@ -58,12 +59,13 @@ public class Country
 	 * @param peakSize the peak size of this country
 	 * @param vanquishes the number of times this country vanquished another
 	 */
-	public Country(String savedata, int peakSize, int vanquishes)
+	public Country(String savedata, int peakSize, int vanquishes, int largestAttack)
 	{
 		this(savedata);
 		
 		this.peakSize = peakSize;
 		this.vanquishes = vanquishes;
+		this.largestAttack = largestAttack;
 	}
 	
 	/**
@@ -89,6 +91,7 @@ public class Country
 		
 		peakSize = 0;
 		vanquishes = 0;
+		largestAttack = 0;
 	}
 	
 	/**
@@ -190,6 +193,11 @@ public class Country
 		return peakSize;
 	}
 	
+	public int getLargestAttack()
+	{
+		return largestAttack;
+	}
+	
 	/**
 	 * @return the number of countries finished off by this country
 	 */
@@ -199,25 +207,60 @@ public class Country
 	}
 	
 	/**
-	 * Undo a vanquish after bringing a vanquished country back to life.
-	 * Should only ever be called during Move.undo()
+	 * Reset the country's data to before a move.
+	 * this country is the one that gained provinces in the move.
+	 * 
+	 * @param lastMove the last move to be undone
 	 */
-	public void undoVanquish()
+	public void undoMove(Move lastMove)
 	{
-		vanquishes--;
+		if (this.equals(lastMove.getNewOwner()))
+		{
+			peakSize = lastMove.getPeakSize();
+			
+			//Reset the peak size if it was changed
+			if (peakSize > lastMove.getPeakSize())
+			{
+				peakSize = lastMove.getPeakSize();
+			}
+			
+			if (lastMove.wasVanquishing())
+			{
+				vanquishes--;
+			}
+			
+			//Reset the largest number of provinces taken if the last move broke the record
+			if (largestAttack > lastMove.getLargestAttack())
+			{
+				largestAttack = lastMove.getLargestAttack();
+			}
+		}
 	}
 	
 	/**
-	 * Resets the peak size to what it was before an attack.
-	 * Should only ever be called during Move.undo()
+	 * Redo the last undone move and reset the country's data.
 	 * 
-	 * @param lastMove the previous move
+	 * @param lastMove the move that was undone
 	 */
-	public void resetPeakSize(Move lastMove)
+	public void redoMove(Move lastMove)
 	{
-		if (this == lastMove.getNewOwner()) //purposefully comparing memory address here.
-		{
-			peakSize = lastMove.getPeakSize();
+		if (this.equals(lastMove.getNewOwner()))
+		{	
+			if (provinces.size() > peakSize)
+			{
+				peakSize = provinces.size();
+			}
+			
+			if (lastMove.wasVanquishing())
+			{
+				vanquishes++;
+			}
+			
+			//Reset the largest number of provinces taken if the last move broke the record
+			if (largestAttack > lastMove.getLargestAttack())
+			{
+				largestAttack = lastMove.getLargestAttack();
+			}
 		}
 	}
 	
@@ -302,6 +345,11 @@ public class Country
 			vanquishes++;
 		}
 		
+		if (move.getNumberOfProvincesTaken() > largestAttack)
+		{
+			largestAttack = move.getNumberOfProvincesTaken();
+		}
+		
 		return move;
 	}
 	
@@ -326,6 +374,11 @@ public class Country
 		if (move.wasVanquishing())
 		{
 			vanquishes++;
+		}
+		
+		if (move.getNumberOfProvincesTaken() > largestAttack)
+		{
+			largestAttack = move.getNumberOfProvincesTaken();
 		}
 		
 		return move;
@@ -380,6 +433,11 @@ public class Country
 		}
 		
 		vanquishes++;
+		
+		if (move.getNumberOfProvincesTaken() > largestAttack)
+		{
+			largestAttack = move.getNumberOfProvincesTaken();
+		}
 		
 		return move;
 	}
