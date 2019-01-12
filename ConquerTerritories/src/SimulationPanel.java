@@ -58,6 +58,16 @@ public class SimulationPanel extends JPanel
 		
 		rand = new Random();
 		
+		ButtonListener buttonListener = new ButtonListener();
+		
+		attack = new JButton("Attack!");
+		attack.addActionListener(buttonListener);
+		attack.setMnemonic(KeyEvent.VK_A);
+		
+		vanquishDefender = ComponentFactory.createButton("Vanquish defender!", "take all provinces from the defender", buttonListener, true);
+		undo = ComponentFactory.createButton("Undo", "Undo the last attack", buttonListener, false);
+		redo = ComponentFactory.createButton("Redo", "Redo the last undone attack", buttonListener, false);
+		
 		displayNeighborsOnly = new JCheckBox("Only display neighboring countries? ", false);
 		attackerSelect = new JComboBox<Country>();
 		attackerSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
@@ -68,16 +78,6 @@ public class SimulationPanel extends JPanel
 		attackerSelect.addActionListener(selectionListener);
 		defenderSelect.addActionListener(selectionListener);
 		displayNeighborsOnly.addActionListener(selectionListener);
-		
-		ButtonListener buttonListener = new ButtonListener();
-		
-		attack = new JButton("Attack!");
-		attack.addActionListener(buttonListener);
-		attack.setMnemonic(KeyEvent.VK_A);
-		
-		vanquishDefender = ComponentFactory.createButton("Vanquish defender!", "take all provinces from the defender", buttonListener, true);
-		undo = ComponentFactory.createButton("Undo", "Undo the last attack", buttonListener, false);
-		redo = ComponentFactory.createButton("Redo", "Redo the last undone attack", buttonListener, false);
 		
 		//Panel to choose which countries to attack and defend
 		JPanel attackInterface = new JPanel(); //left side of interface
@@ -183,18 +183,20 @@ public class SimulationPanel extends JPanel
 	{
 		//Store the currently selected item to keep it selected after updating the combo boxes.
 		Country attacker = (Country)attackerSelect.getSelectedItem();
+		Country defender = (Country)defenderSelect.getSelectedItem();
 		
 		attackerSelect.removeAllItems();
-		
+
 		for (Country c : mapPanel.getCountries())
 		{
 			attackerSelect.addItem(c);
 		}
-		
+
 		//Reselect the country that was selected if it's still on the map.
 		if (mapPanel.getCountries().contains(attacker))
 		{
 			attackerSelect.setSelectedItem(attacker);
+			setDefenderComboBox(attacker, defender);
 		}
 		else
 		{
@@ -202,7 +204,7 @@ public class SimulationPanel extends JPanel
 			attacker = (Country)attackerSelect.getSelectedItem();
 		}
 		
-		setDefenderComboBox(attacker);
+		setDefenderComboBox(attacker, defender);
 	}
 	
 	/**
@@ -211,9 +213,8 @@ public class SimulationPanel extends JPanel
 	 * 
 	 * @param attacker the currently selected country in the other combo box
 	 */
-	private void setDefenderComboBox(Country attacker)
+	private void setDefenderComboBox(Country attacker, Country defender)
 	{
-		Country originalDefender = (Country)defenderSelect.getSelectedItem();
 		defenderSelect.removeAllItems();
 		
 		//Determine which countries should be displayed: all or just neighbors.
@@ -228,19 +229,32 @@ public class SimulationPanel extends JPanel
 		}
 		
 		//Display the countries
-		for (Country c : countriesToDisplay)
+		if (!countriesToDisplay.isEmpty())
 		{
-			defenderSelect.addItem(c);
-		}
-		
-		//Reselect the original defender if it is still being displayed
-		if (countriesToDisplay.contains(originalDefender))
-		{
-			defenderSelect.setSelectedItem(originalDefender);
+			for (Country c : countriesToDisplay)
+			{
+				defenderSelect.addItem(c);
+			}
+			attack.setEnabled(true);
+			vanquishDefender.setEnabled(true);
 		}
 		else
 		{
-			defenderSelect.setSelectedIndex(0);
+			attack.setEnabled(false);
+			vanquishDefender.setEnabled(false);
+		}
+		
+		//Reselect the original defender if it is still being displayed
+		if (countriesToDisplay.contains(defender))
+		{
+			defenderSelect.setSelectedItem(defender);
+		}
+		else
+		{
+			if (defenderSelect.getItemCount() > 0)
+			{
+				defenderSelect.setSelectedIndex(0);
+			}
 		}
 	}
 	
@@ -372,7 +386,7 @@ public class SimulationPanel extends JPanel
 		{
 			setDefenderJList((Country)defenderSelect.getSelectedItem());
 		}
-		
+
 		setComboBoxes();
 		leaderboard.sortList();
 		leaderboard.setLeaderboardText();
@@ -558,7 +572,7 @@ public class SimulationPanel extends JPanel
 	
 	private class SelectionListener implements ListSelectionListener, ActionListener
 	{	
-		//Combobox selection is changed
+		//Combobox/checkbox selection is changed
 		public void actionPerformed(ActionEvent event)
 		{
 			if (event.getSource() == defenderSelect)
@@ -573,13 +587,16 @@ public class SimulationPanel extends JPanel
 					Country attacker = (Country)attackerSelect.getSelectedItem();
 					if (attacker != null)
 					{
-						setDefenderComboBox((Country)attackerSelect.getSelectedItem());
+						Country defender = (Country)defenderSelect.getSelectedItem();
+						setDefenderComboBox(attacker, defender);
 					}
 				}
 			}
 			else if (event.getSource() == displayNeighborsOnly)
 			{
-				setDefenderComboBox((Country)attackerSelect.getSelectedItem());
+				Country attacker = (Country)attackerSelect.getSelectedItem();
+				Country defender = (Country)defenderSelect.getSelectedItem();
+				setDefenderComboBox(attacker, defender);
 			}
 		}
 		
