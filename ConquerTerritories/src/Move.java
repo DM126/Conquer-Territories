@@ -10,12 +10,20 @@ public class Move
 	private Country newOwner; //gained provinces
 	private boolean wasVanquishing; //did the original owner lose the last of their provinces?
 	private int oldPeakSize; //Peak size of the new owner before the move.
+	private int oldLargestAttack; //most number of provinces taken by the new owner before the move.
 	
+	/**
+	 * Creates a record of an attack.
+	 * 
+	 * @param originalOwner the country that lost provinces
+	 * @param newOwner the country that gained provinces
+	 */
 	public Move(Country originalOwner, Country newOwner)
 	{
 		this.originalOwner = originalOwner;
 		this.newOwner = newOwner;
 		oldPeakSize = newOwner.getPeakSize();
+		oldLargestAttack = newOwner.getLargestAttack();
 		provincesTaken = new ArrayList<Province>();
 		wasVanquishing = false;
 	}
@@ -52,16 +60,7 @@ public class Move
 			originalOwner.addProvince(p);
 		}
 		
-		//Reset the peak size if it was changed
-		if (newOwner.getPeakSize() > oldPeakSize)
-		{
-			newOwner.resetPeakSize(this);
-		}
-		
-		if (wasVanquishing)
-		{
-			newOwner.undoVanquish();
-		}
+		newOwner.undoMove(this);
 	}
 	
 	/**
@@ -73,6 +72,8 @@ public class Move
 		{
 			newOwner.addProvince(p);
 		}
+		
+		newOwner.redoMove(this);
 	}
 	
 	/**
@@ -89,6 +90,22 @@ public class Move
 	public int getPeakSize()
 	{
 		return oldPeakSize;
+	}
+	
+	/**
+	 * @return the previous largest attack of the new owner
+	 */
+	public int getLargestAttack()
+	{
+		return oldLargestAttack;
+	}
+	
+	/**
+	 * @return the number of provinces taken in this attack
+	 */
+	public int getNumberOfProvincesTaken()
+	{
+		return provincesTaken.size();
 	}
 	
 	//TODO: add a toString for debugging
