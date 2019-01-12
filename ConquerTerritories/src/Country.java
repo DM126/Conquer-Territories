@@ -10,9 +10,10 @@ public class Country
 	private String name;
 	private Color color;
 	private int peakSize;
-	private int vanquishes; //number of countries vanquished by this one
+	private int vanquishes; //number of countries vanquished by this one //TODO: display after game
 	private Color highlightColor;
 	//private final double LIGHTEN = 1.25; //Scale to lighten the color when highlighting
+	//TODO: keep track of most provinces taken in one attack
 	
 	//TODO: maybe think about keeping this in an array in the worldbuilder?
 	private String provinceIDs;
@@ -162,7 +163,7 @@ public class Country
 			for (Province adjacentProvince : p.getNeighbors())
 			{
 				Country provinceOwner = adjacentProvince.getOwner();
-				if (!provinceOwner.equals(this) && !neighboringCountries.contains(provinceOwner))
+				if (provinceOwner != null && !provinceOwner.equals(this) && !neighboringCountries.contains(provinceOwner))
 				{
 					neighboringCountries.add(provinceOwner);
 				}
