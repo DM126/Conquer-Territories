@@ -16,7 +16,7 @@ public class ColorNotFoundException extends Exception
 	 * 
 	 * @param province the province that could not be found
 	 * @param provinceColor the color that could not be found
-	 * @game the game that was attempted to load
+	 * @param game the game that was attempted to load
 	 */
 	public ColorNotFoundException(Province province, Color provinceColor, Game game)
 	{
