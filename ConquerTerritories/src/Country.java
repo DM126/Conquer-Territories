@@ -156,7 +156,7 @@ public class Country
 	}
 	
 	/**
-	 * @return a list of countries that share a border with this one
+	 * @return an alphabetically sorted list of countries that share a border with this one
 	 */
 	public ArrayList<Country> getNeighbors()
 	{
@@ -173,7 +173,7 @@ public class Country
 			}
 		}
 
-		ListSorter.sortCountries(neighboringCountries, ListSorter.Methods.ALPHABETICAL);
+		ListSorter.sortCountries(neighboringCountries, ComparisonMethods.ALPHABETICAL);
 		return neighboringCountries;
 	}
 	
@@ -296,6 +296,96 @@ public class Country
 	public Color getHighlightColor()
 	{
 		return highlightColor;
+	}
+	
+	/**
+	 * Creates a string for representing this country's size in a textbox
+	 * along with other countries. i.e: "20 provinces", "1 province", etc.
+	 * 
+	 * @return a string representation of this country's size
+	 */
+	public String getSizeAsString()
+	{
+		String output;
+		int size = getSize();
+		if (size > 1)
+		{
+			output = size + " provinces\n";
+		}
+		else if (getSize() == 1)
+		{
+			output = size + " province\n";
+		}
+		else
+		{
+			output = " vanquished!";
+		}
+		
+		return output;
+	}
+	
+	/**
+	 * Creates a string for representing this country's peak size in a textbox
+	 * along with other countries. i.e: "20 provinces", "1 province", etc.
+	 * 
+	 * @return a string representation of this country's peak size
+	 */
+	public String getPeakSizeAsString()
+	{
+		String output;
+		if (peakSize == 1)
+		{
+			output = peakSize + " province\n";
+		}
+		else
+		{
+			output = peakSize + " provinces\n";
+		}
+		
+		return output;
+	}
+	
+	/**
+	 * Creates a string for representing this country's number of vanquishes
+	 * in a textbox along with other countries. 
+	 * i.e: "7 countries", "1 country", etc.
+	 * 
+	 * @return a string representation of this country's vanquishes
+	 */
+	public String getVanquishesAsString()
+	{
+		String output;
+		if (vanquishes == 1)
+		{
+			output = vanquishes + " country\n";
+		}
+		else
+		{
+			output = vanquishes + " countries\n";
+		}
+		
+		return output;
+	}
+	
+	/**
+	 * Creates a string for representing this country's largest attack
+	 * in a textbox along with other countries. i.e: "20 provinces", "1 province", etc.
+	 * 
+	 * @return a string representation of this country's peak size
+	 */
+	public String getLargestAttackAsString()
+	{
+		String output;
+		if (largestAttack == 1)
+		{
+			output = largestAttack + " province\n";
+		}
+		else
+		{
+			output = largestAttack + " provinces\n";
+		}
+		
+		return output;
 	}
 	
 //	private Color lighten(int r, int g, int b)

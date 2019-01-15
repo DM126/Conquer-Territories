@@ -55,7 +55,7 @@ public class Leaderboard extends JPanel
 	
 	public void sortList()
 	{
-		ListSorter.sortCountries(remainingCountries, ListSorter.Methods.SIZE);
+		ListSorter.sortCountries(remainingCountries, ComparisonMethods.SIZE);
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class Leaderboard extends JPanel
 	public void setLeaderboardText()
 	{
 		scores.setText("");
-		ComponentFactory.writeToTextArea(scores, remainingCountries, (country) -> country.getSize());
+		ComponentFactory.writeToTextArea(scores, remainingCountries, ComparisonMethods.SIZE);
 		scores.setCaretPosition(0);
 	}
 	
