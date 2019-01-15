@@ -25,7 +25,6 @@ public class ResultsDisplayPanel extends JPanel
 		scrollPane.setViewportView(textArea);
 		add(scrollPane);
 		
-		//TODO: first sort alphabetically
 		ListSorter.sortCountries(countries, method);
 		ComponentFactory.writeToTextArea(textArea, countries, method);
 		

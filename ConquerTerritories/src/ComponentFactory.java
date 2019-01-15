@@ -59,10 +59,10 @@ public class ComponentFactory
 	{
 		Quantity quantityMethod = getCriteria(comparison);
 		
-		for (int i = countries.size() - 1; i >= 0; i--)
+		for (int i = 0; i < countries.size(); i++)
 		{
 			Country c = countries.get(i);
-			textArea.append((countries.size() - i) + ". " + c.getName() + " - " + quantityMethod.quantity(c));
+			textArea.append((i + 1) + ". " + c.getName() + " - " + quantityMethod.quantity(c));
 		}
 	}
 	
