@@ -9,7 +9,7 @@ public class ListSorter
 	/**
 	 * Methods for comparing countries to sort them
 	 */
-	public enum Methods { ALPHABETICAL, SIZE, PEAK_SIZE };
+	public enum Methods { ALPHABETICAL, SIZE, PEAK_SIZE, VANQUISHES, LARGEST_ATTACK };
 	
 	//Functional interface for a Lambda expression
 	private interface Comparison 
@@ -93,6 +93,10 @@ public class ListSorter
 			return (c1, c2) -> c1.getSize() < c2.getSize();
 		case PEAK_SIZE: 
 			return (c1, c2) -> c1.getPeakSize() < c2.getPeakSize();
+		case VANQUISHES:
+			return (c1, c2) -> c1.getVanquishes() < c2.getVanquishes();
+		case LARGEST_ATTACK:
+			return (c1, c2) -> c1.getLargestAttack() < c2.getLargestAttack();
 		default: 
 			return (c1, c2) -> (c1.getName().compareToIgnoreCase(c2.getName()) < 0); //Shouldn't be called
 		}
