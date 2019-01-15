@@ -20,18 +20,6 @@ public class FinalResultsPanel extends JPanel
 		exit = ComponentFactory.createButton("Exit Game", "Close the program", listener, true);
 		returnToMenu = ComponentFactory.createButton("Main Menu", "Return to the main menu", listener, true);
 		
-		//Write the end sizes in the endResults text area
-		//(country) -> country.getSizeAsString());
-		
-		//Sort countries by peak size and write the results in the peakSizes text area
-		//(country) -> country.getPeakSizeAsString());
-		
-		//Sort countries by number of vanquishes and write the results in the vanquishes text area
-		//(country) -> country.getVanquishesAsString());
-		
-		//Sort countries by largest attack and write the results in the vanquishes text area
-		//(country) -> country.getLargestAttackAsString());
-		
 		ResultsDisplayPanel endSizesPanel = new ResultsDisplayPanel("End Sizes", countries, ComparisonMethods.SIZE);
 		ResultsDisplayPanel peakSizesPanel = new ResultsDisplayPanel("Peak Sizes", countries, ComparisonMethods.PEAK_SIZE);
 		ResultsDisplayPanel vanquishesPanel = new ResultsDisplayPanel("Vanquishes", countries, ComparisonMethods.VANQUISHES);
@@ -49,8 +37,8 @@ public class FinalResultsPanel extends JPanel
 		add(largestAttackPanel);
 		add(buttonPanel);
 		
-		setPreferredSize(new Dimension(endSizesPanel.getPreferredSize().width * 4 + 40, 
-									endSizesPanel.getPreferredSize().height + buttonPanel.getPreferredSize().height + 20));
+		setPreferredSize(new Dimension(endSizesPanel.getPreferredSize().width * 2 + 40, 
+									endSizesPanel.getPreferredSize().height * 2 + buttonPanel.getPreferredSize().height + 20));
 	}
 	
 	private class ButtonListener implements ActionListener
