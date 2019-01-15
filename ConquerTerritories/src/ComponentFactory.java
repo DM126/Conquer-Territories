@@ -37,15 +37,15 @@ public class ComponentFactory
 	}
 	
 	//Functional Interface for a lambda expression
-	public interface Size
+	public interface Quantity
 	{
 		/**
-		 * Determines which size to write to a text area (current size or peak size)
+		 * Determines which quantity to write to the text area
 		 * 
-		 * @param country the country whose size to return
-		 * @return the current or peak size of the country
+		 * @param country the country whose information to return
+		 * @return a string representing information about a country
 		 */
-		int size(Country country);
+		String quantity(Country country);
 	}
 	
 	/**
@@ -53,27 +53,39 @@ public class ComponentFactory
 	 * 
 	 * @param textArea the JTextArea to write to
 	 * @param countries the list of countries to display
-	 * @param sizeMethod the method that returns a country's size (Country.getSize() or Country.getPeakSize())
+	 * @param quantityMethod the method that returns a country's information i.e: Country.getSizeAsString(), etc.
 	 */
-	public static void writeToTextArea(JTextArea textArea, ArrayList<Country> countries, Size sizeMethod)
+	public static void writeToTextArea(JTextArea textArea, ArrayList<Country> countries, ComparisonMethods comparison)
 	{
+		Quantity quantityMethod = getCriteria(comparison);
+		
 		for (int i = countries.size() - 1; i >= 0; i--)
 		{
 			Country c = countries.get(i);
-			textArea.append((countries.size() - i) + ". " + c.getName() + " - ");
-			int size = sizeMethod.size(c);
-			if (size == 1)
-			{
-				textArea.append(size + " province\n");
-			}
-			else if (size > 1)
-			{
-				textArea.append(size + " provinces\n");
-			}
-			else //size == 0
-			{
-				textArea.append("Vanquished!\n");
-			}
+			textArea.append((countries.size() - i) + ". " + c.getName() + " - " + quantityMethod.quantity(c));
+		}
+	}
+	
+	/**
+	 * Determines which criteria to use to compare countries
+	 * 
+	 * @param method the method to compare the countries (alphabetical, size, peak size)
+	 * @return A lambda expression to compare two countries
+	 */
+	private static Quantity getCriteria(ComparisonMethods method)
+	{
+		switch (method)
+		{
+		case SIZE: 
+			return (country) -> country.getSizeAsString();
+		case PEAK_SIZE: 
+			return (country) -> country.getPeakSizeAsString();
+		case VANQUISHES:
+			return (country) -> country.getVanquishesAsString();
+		case LARGEST_ATTACK:
+			return (country) -> country.getLargestAttackAsString();
+		default: 
+			return (country) -> country.getName();
 		}
 	}
 }

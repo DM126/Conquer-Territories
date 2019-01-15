@@ -41,7 +41,7 @@ public class Team
 	 */
 	public void addCountry(Country country)
 	{
-		ListSorter.addToCorrectLocation(team, country, ListSorter.Methods.ALPHABETICAL);
+		ListSorter.addToCorrectLocation(team, country, ComparisonMethods.ALPHABETICAL);
 	}
 	
 	/**

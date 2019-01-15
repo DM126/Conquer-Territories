@@ -414,7 +414,7 @@ public class TeamSelectPanel extends JPanel
 			{
 				countries.add(c);
 			}
-			ListSorter.sortCountries(countries, ListSorter.Methods.ALPHABETICAL);
+			ListSorter.sortCountries(countries, ComparisonMethods.ALPHABETICAL);
 			
 			if (!teams.isEmpty())
 			{	
@@ -474,7 +474,7 @@ public class TeamSelectPanel extends JPanel
 		Country c = countriesOnTeam.getSelectedValue();
 		currentTeam.removeCountry(c);
 		
-		ListSorter.addToCorrectLocation(countries, c, ListSorter.Methods.ALPHABETICAL);
+		ListSorter.addToCorrectLocation(countries, c, ComparisonMethods.ALPHABETICAL);
 		
 		setCountriesJList();
 		setTeamJList(currentTeam);
@@ -540,9 +540,10 @@ public class TeamSelectPanel extends JPanel
 			{
 				for (Team team : teams)
 				{
+					//Create new countries out of the teams and add them to the list of countries
 					if (!team.getCountries().isEmpty()) //TODO: display a confirmation box before starting if there are any empty teams
 					{
-						ListSorter.addToCorrectLocation(countries, new Country(team), ListSorter.Methods.ALPHABETICAL);
+						ListSorter.addToCorrectLocation(countries, new Country(team), ComparisonMethods.ALPHABETICAL);
 					}
 				}
 				

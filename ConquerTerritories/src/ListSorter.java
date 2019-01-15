@@ -6,11 +6,6 @@ import java.util.Collections;
  */
 public class ListSorter
 {
-	/**
-	 * Methods for comparing countries to sort them
-	 */
-	public enum Methods { ALPHABETICAL, SIZE, PEAK_SIZE, VANQUISHES, LARGEST_ATTACK };
-	
 	//Functional interface for a Lambda expression
 	private interface Comparison 
 	{
@@ -30,7 +25,7 @@ public class ListSorter
 	 * @param countries the list of countries to sort
 	 * @param method the criteria to compare two countries (alphabetical, size, peak size)
 	 */
-	public static void sortCountries(ArrayList<Country> countries, Methods method)
+	public static void sortCountries(ArrayList<Country> countries, ComparisonMethods method)
 	{
 		Comparison criteria = getCriteria(method);
 		
@@ -57,7 +52,7 @@ public class ListSorter
 	 * @param country the country to add to the list
 	 * @param method the method for comparing two countries (alphabetical, size, peak size)
 	 */
-	public static void addToCorrectLocation(ArrayList<Country> list, Country country, Methods method)
+	public static void addToCorrectLocation(ArrayList<Country> list, Country country, ComparisonMethods method)
 	{
 		Comparison criteria = getCriteria(method);
 		
@@ -83,7 +78,7 @@ public class ListSorter
 	 * @param method the method to compare the countries (alphabetical, size, peak size)
 	 * @return A lambda expression to compare two countries
 	 */
-	private static Comparison getCriteria(Methods method)
+	private static Comparison getCriteria(ComparisonMethods method)
 	{
 		switch (method)
 		{

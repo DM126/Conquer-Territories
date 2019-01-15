@@ -79,7 +79,7 @@ public class ConquerFrame extends JFrame
 			}
 			scan.close();
 			
-			ListSorter.sortCountries(countries, ListSorter.Methods.ALPHABETICAL);
+			ListSorter.sortCountries(countries, ComparisonMethods.ALPHABETICAL);
 			
 			startGame(countries, settings);
 		}
@@ -151,7 +151,7 @@ public class ConquerFrame extends JFrame
 			closeWithError("Could not find " + game.getCountriesFileName());
 		}
 		
-		ListSorter.sortCountries(countries, ListSorter.Methods.ALPHABETICAL);
+		ListSorter.sortCountries(countries, ComparisonMethods.ALPHABETICAL);
 		
 		return countries;
 	}

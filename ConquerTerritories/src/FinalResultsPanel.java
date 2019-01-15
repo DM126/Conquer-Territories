@@ -4,13 +4,11 @@ import java.util.*;
 import javax.swing.*;
 
 /**
- * Displays the results of a game: ending size and peak size.
+ * Displays the results of a game.
  */
 public class FinalResultsPanel extends JPanel
 {
 	private ConquerFrame parent;
-	private JTextArea endResults;
-	private JTextArea peakSizes;
 	private JButton returnToMenu;
 	private JButton exit;
 	
@@ -18,75 +16,41 @@ public class FinalResultsPanel extends JPanel
 	{
 		this.parent = parent;
 		
-		endResults = createTextArea();
-		peakSizes = createTextArea();
-		
-		JScrollPane resultsScroll = new JScrollPane();
-		resultsScroll.setViewportView(endResults);
-		JScrollPane peakScroll = new JScrollPane();
-		peakScroll.setViewportView(peakSizes);
-		
 		ButtonListener listener = new ButtonListener();
 		exit = ComponentFactory.createButton("Exit Game", "Close the program", listener, true);
 		returnToMenu = ComponentFactory.createButton("Main Menu", "Return to the main menu", listener, true);
 		
 		//Write the end sizes in the endResults text area
-		ComponentFactory.writeToTextArea(endResults, countries, (country) -> country.getSize());
+		//(country) -> country.getSizeAsString());
 		
-		//Sort countries by peak size
-		ListSorter.sortCountries(countries, ListSorter.Methods.PEAK_SIZE);
+		//Sort countries by peak size and write the results in the peakSizes text area
+		//(country) -> country.getPeakSizeAsString());
 		
-		//Write the peak sizes in the peakSizes text area
-		ComponentFactory.writeToTextArea(peakSizes, countries, (country) -> country.getPeakSize());
+		//Sort countries by number of vanquishes and write the results in the vanquishes text area
+		//(country) -> country.getVanquishesAsString());
 		
-		Font titleFont = new Font("Arial", Font.PLAIN, 24);
+		//Sort countries by largest attack and write the results in the vanquishes text area
+		//(country) -> country.getLargestAttackAsString());
 		
-		JPanel endResultsPanel = new JPanel();
-		JLabel endResultsTitle = new JLabel("End Results");
-		endResultsTitle.setFont(titleFont);
-		endResultsPanel.add(endResultsTitle);
-		endResultsPanel.add(resultsScroll);
-		endResultsPanel.setPreferredSize(new Dimension(resultsScroll.getPreferredSize().width + 20, resultsScroll.getPreferredSize().height + endResultsTitle.getPreferredSize().height + 20));
+		ResultsDisplayPanel endSizesPanel = new ResultsDisplayPanel("End Sizes", countries, ComparisonMethods.SIZE);
+		ResultsDisplayPanel peakSizesPanel = new ResultsDisplayPanel("Peak Sizes", countries, ComparisonMethods.PEAK_SIZE);
+		ResultsDisplayPanel vanquishesPanel = new ResultsDisplayPanel("Vanquishes", countries, ComparisonMethods.VANQUISHES);
+		ResultsDisplayPanel largestAttackPanel = new ResultsDisplayPanel("Largest Attack", countries, ComparisonMethods.LARGEST_ATTACK);
 		
-		JPanel peakSizesPanel = new JPanel();
-		JLabel peakSizesTitle = new JLabel("Peak Sizes");
-		peakSizesTitle.setFont(titleFont);
-		peakSizesPanel.add(peakSizesTitle);
-		peakSizesPanel.add(peakScroll);
-		peakSizesPanel.setPreferredSize(endResultsPanel.getPreferredSize());
-
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(exit);
 		buttonPanel.add(returnToMenu);
-		buttonPanel.setPreferredSize(new Dimension(returnToMenu.getPreferredSize().width + 10,
-													returnToMenu.getPreferredSize().height * 2 + 10));
+		buttonPanel.setPreferredSize(new Dimension(returnToMenu.getPreferredSize().width * 2 + 20,
+													returnToMenu.getPreferredSize().height + 10));
 		
-		add(endResultsPanel);
+		add(endSizesPanel);
 		add(peakSizesPanel);
+		add(vanquishesPanel);
+		add(largestAttackPanel);
 		add(buttonPanel);
 		
-		setPreferredSize(new Dimension(endResultsPanel.getPreferredSize().width * 2 + 16, 
-										endResultsPanel.getPreferredSize().height + buttonPanel.getPreferredSize().height + 30));
-		
-		//Display the top of the text areas first
-		endResults.setCaretPosition(0);
-		peakSizes.setCaretPosition(0);
-	}
-	
-	/**
-	 * create a new JTextArea to be uneditable with plain size 20 arial font,
-	 * 20 rows and 20 columns.
-	 * 
-	 * @return a new JTextArea
-	 */
-	private JTextArea createTextArea()
-	{
-		JTextArea text = new JTextArea(20, 20);
-		text.setEditable(false);
-		text.setFont(new Font("Arial", Font.PLAIN, 20));
-		text.setText("");
-		
-		return text;
+		setPreferredSize(new Dimension(endSizesPanel.getPreferredSize().width * 4 + 40, 
+									endSizesPanel.getPreferredSize().height + buttonPanel.getPreferredSize().height + 20));
 	}
 	
 	private class ButtonListener implements ActionListener

@@ -95,7 +95,7 @@ public class MapPanel extends JPanel
 	 */
 	public void reviveCountry(Country c)
 	{
-		ListSorter.addToCorrectLocation(countries, c, ListSorter.Methods.ALPHABETICAL);
+		ListSorter.addToCorrectLocation(countries, c, ComparisonMethods.ALPHABETICAL);
 	}
 	
 	/**
