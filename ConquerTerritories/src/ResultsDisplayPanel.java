@@ -44,7 +44,7 @@ public class ResultsDisplayPanel extends JPanel
 	 */
 	private JTextArea createTextArea()
 	{
-		JTextArea text = new JTextArea(20, 20);
+		JTextArea text = new JTextArea(15, 20);
 		text.setEditable(false);
 		text.setFont(new Font("Arial", Font.PLAIN, 20));
 		text.setText("");
