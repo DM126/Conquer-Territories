@@ -23,7 +23,7 @@ public class ListSorter
 	 * Sorts a list of countries using the specified method.
 	 * 
 	 * @param countries the list of countries to sort
-	 * @param method the criteria to compare two countries (alphabetical, size, peak size)
+	 * @param method the criteria to compare two countries (alphabetical, size, etc.)
 	 */
 	public static void sortCountries(ArrayList<Country> countries, ComparisonMethods method)
 	{
@@ -75,7 +75,7 @@ public class ListSorter
 	/**
 	 * Determines which criteria to use to compare countries
 	 * 
-	 * @param method the method to compare the countries (alphabetical, size, peak size)
+	 * @param method the method to compare the countries (alphabetical, size, etc)
 	 * @return A lambda expression to compare two countries
 	 */
 	private static Comparison getCriteria(ComparisonMethods method)
@@ -85,13 +85,13 @@ public class ListSorter
 		case ALPHABETICAL: 
 			return (c1, c2) -> (c1.getName().compareToIgnoreCase(c2.getName()) < 0);
 		case SIZE: 
-			return (c1, c2) -> c1.getSize() < c2.getSize();
+			return (c1, c2) -> c1.getSize() > c2.getSize();
 		case PEAK_SIZE: 
-			return (c1, c2) -> c1.getPeakSize() < c2.getPeakSize();
+			return (c1, c2) -> c1.getPeakSize() > c2.getPeakSize();
 		case VANQUISHES:
-			return (c1, c2) -> c1.getVanquishes() < c2.getVanquishes();
+			return (c1, c2) -> c1.getVanquishes() > c2.getVanquishes();
 		case LARGEST_ATTACK:
-			return (c1, c2) -> c1.getLargestAttack() < c2.getLargestAttack();
+			return (c1, c2) -> c1.getLargestAttack() > c2.getLargestAttack();
 		default: 
 			return (c1, c2) -> (c1.getName().compareToIgnoreCase(c2.getName()) < 0); //Shouldn't be called
 		}

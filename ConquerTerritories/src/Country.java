@@ -318,7 +318,7 @@ public class Country
 		}
 		else
 		{
-			output = " vanquished!";
+			output = " vanquished!\n";
 		}
 		
 		return output;

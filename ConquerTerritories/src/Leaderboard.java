@@ -82,10 +82,9 @@ public class Leaderboard extends JPanel
 	}
 	
 	/**
-	 * Creates a list of all countries in the game in order of their vanquishing,
-	 * or current size if still alive.
+	 * Creates a list of all countries in the game ordered by size
 	 * 
-	 * @return the list of countries in order of vanquishing
+	 * @return the list of all countries, including vanquished ones
 	 */
 	public ArrayList<Country> getResults()
 	{
