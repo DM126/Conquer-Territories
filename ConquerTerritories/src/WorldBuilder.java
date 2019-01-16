@@ -6,8 +6,6 @@ import javax.imageio.*;
 
 //TODO: Keep track of first pixel found of new color so you don't have to scan
 //		the entire image all over again?
-//
-//TODO: add a comment saying what will cause an IOException
 /**
  * Responsible for creating the province polygons and determing province adjacencies
  */
@@ -23,7 +21,7 @@ public class WorldBuilder
 	 * by reading the map image
 	 * 
 	 * @param provinces the list of all the provinces
-	 * @throws IOException if map.bmp cannot be found
+	 * @throws IOException if the image file cannot be read
 	 * @throws ColorNotFoundException if a province's color is entered incorrectly in the text file
 	 */
 	public WorldBuilder(ArrayList<Province> provinces, Game game) throws IOException, ColorNotFoundException
@@ -84,14 +82,11 @@ public class WorldBuilder
 			{
 				if (pixels[y][x] == provinceColor)
 				{
-					//TODO: consider an isBorder() method?
-					//Check if the current pixel is along the edge of the image
-					if (x == 0 || x == map.getWidth() - 1 || y == 0 || y == map.getHeight() - 1)
+					if (isEdgeOfImage(x, y))
 					{
 						border.add(new MapPoint(x, y));
 					}
-					else if (pixels[y - 1][x] != provinceColor || pixels[y + 1][x] != provinceColor ||
-							 pixels[y][x - 1] != provinceColor || pixels[y][x + 1] != provinceColor)
+					else if (isAdjacentToDifferentColor(x, y, provinceColor))
 					{
 						border.add(new MapPoint(x, y));
 						
@@ -123,6 +118,32 @@ public class WorldBuilder
 		
 		thisProvince.setPolygon(border);
 		thisProvince.setAdjacencies(rgbProvinces, adjColors);
+	}
+	
+	/**
+	 * Checks if a pixel is along the edge of the map
+	 * 
+	 * @param x the x coordinate of the pixel
+	 * @param y the y coordinate of the pixel
+	 * @return true if this pixel is along the edge of the image file
+	 */
+	private boolean isEdgeOfImage(int x, int y)
+	{
+		return (x == 0 || x == map.getWidth() - 1 || y == 0 || y == map.getHeight() - 1);
+	}
+	
+	/**
+	 * Checks if there is a different color pixel around this one.
+	 * 
+	 * @param x the x coordinate of the pixel
+	 * @param y the y coordinate of the pixel
+	 * @param provinceColor the color of the province
+	 * @return true if this pixel is adjacent to a pixel of a different color
+	 */
+	private boolean isAdjacentToDifferentColor(int x, int y, int provinceColor)
+	{
+		return (pixels[y - 1][x] != provinceColor || pixels[y + 1][x] != provinceColor ||
+				pixels[y][x - 1] != provinceColor || pixels[y][x + 1] != provinceColor);
 	}
 	
 	/**
