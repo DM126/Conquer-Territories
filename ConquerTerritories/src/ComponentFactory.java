@@ -69,7 +69,7 @@ public class ComponentFactory
 	/**
 	 * Determines which criteria to use to compare countries
 	 * 
-	 * @param method the method to compare the countries (alphabetical, size, peak size)
+	 * @param method the method to compare the countries (size, peak size, etc.)
 	 * @return A lambda expression to compare two countries
 	 */
 	private static Quantity getCriteria(ComparisonMethods method)
