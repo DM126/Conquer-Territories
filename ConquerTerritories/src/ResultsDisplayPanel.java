@@ -37,13 +37,13 @@ public class ResultsDisplayPanel extends JPanel
 	
 	/**
 	 * create a new JTextArea to be uneditable with plain size 20 arial font,
-	 * 20 rows and 20 columns.
+	 * 15 rows and 21 columns.
 	 * 
 	 * @return a new JTextArea
 	 */
 	private JTextArea createTextArea()
 	{
-		JTextArea text = new JTextArea(15, 20);
+		JTextArea text = new JTextArea(15, 21);
 		text.setEditable(false);
 		text.setFont(new Font("Arial", Font.PLAIN, 20));
 		text.setText("");
