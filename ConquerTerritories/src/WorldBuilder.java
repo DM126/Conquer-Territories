@@ -12,7 +12,7 @@ import javax.imageio.*;
 public class WorldBuilder
 {
 	private BufferedImage map;
-	private int seaColor;
+	private final int seaColor;
 	private int[][] pixels;
 	private Game game;
 	
@@ -27,10 +27,10 @@ public class WorldBuilder
 	public WorldBuilder(ArrayList<Province> provinces, Game game) throws IOException, ColorNotFoundException
 	{
 		this.game = game;
+		seaColor = Color.WHITE.getRGB();
 		
 		File mapFile = new File("Map Data/" + game.getMapImageName());
 		map = ImageIO.read(mapFile);
-		seaColor = map.getRGB(0, 0);
 		pixels = new int[map.getHeight()][map.getWidth()];
 		for (int y = 0; y < map.getHeight(); y++)
 		{
@@ -82,26 +82,10 @@ public class WorldBuilder
 			{
 				if (pixels[y][x] == provinceColor)
 				{
-					if (isEdgeOfImage(x, y))
+					if (isEdgeOfImage(x, y) || isAdjacentToDifferentColor(x, y, provinceColor))
 					{
 						border.add(new MapPoint(x, y));
-					}
-					else if (isAdjacentToDifferentColor(x, y, provinceColor))
-					{
-						border.add(new MapPoint(x, y));
-						
-						//check surrounding colors for adjacent provinces
-						for (int by = y - 1; by <= y + 1; by++)
-						{
-							for (int bx = x - 1; bx <= x + 1; bx++)
-							{
-								int adj = pixels[by][bx];
-								if (adj != seaColor && adj != provinceColor)
-								{
-									adjColors.add(adj);
-								}
-							}
-						}
+						lookForAdjacentColors(x, y, provinceColor, adjColors);
 					}
 				}
 			}
@@ -118,6 +102,45 @@ public class WorldBuilder
 		
 		thisProvince.setPolygon(border);
 		thisProvince.setAdjacencies(rgbProvinces, adjColors);
+	}
+	
+	/**
+	 * Determines if a coordinate (either x or y) are in bounds of the map
+	 * 
+	 * @param x the x coordinate of the pixel
+	 * @param y the y coordinate of the pixel
+	 * @return true if the location is inside the map
+	 */
+	private boolean isInBounds(int x, int y)
+	{
+		return (x >= 0 && x < map.getWidth() && y >= 0 && y < map.getHeight());
+	}
+	
+	/**
+	 * Looks for different colors adjacent to the selected pixel, and if some
+	 * are found, adds them to a hashset of colors (represented as integers)
+	 * 
+	 * @param x the x coordinate of the pixel
+	 * @param y the y coordinate of the pixel
+	 * @param provinceColor the color of this pixel
+	 * @param adjColors a hashset containing the colors adjacent to this province
+	 */
+	private void lookForAdjacentColors(int x, int y, int provinceColor, HashSet<Integer> adjColors)
+	{
+		for (int by = y - 1; by <= y + 1; by++)
+		{
+			for (int bx = x - 1; bx <= x + 1; bx++)
+			{
+				if (isInBounds(x, y))
+				{
+					int adj = pixels[by][bx];
+					if (adj != seaColor && adj != provinceColor)
+					{
+						adjColors.add(adj);
+					}
+				}
+			}
+		}
 	}
 	
 	/**
