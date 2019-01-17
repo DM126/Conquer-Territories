@@ -26,7 +26,7 @@ public class Leaderboard extends JPanel
 		title = new JLabel("Leaderboard");
 		title.setFont(new Font("Arial", Font.PLAIN, 20));
 		
-		scores = new JTextArea(25, 20);
+		scores = new JTextArea(25, 21);
 		scores.setEditable(false);
 		scores.setFont(new Font("Arial", Font.PLAIN, 16));
 		JScrollPane scroll = new JScrollPane();
