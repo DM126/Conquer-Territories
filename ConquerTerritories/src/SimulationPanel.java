@@ -122,6 +122,8 @@ public class SimulationPanel extends JPanel
 		JPanel gamePanel = new JPanel();
 		gamePanel.add(interfacePanel);
 		JScrollPane mapScroll = new JScrollPane();
+		mapScroll.getVerticalScrollBar().setUnitIncrement(16);
+		mapScroll.getHorizontalScrollBar().setUnitIncrement(16);
 		mapScroll.setViewportView(mapPanel);
 		mapScroll.setPreferredSize(mapPanel.getViewportSize());
 		gamePanel.add(mapScroll);
