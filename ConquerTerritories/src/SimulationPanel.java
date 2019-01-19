@@ -332,13 +332,15 @@ public class SimulationPanel extends JPanel
 	private int getAttackStrength()
 	{
 		int strength;
+		int attackerMax = settings.getAttackerMax();
+		int defenderMax = settings.getDefenderMax();
 		
 		do
 		{
 			//get a random number from -defenderMax to attackerMax
-			strength = rand.nextInt(settings.getAttackerMax() + settings.getDefenderMax() + 1) - settings.getDefenderMax();
+			strength = rand.nextInt(attackerMax + defenderMax + 1) - defenderMax;
 		}
-		while (!settings.drawsAllowed() && strength == 0); //loop will only run once if allowDraws is false
+		while (!settings.drawsAllowed() && strength == 0); //loop will only run once if draws are allowed
 		
 		return strength;
 	}
@@ -379,7 +381,6 @@ public class SimulationPanel extends JPanel
 		//if the defender has no provinces left, remove it from the list of countries and update the combo boxes.
 		if (!defender.hasProvinces())
 		{
-			//TODO: fix comboboxes resetting after vanquishing?
 			mapPanel.getCountries().remove(defender);
 			leaderboard.removeCountry(defender);
 			showMessage(defender + " has been vanquished!");
@@ -490,7 +491,7 @@ public class SimulationPanel extends JPanel
 	}
 	
 	/**
-	 * Ends the game and display the final scores.
+	 * Ends the game and displays the final scores.
 	 */
 	private void quit()
 	{
@@ -510,23 +511,23 @@ public class SimulationPanel extends JPanel
 	 */
 	private void takeProvinces(ArrayList<Province> provinces)
 	{
-		Country c1 = (Country)attackerSelect.getSelectedItem();
-		Country c2 = (Country)defenderSelect.getSelectedItem();
+		Country attacker = (Country)attackerSelect.getSelectedItem();
+		Country defender = (Country)defenderSelect.getSelectedItem();
 		
-		if (canAttack(c1, c2)) //TODO: Allow non-adjacent countries to take provinces or no???
+		if (canAttack(attacker, defender)) //TODO: Allow non-adjacent countries to take provinces or no???
 		{
-			lastMove = c1.takeProvinces(provinces);
+			lastMove = attacker.takeProvinces(provinces);
 			
 			if (provinces.size() == 1)
 			{
-				attackDescription.setText(c1 + " took " + provinces.get(0).getName() + " from " + c2 + "!");
+				attackDescription.setText(attacker + " took " + provinces.get(0).getName() + " from " + defender + "!");
 			}
 			else
 			{
-				attackDescription.setText(c1 + " took multiple provinces from " + c2 + "!");
+				attackDescription.setText(attacker + " took multiple provinces from " + defender + "!");
 			}
 			
-			endAttack(c2);
+			endAttack(defender);
 			
 			takeProvince.setEnabled(false);
 		}
