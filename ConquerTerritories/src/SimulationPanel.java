@@ -411,10 +411,9 @@ public class SimulationPanel extends JPanel
 			Country revived = lastMove.getOriginalOwner();
 			mapPanel.reviveCountry(revived);
 			leaderboard.reviveCountry(revived);
-			
-			setComboBoxes();
 		}
 		
+		setComboBoxes();
 		setDefenderJList((Country)defenderSelect.getSelectedItem());
 		
 		mapPanel.repaint();
