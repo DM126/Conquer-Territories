@@ -437,14 +437,14 @@ public class SimulationPanel extends JPanel
 	 */
 	private void vanquishDefender()
 	{
-		Country c1 = (Country)attackerSelect.getSelectedItem();
-		Country c2 = (Country)defenderSelect.getSelectedItem();
+		Country attacker = (Country)attackerSelect.getSelectedItem();
+		Country defender = (Country)defenderSelect.getSelectedItem();
 		
-		if (canAttack(c1, c2))
+		if (canAttack(attacker, defender))
 		{
-			lastMove = c1.vanquish(c2);
-			attackDescription.setText(c1 + " vanquishes " + c2 + "!");
-			endAttack(c2);
+			lastMove = attacker.vanquish(defender);
+			attackDescription.setText(attacker + " vanquishes " + defender + "!");
+			endAttack(defender);
 		}
 	}
 	
@@ -605,7 +605,7 @@ public class SimulationPanel extends JPanel
 		//JList selection is changed
 		public void valueChanged(ListSelectionEvent event)
 		{	
-			if (!event.getValueIsAdjusting())
+			if (event.getSource() == defenderProvinceList && !event.getValueIsAdjusting())
 			{
 				updateSelectedProvinces();
 			}
