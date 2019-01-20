@@ -90,7 +90,7 @@
 90/85/80/32/Piedmont
 91/142/110/192/Cuneo
 92/14/108/128/Nice
-93/164/154/192/Western Isles/6
+93/164/154/192/Western Isles/7
 94/30/68/0/Navarra
 95/158/70/64/Pirineo
 96/30/72/128/Girona
