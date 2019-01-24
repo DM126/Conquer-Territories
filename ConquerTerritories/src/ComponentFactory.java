@@ -53,7 +53,7 @@ public class ComponentFactory
 	 * 
 	 * @param textArea the JTextArea to write to
 	 * @param countries the list of countries to display
-	 * @param quantityMethod the method that returns a country's information i.e: Country.getSizeAsString(), etc.
+	 * @param comparison the attribute of the countries to display (size, peak size, etc.)
 	 */
 	public static void writeToTextArea(JTextArea textArea, ArrayList<Country> countries, ComparisonMethods comparison)
 	{
