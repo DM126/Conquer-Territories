@@ -1,5 +1,8 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
@@ -16,13 +19,14 @@ public class MapPanel extends JPanel
 	
 	private ArrayList<Country> countries;
 	private ArrayList<Province> provinces;
+	private BufferedImage mapImage;
 	
 	/**
 	 * Creates the panel to display the map and instantiates the provinces.
 	 * 
 	 * @param countries the list of every country on the map
 	 * @param game the chosen game
-	 * @throws IOException If there is an issue reading the province text file
+	 * @throws IOException If there is an issue reading the province text file or the map image file
 	 * @throws ColorNotFoundException if a province's color is entered incorrectly in the text file
 	 * @throws NoSuchElementException if a province's data in the text file is missing information
 	 */
@@ -51,11 +55,16 @@ public class MapPanel extends JPanel
 			province.setSeaAdjacencies(provinces);
 		}
 		
+		File mapFile = new File("Map Data/" + game.getMapImageName());
+		mapImage = ImageIO.read(mapFile);
+		
 		//Create polygons and set adjacencies by reading the map image file
-		WorldBuilder wb = new WorldBuilder(provinces, game);
+		WorldBuilder wb = new WorldBuilder(provinces, mapImage);
 		
 		setPreferredSize(wb.getDimensions());
 		setBackground(Color.WHITE);
+		
+		addMouseListener(new ClickListener());
 		
 		repaint();
 	}
@@ -133,5 +142,50 @@ public class MapPanel extends JPanel
 		}
 		
 		return originalValue;
+	}
+	
+	/**
+	 * Displays the information of a province in a dialog box.
+	 * 
+	 * @param province the province whose information to display
+	 */
+	private void displayProvince(Province province)
+	{
+		String message = province.toString() + "\n";
+		message += (province.getOwner() != null) ? "Owner: " + province.getOwner() : "No owner";
+		
+		//TODO: display centerred in the window
+		JOptionPane.showMessageDialog(this, message, "Province", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	//Listens for mouse clicks on the map
+	private class ClickListener implements MouseListener
+	{
+		public void mouseClicked(MouseEvent event)
+		{
+			int x = event.getX();
+			int y = event.getY();
+			
+			int provinceColor = mapImage.getRGB(x, y);
+			if (provinceColor != WorldBuilder.getSeaColor())
+			{
+				boolean provinceFound = false;
+				for (int i = 0; !provinceFound && i < provinces.size(); i++)
+				{
+					if (provinceColor == provinces.get(i).getBMPColor().getRGB())
+					{
+						displayProvince(provinces.get(i));
+						provinceFound = true;
+					}
+				}
+			}
+		}
+
+		//Unused MouseListener methods
+		public void mouseEntered(MouseEvent event) {}
+		public void mouseExited(MouseEvent event) {}
+		public void mousePressed(MouseEvent event) {}
+		public void mouseReleased(MouseEvent event) {}
+		
 	}
 }
