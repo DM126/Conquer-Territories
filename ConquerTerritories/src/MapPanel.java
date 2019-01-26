@@ -145,6 +145,33 @@ public class MapPanel extends JPanel
 	}
 	
 	/**
+	 * Returns the province at a specific location on the map.
+	 * 
+	 * @param x the x coordinate of the location
+	 * @param y the y coordinate of the location
+	 * @return the province at the location, or null if there is no province there
+	 */
+	private Province getProvinceAtLocation(int x, int y)
+	{
+		int provinceColor = mapImage.getRGB(x, y);
+		
+		if (provinceColor == WorldBuilder.getSeaColor())
+		{
+			return null;
+		}
+		
+		for (int i = 0; i < provinces.size(); i++)
+		{
+			if (provinceColor == provinces.get(i).getBMPColor().getRGB())
+			{
+				return provinces.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Displays the information of a province in a dialog box.
 	 * 
 	 * @param province the province whose information to display
@@ -154,7 +181,7 @@ public class MapPanel extends JPanel
 		String message = province.toString() + "\n";
 		message += (province.getOwner() != null) ? "Owner: " + province.getOwner() : "No owner";
 		
-		//TODO: display centerred in the window
+		//TODO: display centered in the window
 		JOptionPane.showMessageDialog(this, message, "Province", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
@@ -166,18 +193,10 @@ public class MapPanel extends JPanel
 			int x = event.getX();
 			int y = event.getY();
 			
-			int provinceColor = mapImage.getRGB(x, y);
-			if (provinceColor != WorldBuilder.getSeaColor())
+			Province provinceClicked = getProvinceAtLocation(x, y);
+			if (provinceClicked != null)
 			{
-				boolean provinceFound = false;
-				for (int i = 0; !provinceFound && i < provinces.size(); i++)
-				{
-					if (provinceColor == provinces.get(i).getBMPColor().getRGB())
-					{
-						displayProvince(provinces.get(i));
-						provinceFound = true;
-					}
-				}
+				displayProvince(provinceClicked);
 			}
 		}
 
