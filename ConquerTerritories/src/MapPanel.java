@@ -61,7 +61,7 @@ public class MapPanel extends JPanel
 		//Create polygons and set adjacencies by reading the map image file
 		WorldBuilder wb = new WorldBuilder(provinces, mapImage);
 		
-		setPreferredSize(wb.getDimensions());
+		setPreferredSize(new Dimension(mapImage.getWidth(), mapImage.getHeight()));
 		setBackground(Color.WHITE);
 		
 		addMouseListener(new ClickListener());
@@ -185,6 +185,18 @@ public class MapPanel extends JPanel
 		JOptionPane.showMessageDialog(this, message, "Province", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
+	/**
+	 * highlights or unhighlights a specific province.
+	 * 
+	 * @param province the province selected
+	 * @param shoudlHighlight determines if the province should be highlighted or unhighlighted
+	 */
+	private void highlightProvince(Province province, boolean shouldHighlight)
+	{
+		province.setHighlighted(shouldHighlight);
+		repaint();
+	}
+	
 	//Listens for mouse clicks on the map
 	private class ClickListener implements MouseListener
 	{
@@ -196,7 +208,9 @@ public class MapPanel extends JPanel
 			Province provinceClicked = getProvinceAtLocation(x, y);
 			if (provinceClicked != null)
 			{
+				highlightProvince(provinceClicked, true);
 				displayProvince(provinceClicked);
+				highlightProvince(provinceClicked, false);
 			}
 		}
 
