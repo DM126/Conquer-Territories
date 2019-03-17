@@ -164,14 +164,6 @@ public class WorldBuilder
 	}
 	
 	/**
-	 * @return the dimensions of the map image
-	 */
-	public Dimension getDimensions()
-	{
-		return new Dimension(map.getWidth(), map.getHeight());
-	}
-	
-	/**
 	 * Used for determining which color on the map is not part of any province.
 	 * 
 	 * @return the sea color on the map
