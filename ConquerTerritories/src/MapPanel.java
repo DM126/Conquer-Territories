@@ -20,19 +20,22 @@ public class MapPanel extends JPanel
 	private ArrayList<Country> countries;
 	private ArrayList<Province> provinces;
 	private BufferedImage mapImage;
+	private SimulationPanel simulationPanel;
 	
 	/**
 	 * Creates the panel to display the map and instantiates the provinces.
 	 * 
 	 * @param countries the list of every country on the map
 	 * @param game the chosen game
+	 * @param simPanel the SimulationPanel that contains this MapPanel
 	 * @throws IOException If there is an issue reading the province text file or the map image file
 	 * @throws ColorNotFoundException if a province's color is entered incorrectly in the text file
 	 * @throws NoSuchElementException if a province's data in the text file is missing information
 	 */
-	public MapPanel(ArrayList<Country> countries, Game game) throws IOException, ColorNotFoundException, NoSuchElementException
+	public MapPanel(ArrayList<Country> countries, Game game, SimulationPanel simPanel) throws IOException, ColorNotFoundException, NoSuchElementException
 	{
 		this.countries = countries;
+		simulationPanel = simPanel;
 		
 		//Create the list of provinces by reading the text file.
 		File provinceFile = new File("Map Data/" + game.getProvincesFileName());
@@ -80,6 +83,10 @@ public class MapPanel extends JPanel
 			if (p.getOwner() != null)
 			{
 				page.setColor(p.getColor());
+			}
+			else if (p.isHighlighted())
+			{
+				page.setColor(Color.BLACK);
 			}
 			else
 			{
@@ -172,20 +179,6 @@ public class MapPanel extends JPanel
 	}
 	
 	/**
-	 * Displays the information of a province in a dialog box.
-	 * 
-	 * @param province the province whose information to display
-	 */
-	private void displayProvince(Province province)
-	{
-		String message = province.toString() + "\n";
-		message += (province.getOwner() != null) ? "Owner: " + province.getOwner() : "No owner";
-		
-		//TODO: display centered in the window
-		JOptionPane.showMessageDialog(this, message, "Province", JOptionPane.INFORMATION_MESSAGE);
-	}
-	
-	/**
 	 * highlights or unhighlights a specific province.
 	 * 
 	 * @param province the province selected
@@ -209,7 +202,7 @@ public class MapPanel extends JPanel
 			if (provinceClicked != null)
 			{
 				highlightProvince(provinceClicked, true);
-				displayProvince(provinceClicked);
+				simulationPanel.displayProvince(provinceClicked);
 				highlightProvince(provinceClicked, false);
 			}
 		}
