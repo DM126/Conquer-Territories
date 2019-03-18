@@ -1,8 +1,6 @@
 import java.awt.*;
 import java.awt.image.*;
-import java.io.*;
 import java.util.*;
-import javax.imageio.*;
 
 //TODO: Keep track of first pixel found of new color so you don't have to scan
 //		the entire image all over again?
@@ -11,8 +9,9 @@ import javax.imageio.*;
  */
 public class WorldBuilder
 {
+	private static final int seaColor = Color.WHITE.getRGB();
+	
 	private BufferedImage map;
-	private final int seaColor;
 	private int[][] pixels;
 	private Game game;
 	
@@ -21,16 +20,11 @@ public class WorldBuilder
 	 * by reading the map image
 	 * 
 	 * @param provinces the list of all the provinces
-	 * @throws IOException if the image file cannot be read
 	 * @throws ColorNotFoundException if a province's color is entered incorrectly in the text file
 	 */
-	public WorldBuilder(ArrayList<Province> provinces, Game game) throws IOException, ColorNotFoundException
-	{
-		this.game = game;
-		seaColor = Color.WHITE.getRGB();
-		
-		File mapFile = new File("Map Data/" + game.getMapImageName());
-		map = ImageIO.read(mapFile);
+	public WorldBuilder(ArrayList<Province> provinces, BufferedImage mapImage) throws ColorNotFoundException
+	{	
+		map = mapImage;
 		pixels = new int[map.getHeight()][map.getWidth()];
 		for (int y = 0; y < map.getHeight(); y++)
 		{
@@ -46,7 +40,7 @@ public class WorldBuilder
 		{
 			rgbProvinces.put(p.getBMPColor().getRGB(), p);
 		}
-		
+
 		for (int i = 0; i < provinces.size(); i++)
 		{
 			//debug
@@ -170,10 +164,12 @@ public class WorldBuilder
 	}
 	
 	/**
-	 * @return the dimensions of the map image
+	 * Used for determining which color on the map is not part of any province.
+	 * 
+	 * @return the sea color on the map
 	 */
-	public Dimension getDimensions()
+	public static int getSeaColor()
 	{
-		return new Dimension(map.getWidth(), map.getHeight());
+		return seaColor;
 	}
 }
