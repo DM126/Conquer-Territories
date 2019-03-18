@@ -38,7 +38,7 @@ public class SimulationPanel extends JPanel
 		
 		try
 		{
-			mapPanel = new MapPanel(countries, settings.getGame());
+			mapPanel = new MapPanel(countries, settings.getGame(), this);
 		} 
 		catch (IOException e)
 		{
@@ -568,6 +568,19 @@ public class SimulationPanel extends JPanel
 		}
 		
 		mapPanel.repaint();
+	}
+	
+	/**
+	 * Displays the information of a clicked province in a dialog box.
+	 * 
+	 * @param province the province whose information to display
+	 */
+	public void displayProvince(Province province)
+	{
+		String message = province.toString() + "\n";
+		message += (province.getOwner() != null) ? "Owner: " + province.getOwner() : "No owner";
+		
+		JOptionPane.showMessageDialog(this, message, "Province", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	//Event Listeners----------------------------------------------------------
