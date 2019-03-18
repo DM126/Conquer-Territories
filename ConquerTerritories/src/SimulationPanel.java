@@ -575,7 +575,7 @@ public class SimulationPanel extends JPanel
 	 * 
 	 * @param province the province whose information to display
 	 */
-	public void displayProvince(Province province)
+	public void displayProvinceInfo(Province province)
 	{
 		String message = province.toString() + "\n";
 		message += (province.getOwner() != null) ? "Owner: " + province.getOwner() : "No owner";

@@ -202,7 +202,7 @@ public class MapPanel extends JPanel
 			if (provinceClicked != null)
 			{
 				highlightProvince(provinceClicked, true);
-				simulationPanel.displayProvince(provinceClicked);
+				simulationPanel.displayProvinceInfo(provinceClicked);
 				highlightProvince(provinceClicked, false);
 			}
 		}
