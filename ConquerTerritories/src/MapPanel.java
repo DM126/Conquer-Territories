@@ -189,7 +189,7 @@ public class MapPanel extends JPanel
 	 * highlights or unhighlights a specific province.
 	 * 
 	 * @param province the province selected
-	 * @param shoudlHighlight determines if the province should be highlighted or unhighlighted
+	 * @param shouldHighlight determines if the province should be highlighted or unhighlighted
 	 */
 	private void highlightProvince(Province province, boolean shouldHighlight)
 	{

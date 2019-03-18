@@ -10,7 +10,7 @@ public class Country
 	private String name;
 	private Color color;
 	private int peakSize;
-	private int vanquishes; //number of countries vanquished by this one //TODO: display after game
+	private int vanquishes; //number of countries vanquished by this one
 	private Color highlightColor;
 	private int largestAttack;
 	//private final double LIGHTEN = 1.25; //Scale to lighten the color when highlighting
