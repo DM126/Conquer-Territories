@@ -206,6 +206,28 @@ public class Province
 	}
 	
 	/**
+	 * Returns true if this province is on the border of the specified country,
+	 * i.e. It could be taken in the next attack.
+	 * 
+	 * @param country
+	 */
+	public boolean bordersCountry(Country country)
+	{
+		if (owner != country)
+		{
+			for (Province neighbor : neighbors)
+			{
+				if (neighbor.getOwner() != null && neighbor.getOwner().equals(country))
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * @return the province id and name of the province. Used for debugging.
 	 */
 	public String toString()
