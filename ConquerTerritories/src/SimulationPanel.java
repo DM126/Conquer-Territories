@@ -13,6 +13,7 @@ public class SimulationPanel extends JPanel
 {
 	private ConquerFrame parent;
 	private MapPanel mapPanel;
+	private JScrollPane mapScroll; //for the MapPanel
 	private JComboBox<Country> attackerSelect;
 	private JComboBox<Country> defenderSelect;
 	private JButton attack;
@@ -121,7 +122,7 @@ public class SimulationPanel extends JPanel
 		//JPanel that holds the interface, map, and description
 		JPanel gamePanel = new JPanel();
 		gamePanel.add(interfacePanel);
-		JScrollPane mapScroll = new JScrollPane();
+		mapScroll = new JScrollPane();
 		mapScroll.getVerticalScrollBar().setUnitIncrement(16);
 		mapScroll.getHorizontalScrollBar().setUnitIncrement(16);
 		mapScroll.setViewportView(mapPanel);
@@ -593,7 +594,7 @@ public class SimulationPanel extends JPanel
 		if (province.bordersCountry(attacker))
 		{
 			message += "\n\nWould you like " + attacker + " to take this province?";
-			int choice = JOptionPane.showConfirmDialog(this, message, "Province", JOptionPane.OK_CANCEL_OPTION);
+			int choice = JOptionPane.showConfirmDialog(mapScroll, message, "Province", JOptionPane.OK_CANCEL_OPTION);
 			if (choice == JOptionPane.OK_OPTION)
 			{
 				takeClickedProvince(attacker, province);
@@ -601,8 +602,10 @@ public class SimulationPanel extends JPanel
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(this, message, "Province", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(mapScroll, message, "Province", JOptionPane.INFORMATION_MESSAGE);
 		}
+		
+		//TODO: let the user set the attacker/defender by clicking one of their provinces
 	}
 	
 	private void takeClickedProvince(Country attacker, Province province)
