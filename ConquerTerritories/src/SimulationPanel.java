@@ -379,7 +379,7 @@ public class SimulationPanel extends JPanel
 		mapPanel.repaint();
 		
 		//if the defender has no provinces left, remove it from the list of countries and update the combo boxes.
-		if (!defender.hasProvinces())
+		if (defender != null && !defender.hasProvinces())
 		{
 			mapPanel.getCountries().remove(defender);
 			leaderboard.removeCountry(defender);
@@ -578,9 +578,49 @@ public class SimulationPanel extends JPanel
 	public void displayProvinceInfo(Province province)
 	{
 		String message = province.toString() + "\n";
-		message += (province.getOwner() != null) ? "Owner: " + province.getOwner() : "No owner";
 		
-		JOptionPane.showMessageDialog(this, message, "Province", JOptionPane.INFORMATION_MESSAGE);
+		if (province.getOwner() != null)
+		{
+			message += "Owner: " + province.getOwner();
+		}
+		else
+		{
+			message += "No owner";
+		}
+		
+		//Allow adjacent countries to take the province
+		Country attacker = (Country)attackerSelect.getSelectedItem();
+		if (province.bordersCountry(attacker))
+		{
+			message += "\n\nWould you like " + attacker + " to take this province?";
+			int choice = JOptionPane.showConfirmDialog(this, message, "Province", JOptionPane.OK_CANCEL_OPTION);
+			if (choice == JOptionPane.OK_OPTION)
+			{
+				takeClickedProvince(attacker, province);
+			}
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(this, message, "Province", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+	
+	private void takeClickedProvince(Country attacker, Province province)
+	{
+		Country defender = province.getOwner();
+		attacker.addProvince(province);
+		if (defender == null) //Colonize an unowned province
+		{
+			attackDescription.setText(attacker + " has colonized " + province.getName() + "!");
+			lastMove = new Move(attacker, province);
+		}
+		else //Take a province from another country
+		{
+			attackDescription.setText(attacker + " took " + province.getName() + " from " + defender + "!");
+			lastMove = new Move(defender, attacker);
+			lastMove.add(province);
+		}
+		endAttack(defender);
 	}
 	
 	//Event Listeners----------------------------------------------------------

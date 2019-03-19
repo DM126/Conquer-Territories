@@ -28,6 +28,24 @@ public class Move
 		wasVanquishing = false;
 	}
 	
+	//TODO: consider creating a subclass for colonization moves
+	/**
+	 * Creates a record of a country colonizing an unowned province.
+	 * 
+	 * @param newOwner the country that took the province
+	 * @param provinceTaken the colonized province
+	 */
+	public Move(Country newOwner, Province provinceTaken)
+	{
+		this.originalOwner = null;
+		this.newOwner = newOwner;
+		oldPeakSize = newOwner.getPeakSize();
+		oldLargestAttack = newOwner.getLargestAttack();
+		provincesTaken = new ArrayList<Province>();
+		provincesTaken.add(provinceTaken);
+		wasVanquishing = false;
+	}
+	
 	public void add(Province p)
 	{
 		provincesTaken.add(p);
@@ -54,12 +72,20 @@ public class Move
 	 */
 	public void undo()
 	{
-		//Return the provinces taken
-		for (Province p : provincesTaken)
+		if (originalOwner != null)
 		{
-			originalOwner.addProvince(p);
+			//Return the provinces taken from an attack
+			for (Province p : provincesTaken)
+			{
+				originalOwner.addProvince(p);
+			}
 		}
-		
+		else
+		{
+			//Uncolonize the province
+			newOwner.removeProvince(provincesTaken.get(0));
+			provincesTaken.get(0).setOwner(null);
+		}
 		newOwner.undoMove(this);
 	}
 	
