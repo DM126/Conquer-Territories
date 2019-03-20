@@ -15,6 +15,7 @@ public class SimulationPanel extends JPanel
 	private MapPanel mapPanel;
 	private JScrollPane mapScroll; //for the MapPanel
 	private JComboBox<Country> attackerSelect;
+	private JButton swapCountries;
 	private JComboBox<Country> defenderSelect;
 	private JButton attack;
 	private JButton vanquishDefender;
@@ -75,6 +76,11 @@ public class SimulationPanel extends JPanel
 		displayNeighborsOnly = new JCheckBox("Only display neighboring countries? ", false);
 		attackerSelect = new JComboBox<Country>();
 		attackerSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
+		ImageIcon swapImage = new ImageIcon("swap.png");
+		swapCountries = new JButton(swapImage);
+		swapCountries.setPreferredSize(new Dimension(25, 25));
+		swapCountries.addActionListener(buttonListener);
+		swapCountries.setToolTipText("Swap the attacker and defender");
 		defenderSelect = new JComboBox<Country>();
 		defenderSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
 		setComboBoxes();
@@ -86,13 +92,15 @@ public class SimulationPanel extends JPanel
 		//Panel to choose which countries to attack and defend
 		JPanel attackInterface = new JPanel(); //left side of interface
 		attackInterface.add(attackerSelect);
+		attackInterface.add(swapCountries);
 		attackInterface.add(defenderSelect);
 		attackInterface.add(attack);
 		attackInterface.add(undo);
 		attackInterface.add(redo);
 		attackInterface.add(vanquishDefender);
 		attackInterface.add(displayNeighborsOnly);
-		attackInterface.setPreferredSize(new Dimension(attackerSelect.getPreferredSize().width * 2 + 20, 
+		attackInterface.setPreferredSize(new Dimension(attackerSelect.getPreferredSize().width * 2 + 20 +
+														swapCountries.getPreferredSize().width + 10, 
 														attackerSelect.getPreferredSize().height + 
 														attack.getPreferredSize().height * 2 +
 														displayNeighborsOnly.getPreferredSize().height + 20));
@@ -611,6 +619,12 @@ public class SimulationPanel extends JPanel
 		//TODO: let the user set the attacker/defender by clicking one of their provinces
 	}
 	
+	/**
+	 * Gives the clicked province to the current attacker.
+	 * 
+	 * @param attacker the country to take the province
+	 * @param province the province to take
+	 */
 	private void takeClickedProvince(Country attacker, Province province)
 	{
 		Country defender = province.getOwner();
@@ -627,6 +641,19 @@ public class SimulationPanel extends JPanel
 			lastMove.add(province);
 		}
 		endAttack(defender);
+	}
+	
+	/**
+	 * Swaps the currently selected attacker and defender; The attacker will
+	 * become the new defender and the defender will become the new attacker.
+	 */
+	private void swapAttackerAndDefender()
+	{
+		Country currentAttacker = (Country)attackerSelect.getSelectedItem();
+		Country currentDefender = (Country)defenderSelect.getSelectedItem();
+		
+		attackerSelect.setSelectedItem(currentDefender);
+		defenderSelect.setSelectedItem(currentAttacker);
 	}
 	
 	//Event Listeners----------------------------------------------------------
@@ -678,6 +705,10 @@ public class SimulationPanel extends JPanel
 			if (event.getSource() == attack)
 			{
 				beginAttack();
+			}
+			else if (event.getSource() == swapCountries)
+			{
+				swapAttackerAndDefender();
 			}
 			else if (event.getSource() == undo)
 			{
