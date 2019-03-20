@@ -179,7 +179,7 @@ public class MapPanel extends JPanel
 	}
 	
 	/**
-	 * highlights or unhighlights a specific province.
+	 * Highlights or unhighlights a specific province.
 	 * 
 	 * @param province the province selected
 	 * @param shouldHighlight determines if the province should be highlighted or unhighlighted
@@ -188,6 +188,35 @@ public class MapPanel extends JPanel
 	{
 		province.setHighlighted(shouldHighlight);
 		repaint();
+	}
+	
+	/**
+	 * Changes the highlighted state of a clicked province and dispalys an info
+	 * dialog box. Checks if the province was taken and resets its highlighted 
+	 * state accordingly.
+	 * 
+	 * @param provinceClicked the province that was clicked
+	 */
+	private void selectProvince(Province provinceClicked)
+	{
+		//Unhighlighted provinces should be highlighted and vice versa
+		boolean originalHighlightState = provinceClicked.isHighlighted();
+		Country originalOwner = provinceClicked.getOwner();
+		
+		highlightProvince(provinceClicked, !originalHighlightState);
+		simulationPanel.displayProvinceInfo(provinceClicked);
+		Country currentOwner = provinceClicked.getOwner(); //check if the owner changed
+		
+		//If the province wasn't taken, reset it's highlighted state
+		if (currentOwner == null || (originalOwner != null && originalOwner.equals(currentOwner)))
+		{
+			highlightProvince(provinceClicked, originalHighlightState);
+		}
+		else
+		{
+			//If the province was taken, unhighlight it
+			highlightProvince(provinceClicked, false);
+		}
 	}
 	
 	//Listens for mouse clicks on the map
@@ -201,9 +230,7 @@ public class MapPanel extends JPanel
 			Province provinceClicked = getProvinceAtLocation(x, y);
 			if (provinceClicked != null)
 			{
-				highlightProvince(provinceClicked, true);
-				simulationPanel.displayProvinceInfo(provinceClicked);
-				highlightProvince(provinceClicked, false);
+				selectProvince(provinceClicked);
 			}
 		}
 

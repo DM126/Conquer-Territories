@@ -444,7 +444,7 @@ public class Country
 	}
 	
 	/**
-	 * Take a list of specific province in an attack.
+	 * Take a list of specific provinces in an attack.
 	 * Differs from attack() in that this method can take any provinces,
 	 * not just provinces along the border.
 	 * 

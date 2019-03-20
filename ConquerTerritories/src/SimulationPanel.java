@@ -32,6 +32,9 @@ public class SimulationPanel extends JPanel
 	private JButton takeProvince;
 	private ArrayList<Province> highlightedProvinces;
 	
+	//TODO: Consider adding a panel that displays province info, both when clicked on map
+	//and when clicked in the defender's province list
+	
 	public SimulationPanel(ConquerFrame parent, ArrayList<Country> countries, Settings settings)
 	{	
 		this.parent = parent;
