@@ -23,11 +23,7 @@ public class MainMenu extends JPanel
 		ButtonListener listener = new ButtonListener();
 		
 		selectTeams = ComponentFactory.createButton("Select Teams", "Combine countries into teams (optional)", listener, true);
-		
-		File saveFile = new File("Saved Games/GameData.save");
-		loadGame = ComponentFactory.createButton("Load game", "Load a saved game", listener, saveFile.exists());
-		//TODO: add functionality to delete a save
-		
+		loadGame = ComponentFactory.createButton("Load game", "Load a saved game", listener, true);
 		play = ComponentFactory.createButton("Play!", "Start a new game with the chosen settings", listener, true);
 		
 		settingsPanel = new SettingsPanel(this);
