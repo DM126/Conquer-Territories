@@ -46,12 +46,14 @@ public class TeamSelectPanel extends JPanel
 		JScrollPane countryScroll = new JScrollPane();
 		countryScroll.setViewportView(countryChoices);
 		countryChoices.addListSelectionListener(listener);
+		countryChoices.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setCountriesJList();
 		
 		countriesOnTeam = new JList<Country>();
 		JScrollPane currentCountriesScrollPane = new JScrollPane();
 		currentCountriesScrollPane.setViewportView(countriesOnTeam);
 		countriesOnTeam.addListSelectionListener(listener);
+		countriesOnTeam.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		teamComboBox = new JComboBox<Team>();
 		//teamComboBox.addActionListener(listener);
@@ -387,14 +389,7 @@ public class TeamSelectPanel extends JPanel
 				teamComboBox.setSelectedItem(newTeam);
 				setNameLabel();
 				setTeamJList(newTeam);
-				if (!countryChoices.isSelectionEmpty())
-				{
-					addCountry.setEnabled(true);
-				}
-				else
-				{
-					addCountry.setEnabled(false);
-				}
+				addCountry.setEnabled(!countryChoices.isSelectionEmpty());
 				enableComponents(true);
 			}
 		}
