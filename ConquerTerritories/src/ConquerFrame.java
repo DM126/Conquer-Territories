@@ -57,41 +57,11 @@ public class ConquerFrame extends JFrame
 	}
 	
 	/**
-	 * Loads a saved game from the save file
+	 * Opens a new panel to select a save file to load
 	 */
 	public void loadGame()
 	{
-		try
-		{
-			File saveFile = new File("Saved Games/GameData.save");
-			Scanner scan = new Scanner(saveFile);
-			Settings settings = new Settings(scan.nextLine());
-			
-			ArrayList<Country> countries = new ArrayList<Country>();
-			while (scan.hasNext())
-			{
-				String countryData = scan.nextLine();
-				int peakSize = Integer.parseInt(scan.nextLine());
-				int vanquishes = Integer.parseInt(scan.nextLine());
-				int largestAttack = Integer.parseInt(scan.nextLine());
-				
-				countries.add(new Country(countryData, peakSize, vanquishes, largestAttack));
-			}
-			scan.close();
-			
-			ListSorter.sortCountries(countries, ComparisonMethods.ALPHABETICAL);
-			
-			startGame(countries, settings);
-		}
-		catch (FileNotFoundException e)
-		{
-			JOptionPane.showMessageDialog(null, "Error: The save file could not be found.", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		catch (NumberFormatException e)
-		{
-			e.printStackTrace(); //debug
-			JOptionPane.showMessageDialog(null, "Error: The save data could not be read.", "Error", JOptionPane.ERROR_MESSAGE);
-		}
+		setPanel(new LoadGamePanel(this));
 	}
 	
 	/**
