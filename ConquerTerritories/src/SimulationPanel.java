@@ -652,8 +652,12 @@ public class SimulationPanel extends JPanel
 		Country currentAttacker = (Country)attackerSelect.getSelectedItem();
 		Country currentDefender = (Country)defenderSelect.getSelectedItem();
 		
-		attackerSelect.setSelectedItem(currentDefender);
-		defenderSelect.setSelectedItem(currentAttacker);
+		//Quick fix, TODO: disable swap button when one of the comboboxes is null?
+		if (currentAttacker != null && currentDefender != null)
+		{
+			attackerSelect.setSelectedItem(currentDefender);
+			defenderSelect.setSelectedItem(currentAttacker);
+		}
 	}
 	
 	//Event Listeners----------------------------------------------------------
