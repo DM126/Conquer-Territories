@@ -169,6 +169,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void removeEmptyCountries(ArrayList<Country> countries)
 	{
+		//TODO: use removeIf()
+		
 		//Find the empty countries
 		ArrayList<Country> emptyCountries = new ArrayList<Country>();
 		for (Country country : countries)
@@ -430,6 +432,8 @@ public class SimulationPanel extends JPanel
 		
 		mapPanel.repaint();
 		
+		leaderboard.sortList();
+		leaderboard.setLeaderboardText();
 		undo.setEnabled(false);
 		redo.setEnabled(true);
 	}
