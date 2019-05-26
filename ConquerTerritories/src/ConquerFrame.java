@@ -120,6 +120,10 @@ public class ConquerFrame extends JFrame
 		{
 			closeWithError("Could not find " + game.getCountriesFileName());
 		}
+		catch (InvalidCountryDataException e)
+		{
+			closeWithError(e.getMessage());
+		}
 		
 		ListSorter.sortCountries(countries, ComparisonMethods.ALPHABETICAL);
 		

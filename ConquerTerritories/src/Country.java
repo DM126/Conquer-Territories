@@ -22,8 +22,9 @@ public class Country
 	 * Creates a country by reading from the Countries.txt file
 	 * 
 	 * @param data the data from the text file including the name and color
+	 * @throws InvalidCountryDataException if the country's data was entered incorrectly in the text file
 	 */
-	public Country(String data)
+	public Country(String data) throws InvalidCountryDataException
 	{
 		provinces = new ArrayList<Province>();
 		
@@ -32,10 +33,20 @@ public class Country
 		
 		//scan the name, color, and province ids
 		name = scan.next();
-		int red = scan.nextInt();
-		int green = scan.nextInt();
-		int blue = scan.nextInt();
-		setColor(new Color(red, green, blue));
+
+		try
+		{
+			int red = scan.nextInt();
+			int green = scan.nextInt();
+			int blue = scan.nextInt();
+			setColor(new Color(red, green, blue));
+		}
+		catch (InputMismatchException e)
+		{
+			scan.close();
+			throw new InvalidCountryDataException(name);
+		}
+		
 		if (scan.hasNext())
 		{
 			provinceIDs = scan.next();
@@ -99,17 +110,32 @@ public class Country
 	 * 
 	 * @param worldMap the list of all provinces in the world
 	 */
-	public void scanProvinces(ArrayList<Province> worldMap)
+	public void scanProvinces(ArrayList<Province> worldMap) throws InvalidCountryDataException
 	{
 		Scanner scan = new Scanner(provinceIDs);
 		scan.useDelimiter(",");
 
-		while (scan.hasNext())
+		int id = -1;
+		try
 		{
-			addProvince(worldMap.get(scan.nextInt() - 1));
+			while (scan.hasNext())
+			{
+				id = scan.nextInt();
+				addProvince(worldMap.get(id - 1));
+			}
 		}
-		
-		scan.close();
+		catch (InputMismatchException e)
+		{
+			throw new InvalidCountryDataException(name);
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+			throw new InvalidProvinceIDException(name, id);
+		}
+		finally
+		{
+			scan.close();
+		}
 		
 		provinceIDs = "";
 	}
