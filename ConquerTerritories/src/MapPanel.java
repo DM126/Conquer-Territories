@@ -16,6 +16,7 @@ public class MapPanel extends JPanel
 	private static final int MAX_WIDTH = 1500;
 	private static final int MAX_HEIGHT = 800;
 	private static final Color NO_OWNER = Color.LIGHT_GRAY; //Used to draw provinces that don't belong to any country
+	private static final String MAP_FOLDER = "Map Data"; //Folder containing the text/image files for the map data
 	
 	private ArrayList<Country> countries;
 	private ArrayList<Province> provinces;
@@ -30,15 +31,16 @@ public class MapPanel extends JPanel
 	 * @param simPanel the SimulationPanel that contains this MapPanel
 	 * @throws IOException If there is an issue reading the province text file or the map image file
 	 * @throws ColorNotFoundException if a province's color is entered incorrectly in the text file
-	 * @throws NoSuchElementException if a province's data in the text file is missing information
+	 * @throws InvalidCountryDataException if a country's data is entered incorrectly in the country text file
+	 * @throws InvalidProvinceIDException if a province id from the countries text file does not exist
 	 */
-	public MapPanel(ArrayList<Country> countries, Game game, SimulationPanel simPanel) throws IOException, ColorNotFoundException, NoSuchElementException
+	public MapPanel(ArrayList<Country> countries, Game game, SimulationPanel simPanel) throws IOException, ColorNotFoundException, InvalidCountryDataException, InvalidProvinceIDException
 	{
 		this.countries = countries;
 		simulationPanel = simPanel;
 		
 		//Create the list of provinces by reading the text file.
-		File provinceFile = new File("Map Data/" + game.getProvincesFileName());
+		File provinceFile = new File(MAP_FOLDER + "/" + game.getProvincesFileName());
 		Scanner scan = new Scanner(provinceFile);
 		provinces = new ArrayList<Province>();
 		while (scan.hasNext())
@@ -50,7 +52,7 @@ public class MapPanel extends JPanel
 		//Add the provinces to each country.
 		for (Country country : countries)
 		{
-			country.scanProvinces(provinces);
+			country.scanProvinces(provinces); //TODO: check for duplicate provinces
 		}
 		
 		for (Province province : provinces)
@@ -58,7 +60,7 @@ public class MapPanel extends JPanel
 			province.setSeaAdjacencies(provinces);
 		}
 		
-		File mapFile = new File("Map Data/" + game.getMapImageName());
+		File mapFile = new File(MAP_FOLDER + "/" + game.getMapImageName());
 		mapImage = ImageIO.read(mapFile);
 		
 		//Create polygons and set adjacencies by reading the map image file
