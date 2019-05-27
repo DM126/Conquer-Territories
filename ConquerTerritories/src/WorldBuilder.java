@@ -125,7 +125,7 @@ public class WorldBuilder
 		{
 			for (int bx = x - 1; bx <= x + 1; bx++)
 			{
-				if (isInBounds(x, y))
+				if (isInBounds(bx, by))
 				{
 					int adj = pixels[by][bx];
 					if (adj != seaColor && adj != provinceColor)
