@@ -36,6 +36,8 @@ public class SimulationPanel extends JPanel
 	//TODO: Consider adding a panel that displays province info, both when clicked on map
 	//and when clicked in the defender's province list
 	
+	//TODO: Add buttons to randomize attacker (and defender?)
+	
 	public SimulationPanel(ConquerFrame parent, ArrayList<Country> countries, Settings settings)
 	{	
 		this.parent = parent;
@@ -49,15 +51,7 @@ public class SimulationPanel extends JPanel
 		{
 			parent.closeWithError("Error: " + settings.getGame().getMapImageName() + " could not be found.");
 		}
-		catch (ColorNotFoundException e)
-		{
-			parent.closeWithError(e.getMessage());
-		}
-		catch (InvalidCountryDataException e)
-		{
-			parent.closeWithError(e.getMessage());
-		}
-		catch (InvalidProvinceIDException e)
+		catch (ColorNotFoundException | InvalidCountryDataException | InvalidProvinceIDException e)
 		{
 			parent.closeWithError(e.getMessage());
 		}
