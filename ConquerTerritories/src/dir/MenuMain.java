@@ -25,8 +25,14 @@ public class MainMenu extends JPanel
 		selectTeams = ComponentFactory.createButton("Select Teams", "Combine countries into teams (optional)", listener, true);
 		loadGame = ComponentFactory.createButton("Load game", "Load a saved game", listener, true);
 		play = ComponentFactory.createButton("Play!", "Start a new game with the chosen settings", listener, true);
-		
-		settingsPanel = new SettingsPanel(this);
+		try
+		{
+			settingsPanel = new SettingsPanel(this);
+		}
+		catch (FileNotFoundException e)
+		{
+			parent.closeWithError("Could not find Maps.txt.");
+		}
 		
 		JPanel uiPanel = new JPanel();
 		uiPanel.add(settingsPanel);

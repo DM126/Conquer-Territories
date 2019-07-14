@@ -16,7 +16,7 @@ public class MapPanel extends JPanel
 	private static final int MAX_WIDTH = 1500;
 	private static final int MAX_HEIGHT = 800;
 	private static final Color NO_OWNER = Color.LIGHT_GRAY; //Used to draw provinces that don't belong to any country
-	private static final String MAP_FOLDER = "Map Data"; //Folder containing the text/image files for the map data
+	private static final String MAP_FOLDER = "ConquerTerritories/Map Data/"; //Folder containing the text/image files for the map data
 	
 	private ArrayList<Country> countries;
 	private ArrayList<Province> provinces;
@@ -40,7 +40,7 @@ public class MapPanel extends JPanel
 		simulationPanel = simPanel;
 		
 		//Create the list of provinces by reading the text file.
-		File provinceFile = new File(MAP_FOLDER + "/" + game.getProvincesFileName());
+		File provinceFile = new File(MAP_FOLDER + game.getProvincesFileName());
 		Scanner scan = new Scanner(provinceFile);
 		provinces = new ArrayList<Province>();
 		while (scan.hasNext())
@@ -60,7 +60,7 @@ public class MapPanel extends JPanel
 			province.setSeaAdjacencies(provinces);
 		}
 		
-		File mapFile = new File(MAP_FOLDER + "/" + game.getMapImageName());
+		File mapFile = new File(MAP_FOLDER + game.getMapImageName());
 		mapImage = ImageIO.read(mapFile);
 		
 		//Create polygons and set adjacencies by reading the map image file
