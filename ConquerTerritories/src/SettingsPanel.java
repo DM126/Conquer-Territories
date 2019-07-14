@@ -90,7 +90,7 @@ public class SettingsPanel extends JPanel
 	 */
 	private void getGames()
 	{
-		File dataFile = new File("Maps.txt");
+		File dataFile = new File("ConquerTerritories/Maps.txt");
 		
 		try
 		{
