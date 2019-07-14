@@ -18,7 +18,13 @@ public class SettingsPanel extends JPanel
 	private JCheckBox allowDraws;
 	private MainMenu menu;
 	
-	public SettingsPanel(MainMenu menu)
+	/**
+	 * Creates the Settings panel on the main menu.
+	 * 
+	 * @param menu the main menu
+	 * @throws FileNotFoundException if Maps.txt could not be found
+	 */
+	public SettingsPanel(MainMenu menu) throws FileNotFoundException
 	{
 		this.menu = menu;
 		
@@ -87,27 +93,21 @@ public class SettingsPanel extends JPanel
 	
 	/**
 	 * Find all the playable maps
+	 * 
+	 * @throws FileNotFoundException if Maps.txt could not be found
 	 */
-	private void getGames()
+	private void getGames() throws FileNotFoundException
 	{
-		File dataFile = new File("Maps.txt");
+		File dataFile = new File("ConquerTerritories/Maps.txt");
 		
-		try
+		Scanner fileScan = new Scanner(dataFile);
+		while (fileScan.hasNext())
 		{
-			Scanner fileScan = new Scanner(dataFile);
-			while (fileScan.hasNext())
-			{
-				Game game = new Game(fileScan.nextLine());
-				gameSelect.addItem(game);
-			}
-			
-			fileScan.close();
-		} 
-		catch (FileNotFoundException e)
-		{
-			JOptionPane.showMessageDialog(null, "Could not find Maps.txt.", "Error", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
+			Game game = new Game(fileScan.nextLine());
+			gameSelect.addItem(game);
 		}
+		
+		fileScan.close();
 	}
 	
 	/**
