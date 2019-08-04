@@ -26,3 +26,11 @@ hs_err_pid*
 .classpath
 .project
 .settings/
+
+# Save files
+*.save
+
+# Maps
+v2Map.bmp
+eu3Map.bmp
+
