@@ -666,6 +666,39 @@ public class SimulationPanel extends JPanel
 		}
 	}
 	
+	/**
+	 * Sets the currently selected attacker.
+	 * 
+	 * @param newAttacker the country to set as the attacker
+	 */
+	public void setAttacker(Country newAttacker)
+	{
+		attackerSelect.setSelectedItem(newAttacker);
+	}
+	
+	/**
+	 * Sets the currently selected defender. If the new defender either 
+	 * already is the attacker or does not border the current attacker, 
+	 * unchecks the display neighbors checkbox and sets the defender.
+	 * 
+	 * @param newDefender the country to set as the defender
+	 */
+	public void setDefender(Country newDefender)
+	{
+		if (displayNeighborsOnly.isSelected())
+		{
+			Country currentAttacker = (Country)attackerSelect.getSelectedItem();
+			if (!newDefender.borders(currentAttacker) || newDefender.equals(currentAttacker))
+			{
+				displayNeighborsOnly.doClick(); //Set to false and trigger ActionEvent to refresh defender combobox
+			}
+		}
+		
+		defenderSelect.setSelectedItem(newDefender);
+	}
+	
+	
+	
 	//Event Listeners----------------------------------------------------------
 	
 	private class SelectionListener implements ListSelectionListener, ActionListener
