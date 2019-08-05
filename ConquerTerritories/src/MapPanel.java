@@ -22,6 +22,7 @@ public class MapPanel extends JPanel
 	private ArrayList<Province> provinces;
 	private BufferedImage mapImage;
 	private SimulationPanel simulationPanel;
+	private RightClickMenu rightClickMenu;
 	
 	/**
 	 * Creates the panel to display the map and instantiates the provinces.
@@ -37,7 +38,7 @@ public class MapPanel extends JPanel
 	public MapPanel(ArrayList<Country> countries, Game game, SimulationPanel simPanel) throws IOException, ColorNotFoundException, InvalidCountryDataException, InvalidProvinceIDException
 	{
 		this.countries = countries;
-		simulationPanel = simPanel;
+		this.simulationPanel = simPanel;
 		
 		//Create the list of provinces by reading the text file.
 		File provinceFile = new File(MAP_FOLDER + game.getProvincesFileName());
@@ -69,7 +70,9 @@ public class MapPanel extends JPanel
 		setPreferredSize(new Dimension(mapImage.getWidth(), mapImage.getHeight()));
 		setBackground(Color.WHITE);
 		
-		addMouseListener(new ClickListener());
+		ClickListener listener = new ClickListener();
+		addMouseListener(listener);
+		rightClickMenu = new RightClickMenu(listener);
 		
 		repaint();
 	}
@@ -221,9 +224,10 @@ public class MapPanel extends JPanel
 		}
 	}
 	
-	//Listens for mouse clicks on the map
-	private class ClickListener implements MouseListener
+	//Listens for mouse clicks on the map and right click menu
+	private class ClickListener implements MouseListener, ActionListener
 	{
+		//For clicks on the map
 		public void mouseClicked(MouseEvent event)
 		{
 			int x = event.getX();
@@ -232,15 +236,74 @@ public class MapPanel extends JPanel
 			Province provinceClicked = getProvinceAtLocation(x, y);
 			if (provinceClicked != null)
 			{
-				selectProvince(provinceClicked);
+				if (event.getButton() == MouseEvent.BUTTON1) //Left click
+				{
+					selectProvince(provinceClicked);
+				}
+				else if (event.getButton() == MouseEvent.BUTTON3 && provinceClicked.getOwner() != null) //Right click
+				{
+					//TODO: If province is null, allow for colonization? Only for bordering country?
+					rightClickMenu.show(event.getComponent(), event.getX(), event.getY(), provinceClicked.getOwner());
+				}
 			}
 		}
 
+		//For right click menu selections
+		public void actionPerformed(ActionEvent event)
+		{
+			if (event.getSource() == rightClickMenu.makeAttacker)
+			{
+				simulationPanel.setAttacker(rightClickMenu.countryClicked);
+			}
+			else if (event.getSource() == rightClickMenu.makeDefender)
+			{
+				simulationPanel.setDefender(rightClickMenu.countryClicked);
+			}
+		}
+		
 		//Unused MouseListener methods
 		public void mouseEntered(MouseEvent event) {}
 		public void mouseExited(MouseEvent event) {}
 		public void mousePressed(MouseEvent event) {}
 		public void mouseReleased(MouseEvent event) {}
+	}
+	
+	/**
+	 * Menu that pops up upon right click to allow setting the attacker and 
+	 * defender.
+	 */
+	private class RightClickMenu extends JPopupMenu
+	{
+		//TODO: Add options to attack and vanquish straight from right click menu (should this change the comboboxes?)
+		//TODO: Disable/grey out options that can't be chosen?
+		private Country countryClicked;
+		private JLabel countryName;
+		private JMenuItem makeAttacker;
+		private JMenuItem makeDefender;
 		
+		public RightClickMenu(ClickListener listener)
+		{
+			//TODO: center country name in menu
+			this.countryClicked = null;
+			countryName = new JLabel("No country");
+			countryName.setFont(new Font("Arial", Font.BOLD, 16));
+			
+			makeAttacker = new JMenuItem("Make attacker");
+			makeAttacker.addActionListener(listener);
+			makeDefender = new JMenuItem("Make defender");
+			makeDefender.addActionListener(listener);
+			
+			this.add(countryName);
+			this.addSeparator();
+			this.add(makeAttacker);
+			this.add(makeDefender);
+		}
+		
+		public void show(Component component, int x, int y, Country countryClicked)
+		{
+			this.countryClicked = countryClicked;
+			countryName.setText(countryClicked.getName());
+			super.show(component, x, y);
+		}
 	}
 }

@@ -53,7 +53,7 @@ public class Game
 	}
 	
 	/**
-	 * @return a string represtation of the game to be scanned from a text file
+	 * @return a string representation of the game to be scanned from a text file
 	 */
 	public String serialize()
 	{
