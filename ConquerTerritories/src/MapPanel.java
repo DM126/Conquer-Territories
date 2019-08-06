@@ -278,6 +278,7 @@ public class MapPanel extends JPanel
 		//TODO: Disable/grey out options that can't be chosen?
 		private Country countryClicked;
 		private JLabel countryName;
+		private JLabel numberOfProvinces;
 		private JMenuItem makeAttacker;
 		private JMenuItem makeDefender;
 		
@@ -287,6 +288,7 @@ public class MapPanel extends JPanel
 			this.countryClicked = null;
 			countryName = new JLabel("No country");
 			countryName.setFont(new Font("Arial", Font.BOLD, 16));
+			numberOfProvinces = new JLabel("0 provinces");
 			
 			makeAttacker = new JMenuItem("Make attacker");
 			makeAttacker.addActionListener(listener);
@@ -294,6 +296,7 @@ public class MapPanel extends JPanel
 			makeDefender.addActionListener(listener);
 			
 			this.add(countryName);
+			this.add(numberOfProvinces);
 			this.addSeparator();
 			this.add(makeAttacker);
 			this.add(makeDefender);
@@ -303,6 +306,7 @@ public class MapPanel extends JPanel
 		{
 			this.countryClicked = countryClicked;
 			countryName.setText(countryClicked.getName());
+			numberOfProvinces.setText(countryClicked.getSizeAsString());
 			super.show(component, x, y);
 		}
 	}
