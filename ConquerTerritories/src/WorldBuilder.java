@@ -22,8 +22,10 @@ public class WorldBuilder
 	 * @param provinces the list of all the provinces
 	 * @throws ColorNotFoundException if a province's color is entered incorrectly in the text file
 	 */
-	public WorldBuilder(ArrayList<Province> provinces, BufferedImage mapImage) throws ColorNotFoundException
+	public WorldBuilder(ArrayList<Province> provinces, BufferedImage mapImage, Game game) throws ColorNotFoundException
 	{	
+		this.game = game;
+		
 		map = mapImage;
 		pixels = new int[map.getHeight()][map.getWidth()];
 		for (int y = 0; y < map.getHeight(); y++)

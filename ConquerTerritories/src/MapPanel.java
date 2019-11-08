@@ -65,7 +65,7 @@ public class MapPanel extends JPanel
 		mapImage = ImageIO.read(mapFile);
 		
 		//Create polygons and set adjacencies by reading the map image file
-		WorldBuilder wb = new WorldBuilder(provinces, mapImage);
+		WorldBuilder wb = new WorldBuilder(provinces, mapImage, game);
 		
 		setPreferredSize(new Dimension(mapImage.getWidth(), mapImage.getHeight()));
 		setBackground(Color.WHITE);
