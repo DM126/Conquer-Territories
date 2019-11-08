@@ -127,7 +127,7 @@ public class Province
 	}
 
 	/**
-	 * Used for determine the shape of the province to create the map.
+	 * Used for determining the shape of the province to create the map.
 	 * For drawing this province on screen use getColor().
 	 * 
 	 * @return the color of this province on the map.bmp image file
