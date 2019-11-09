@@ -66,13 +66,14 @@ public class Country
 	/**
 	 * Loads the country's data from the save game file.
 	 * 
-	 * @param savedata a string including the name and color to be sent to the other constructor
+	 * @param saveData a string including the name and color to be sent to the other constructor
 	 * @param peakSize the peak size of this country
 	 * @param vanquishes the number of times this country vanquished another
+	 * @param largestAttack the the most provinces taken in a single attack
 	 */
-	public Country(String savedata, int peakSize, int vanquishes, int largestAttack)
+	public Country(String saveData, int peakSize, int vanquishes, int largestAttack)
 	{
-		this(savedata);
+		this(saveData);
 		
 		this.peakSize = peakSize;
 		this.vanquishes = vanquishes;
