@@ -106,7 +106,7 @@ public class ConquerFrame extends JFrame
 		
 		try
 		{
-			Scanner scan = new Scanner(countriesFile);
+			Scanner scan = new Scanner(countriesFile, "Latin1");
 			
 			//get the countries
 			while (scan.hasNext())

@@ -42,7 +42,7 @@ public class MapPanel extends JPanel
 		
 		//Create the list of provinces by reading the text file.
 		File provinceFile = new File(MAP_FOLDER + game.getProvincesFileName());
-		Scanner scan = new Scanner(provinceFile);
+		Scanner scan = new Scanner(provinceFile, "Latin1");
 		provinces = new ArrayList<Province>();
 		while (scan.hasNext())
 		{
