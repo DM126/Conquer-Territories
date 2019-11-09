@@ -30,6 +30,9 @@ hs_err_pid*
 # Save files
 *.save
 
+#VSCode files
+.vscode
+
 # Maps
 v2Map.bmp
 eu3Map.bmp
