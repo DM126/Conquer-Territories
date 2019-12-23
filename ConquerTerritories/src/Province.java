@@ -32,7 +32,10 @@ public class Province
 		
 		id = scan.nextInt();
 		bmpColor = new Color(scan.nextInt(), scan.nextInt(), scan.nextInt());
-		name = scan.next();
+		if (scan.hasNext())
+		{
+			name = scan.next(); //TODO throw exception instead?
+		}
 		
 		if (scan.hasNext())
 		{
