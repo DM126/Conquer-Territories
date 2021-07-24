@@ -78,7 +78,7 @@ public class LoadGamePanel extends JPanel
 			File file = saveFiles[i];
 			if (file.isFile() && file.getName().endsWith(FILE_EXTENSION)) //TODO: Just use FileFilter instead?
 			{
-				model.addElement(file); //TODO: Only list file name, don't include the folder
+				model.addElement(file);
 			}
 		}
 	}
