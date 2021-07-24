@@ -42,6 +42,7 @@ public class LoadGamePanel extends JPanel
 		scrollPane.setPreferredSize(new Dimension(300, 100));
 		saveFilesList.addListSelectionListener(listener);
 		saveFilesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		saveFilesList.setCellRenderer(new FileRenderer());
 		saveFilesList.setModel(new DefaultListModel<File>());
 		
 		fileInfo = new JTextArea(8, 20);
@@ -171,6 +172,19 @@ public class LoadGamePanel extends JPanel
 		catch (IOException e)
 		{
 			fileInfo.setText("Error: could not read save file.");
+		}
+	}
+	
+	//List renderer for displaying save files by filename instead of their path
+	private class FileRenderer extends DefaultListCellRenderer
+	{
+		@SuppressWarnings("rawtypes")
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+		{
+			super.getListCellRendererComponent(list, value,index,isSelected,cellHasFocus);
+			setText(((File)value).getName());
+			return this;
 		}
 	}
 	
