@@ -1,3 +1,5 @@
+package panel;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -5,6 +7,10 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
+
+import map.*;
+import settings.Game;
+import exception.*;
 
 /**
  * Class used to display the map within the game panel.

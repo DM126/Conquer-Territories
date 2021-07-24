@@ -1,3 +1,5 @@
+package panel;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
@@ -7,6 +9,9 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.*;
 import java.util.*;
+
+import map.*;
+import settings.Settings;
 
 public class LoadGamePanel extends JPanel
 {

@@ -1,7 +1,11 @@
+package panel;
+
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import settings.Settings;
 
 public class MainMenu extends JPanel
 {	

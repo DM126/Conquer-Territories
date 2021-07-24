@@ -1,3 +1,4 @@
+package map;
 
 /**
  * Methods for comparing countries to sort them and display their information

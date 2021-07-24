@@ -1,6 +1,12 @@
+package panel;
+
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
+
+import exception.InvalidCountryDataException;
+import map.*;
+import settings.*;
 
 public class ConquerFrame extends JFrame
 {

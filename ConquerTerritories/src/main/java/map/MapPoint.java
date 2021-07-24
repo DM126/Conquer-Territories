@@ -1,3 +1,4 @@
+package map;
 
 /**
  * Represents an x,y coordinate on the map image.

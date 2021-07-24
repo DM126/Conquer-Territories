@@ -1,6 +1,10 @@
+package panel;
+
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
+
+import map.*;
 
 public class ResultsDisplayPanel extends JPanel
 {

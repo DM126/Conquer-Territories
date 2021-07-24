@@ -1,3 +1,5 @@
+package panel;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -5,6 +7,10 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
+
+import map.*;
+import settings.*;
+import exception.*;
 
 /**
  * Represents the main panel for the simulation.

@@ -1,8 +1,12 @@
+package panel;
+
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.*;
+
+import settings.*;
 
 /**
  * Displays the settings on the main menu
