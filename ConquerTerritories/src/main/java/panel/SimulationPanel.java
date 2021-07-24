@@ -691,6 +691,7 @@ public class SimulationPanel extends JPanel
 	 */
 	public void setDefender(Country newDefender)
 	{
+		//If the countries are not neighbors, show all countries in the defender combobox
 		if (displayNeighborsOnly.isSelected())
 		{
 			Country currentAttacker = (Country)attackerSelect.getSelectedItem();
