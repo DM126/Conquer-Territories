@@ -19,8 +19,8 @@ public class MapPanel extends JPanel
 {
 	private static final int MIN_WIDTH = 600;
 	private static final int MIN_HEIGHT = 600;
-	private static final int MAX_WIDTH = 1500;
-	private static final int MAX_HEIGHT = 800;
+	private static final int MAX_WIDTH = 1200;
+	private static final int MAX_HEIGHT = 600;
 	private static final Color NO_OWNER = Color.LIGHT_GRAY; //Used to draw provinces that don't belong to any country
 	private static final String MAP_FOLDER = "ConquerTerritories/src/main/resources/Map Data/"; //Folder containing the text/image files for the map data
 	
@@ -45,7 +45,6 @@ public class MapPanel extends JPanel
 	{
 		this.countries = countries;
 		this.simulationPanel = simPanel;
-		
 		//Create the list of provinces by reading the text file.
 		File provinceFile = new File(MAP_FOLDER + game.getProvincesFileName());
 		Scanner scan = new Scanner(provinceFile, "Latin1");

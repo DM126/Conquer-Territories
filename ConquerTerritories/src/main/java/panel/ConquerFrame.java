@@ -1,5 +1,6 @@
 package panel;
 
+import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -35,6 +36,13 @@ public class ConquerFrame extends JFrame
 		pack();
 		setVisible(true);
 		setLocationRelativeTo(null);
+		
+		//maximize window if larger than screen size
+		if (newPanel.getPreferredSize().width >= Toolkit.getDefaultToolkit().getScreenSize().width || 
+				newPanel.getPreferredSize().height >= Toolkit.getDefaultToolkit().getScreenSize().height)
+		{
+			this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		}
 	}
 	
 	/**
