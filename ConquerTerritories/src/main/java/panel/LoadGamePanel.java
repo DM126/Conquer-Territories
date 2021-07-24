@@ -1,3 +1,5 @@
+package panel;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
@@ -7,6 +9,9 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.*;
 import java.util.*;
+
+import map.*;
+import settings.Settings;
 
 public class LoadGamePanel extends JPanel
 {
@@ -18,7 +23,7 @@ public class LoadGamePanel extends JPanel
 	private JList<File> saveFilesList; //JList of save files
 	private JTextArea fileInfo; //displays info of the selected save file //TODO: make a separate panel with JLabels?
 	
-	private static final String SAVE_FOLDER_NAME = "ConquerTerritories/Saved Games"; //name of save file folder
+	private static final String SAVE_FOLDER_NAME = "ConquerTerritories/src/main/resources/Saved Games"; //name of save file folder
 	private static final String FILE_EXTENSION = ".save"; //file extension for save files
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat();
 	

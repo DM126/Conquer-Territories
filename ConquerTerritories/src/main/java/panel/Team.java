@@ -1,5 +1,9 @@
+package panel;
+
 import java.awt.Color;
 import java.util.ArrayList;
+
+import map.*;
 
 /**
  * Used to represent a team on the team select screen.

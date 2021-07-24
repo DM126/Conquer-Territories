@@ -1,3 +1,5 @@
+package panel;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -5,6 +7,10 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
+
+import map.*;
+import settings.*;
+import exception.*;
 
 /**
  * Represents the main panel for the simulation.
@@ -78,7 +84,7 @@ public class SimulationPanel extends JPanel
 		displayNeighborsOnly = new JCheckBox("Only display neighboring countries? ", false);
 		attackerSelect = new JComboBox<Country>();
 		attackerSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
-		ImageIcon swapImage = new ImageIcon("ConquerTerritories/swap.png");
+		ImageIcon swapImage = new ImageIcon("ConquerTerritories/src/main/resources/swap.png");
 		swapCountries = new JButton(swapImage);
 		swapCountries.setPreferredSize(new Dimension(25, 25));
 		swapCountries.addActionListener(buttonListener);

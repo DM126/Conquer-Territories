@@ -1,7 +1,11 @@
+package panel;
+
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
+
+import map.*;
 
 /**
  * Used to simplify creation and modification of Swing components and keep code looking clean.

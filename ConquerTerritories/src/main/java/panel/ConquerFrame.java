@@ -1,6 +1,13 @@
+package panel;
+
+import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
+
+import exception.InvalidCountryDataException;
+import map.*;
+import settings.*;
 
 public class ConquerFrame extends JFrame
 {
@@ -29,6 +36,13 @@ public class ConquerFrame extends JFrame
 		pack();
 		setVisible(true);
 		setLocationRelativeTo(null);
+		
+		//maximize window if larger than screen size
+		if (newPanel.getPreferredSize().width >= Toolkit.getDefaultToolkit().getScreenSize().width || 
+				newPanel.getPreferredSize().height >= Toolkit.getDefaultToolkit().getScreenSize().height)
+		{
+			this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		}
 	}
 	
 	/**
@@ -102,7 +116,7 @@ public class ConquerFrame extends JFrame
 	private ArrayList<Country> getCountries(Game game)
 	{	
 		ArrayList<Country> countries = new ArrayList<Country>();
-		File countriesFile = new File("ConquerTerritories/Map Data/" + game.getCountriesFileName());
+		File countriesFile = new File("ConquerTerritories/src/main/resources/Map Data/" + game.getCountriesFileName());
 		
 		try
 		{

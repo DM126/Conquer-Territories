@@ -1,6 +1,10 @@
+package panel;
+
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
+
+import map.*;
 
 public class ResultsDisplayPanel extends JPanel
 {
@@ -17,7 +21,7 @@ public class ResultsDisplayPanel extends JPanel
 	public ResultsDisplayPanel(String title, ArrayList<Country> countries, ComparisonMethods method)
 	{
 		titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+		titleLabel.setFont(new Font("Arial", Font.PLAIN, 22));
 		add(titleLabel);
 		
 		textArea = createTextArea();
@@ -43,9 +47,9 @@ public class ResultsDisplayPanel extends JPanel
 	 */
 	private JTextArea createTextArea()
 	{
-		JTextArea text = new JTextArea(15, 21);
+		JTextArea text = new JTextArea(12, 21);
 		text.setEditable(false);
-		text.setFont(new Font("Arial", Font.PLAIN, 20));
+		text.setFont(new Font("Arial", Font.PLAIN, 18));
 		text.setText("");
 		
 		return text;

@@ -1,8 +1,13 @@
+package panel;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
+import map.*;
+import settings.Settings;
 
 public class TeamSelectPanel extends JPanel
 {

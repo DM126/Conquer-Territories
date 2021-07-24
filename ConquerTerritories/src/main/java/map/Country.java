@@ -1,5 +1,10 @@
+package map;
+
 import java.awt.Color;
 import java.util.*;
+
+import exception.*;
+import panel.Team;
 
 //Countries.txt format:
 //name/r/g/b/provinces
@@ -80,6 +85,7 @@ public class Country
 		this.largestAttack = largestAttack;
 	}
 	
+	//TODO Put this in Team class?
 	/**
 	 * Creates a team/alliance of countries under a single country object.
 	 * 

@@ -1,6 +1,11 @@
+package map;
+
 import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
+
+import exception.ColorNotFoundException;
+import settings.Game;
 
 //TODO: Keep track of first pixel found of new color so you don't have to scan
 //		the entire image all over again?

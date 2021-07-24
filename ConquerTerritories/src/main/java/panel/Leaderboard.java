@@ -1,7 +1,12 @@
+package panel;
+
 import java.awt.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
+
+import map.*;
+import settings.Settings;
 
 /**
  * Displays the countries in order of number of provinces.

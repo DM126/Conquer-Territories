@@ -1,7 +1,11 @@
+package panel;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+
+import map.*;
 
 /**
  * Displays the results of a game.

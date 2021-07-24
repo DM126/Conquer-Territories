@@ -1,4 +1,9 @@
+package exception;
+
 import java.awt.Color;
+
+import map.Province;
+import settings.Game;
 
 /**
  * Thrown when a province's color in the province text file does not match its
