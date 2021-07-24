@@ -22,7 +22,7 @@ public class MapPanel extends JPanel
 	private static final int MAX_WIDTH = 1500;
 	private static final int MAX_HEIGHT = 800;
 	private static final Color NO_OWNER = Color.LIGHT_GRAY; //Used to draw provinces that don't belong to any country
-	private static final String MAP_FOLDER = "ConquerTerritories/Map Data/"; //Folder containing the text/image files for the map data
+	private static final String MAP_FOLDER = "ConquerTerritories/src/main/resources/Map Data/"; //Folder containing the text/image files for the map data
 	
 	private ArrayList<Country> countries;
 	private ArrayList<Province> provinces;

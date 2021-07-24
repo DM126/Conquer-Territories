@@ -102,7 +102,7 @@ public class SettingsPanel extends JPanel
 	 */
 	private void getGames() throws FileNotFoundException
 	{
-		File dataFile = new File("ConquerTerritories/Maps.txt");
+		File dataFile = new File("ConquerTerritories/src/main/resources/Maps.txt");
 		
 		Scanner fileScan = new Scanner(dataFile);
 		while (fileScan.hasNext())

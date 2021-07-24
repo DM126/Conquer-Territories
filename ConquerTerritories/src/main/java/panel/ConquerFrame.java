@@ -108,7 +108,7 @@ public class ConquerFrame extends JFrame
 	private ArrayList<Country> getCountries(Game game)
 	{	
 		ArrayList<Country> countries = new ArrayList<Country>();
-		File countriesFile = new File("ConquerTerritories/Map Data/" + game.getCountriesFileName());
+		File countriesFile = new File("ConquerTerritories/src/main/resources/Map Data/" + game.getCountriesFileName());
 		
 		try
 		{

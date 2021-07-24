@@ -84,7 +84,7 @@ public class SimulationPanel extends JPanel
 		displayNeighborsOnly = new JCheckBox("Only display neighboring countries? ", false);
 		attackerSelect = new JComboBox<Country>();
 		attackerSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
-		ImageIcon swapImage = new ImageIcon("ConquerTerritories/swap.png");
+		ImageIcon swapImage = new ImageIcon("ConquerTerritories/src/main/resources/swap.png");
 		swapCountries = new JButton(swapImage);
 		swapCountries.setPreferredSize(new Dimension(25, 25));
 		swapCountries.addActionListener(buttonListener);
