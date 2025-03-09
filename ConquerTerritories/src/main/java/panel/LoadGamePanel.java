@@ -15,7 +15,7 @@ import settings.Settings;
 
 public class LoadGamePanel extends JPanel
 {
-	private ConquerFrame parent;
+	private ConquerFrame parentFrame;
 	private JButton returnToMenu; //TODO: common fields, use inheritance?
 	private JButton loadSave;
 	private JButton deleteSave;
@@ -23,13 +23,13 @@ public class LoadGamePanel extends JPanel
 	private JList<File> saveFilesList; //JList of save files
 	private JTextArea fileInfo; //displays info of the selected save file //TODO: make a separate panel with JLabels?
 	
-	private static final String SAVE_FOLDER_NAME = "ConquerTerritories/src/main/resources/Saved Games"; //name of save file folder
+	public static final String SAVE_FOLDER_NAME = "ConquerTerritories/src/main/resources/Saved Games"; //name of save file folder
 	private static final String FILE_EXTENSION = ".save"; //file extension for save files
-	private static final DateFormat DATE_FORMAT = new SimpleDateFormat();
+	private final DateFormat dateFormat = new SimpleDateFormat();
 	
 	public LoadGamePanel(ConquerFrame parent)
 	{
-		this.parent = parent;
+		this.parentFrame = parent;
 		
 		EventListener listener = new EventListener();
 		returnToMenu = ComponentFactory.createButton("Main Menu", "Return to the main menu", listener, true);
@@ -107,7 +107,7 @@ public class LoadGamePanel extends JPanel
 			
 			ListSorter.sortCountries(countries, ComparisonMethods.ALPHABETICAL);
 			
-			parent.startGame(countries, settings);
+			parentFrame.startGame(countries, settings);
 		}
 		catch (FileNotFoundException e)
 		{
@@ -164,8 +164,8 @@ public class LoadGamePanel extends JPanel
 			
 			fileInfo.setText("Save File Info:\n\n"
 							+ "File Name: " + saveFile.getName() + "\n"
-							+ "Date Created: " + DATE_FORMAT.format(fileData.creationTime().toMillis()) + "\n"
-							+ "Last Modified: " + DATE_FORMAT.format(fileData.lastModifiedTime().toMillis()) + "\n");
+							+ "Date Created: " + dateFormat.format(fileData.creationTime().toMillis()) + "\n"
+							+ "Last Modified: " + dateFormat.format(fileData.lastModifiedTime().toMillis()) + "\n");
 		} 
 		catch (IOException e)
 		{
@@ -193,7 +193,7 @@ public class LoadGamePanel extends JPanel
 		{
 			if (event.getSource() == returnToMenu)
 			{
-				parent.returnToMenu();
+				parentFrame.returnToMenu();
 			}
 			else if (event.getSource() == loadSave)
 			{

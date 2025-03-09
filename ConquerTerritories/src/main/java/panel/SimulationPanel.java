@@ -514,8 +514,8 @@ public class SimulationPanel extends JPanel
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(this, "Error: The game could not be saved.", "Error", JOptionPane.ERROR_MESSAGE);
+//				e.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Error: The game could not be saved.\nReason: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

@@ -111,8 +111,9 @@ public class Leaderboard extends JPanel
 	 */
 	public void saveGame(Settings settings) throws IOException
 	{
-		File saveData = new File("Saved Games/GameData.save");
+		File saveData = new File(LoadGamePanel.SAVE_FOLDER_NAME + "/GameData.save");
 		saveData.createNewFile();
+		
 		PrintWriter writer = new PrintWriter(saveData);
 		
 		//Write the game info to the text file
