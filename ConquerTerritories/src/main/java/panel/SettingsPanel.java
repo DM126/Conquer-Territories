@@ -14,11 +14,12 @@ import settings.*;
 public class SettingsPanel extends JPanel
 {
 	//min/max strength value the user can input
-	private final int MAX_STRENGTH = 10;
-	private final int MIN_STRENGTH = 0;
+	private static final int MAX_STRENGTH = 10;
+	private static final int MIN_STRENGTH = 0;
 	
 	private JComboBox<Game> gameSelect; //Choose a map from Maps.txt
-	private JSpinner attackerMax, defenderMax;
+	private JSpinner attackerMax;
+	private JSpinner defenderMax;
 	private JCheckBox allowDraws;
 	private MainMenu menu;
 	
@@ -33,7 +34,7 @@ public class SettingsPanel extends JPanel
 		this.menu = menu;
 		
 		JLabel gameSelectLabel = new JLabel("Select a map: ");
-		gameSelect = new JComboBox<Game>();
+		gameSelect = new JComboBox<>();
 		getGames();
 		
 		JPanel gameSelectPanel = new JPanel();

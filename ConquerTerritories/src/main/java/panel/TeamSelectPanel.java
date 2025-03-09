@@ -15,7 +15,7 @@ public class TeamSelectPanel extends JPanel
 	private static final Color INVALID_COLOR = Color.WHITE;
 	
 	//This stuff gets sent to the simulation panel
-	private ConquerFrame parent;
+	private ConquerFrame parentFrame;
 	private ArrayList<Country> countries;
 	private Settings settings;
 	
@@ -28,7 +28,8 @@ public class TeamSelectPanel extends JPanel
 	private JButton selectTeam;	//Sets the current team to be the one selected in teamComboBox
 	private ArrayList<Team> teams;
 	private JButton addTeam;	//Creates a new team
-	private JButton addCountry, removeCountry;	//Adds and removes countries from the current team
+	private JButton addCountry;		//Adds countries to the current team
+	private JButton removeCountry;	//Removes countries from the current team
 	private JButton chooseColor;
 	private JButton deleteTeam;
 	private JButton startGame;
@@ -36,7 +37,7 @@ public class TeamSelectPanel extends JPanel
 	
 	public TeamSelectPanel(ConquerFrame parent, ArrayList<Country> countries, Settings settings)
 	{
-		this.parent = parent;
+		this.parentFrame = parent;
 		this.countries = countries;
 		this.settings = settings;
 		
@@ -47,20 +48,20 @@ public class TeamSelectPanel extends JPanel
 		
 		EventListener listener = new EventListener();
 		
-		countryChoices = new JList<Country>();
+		countryChoices = new JList<>();
 		JScrollPane countryScroll = new JScrollPane();
 		countryScroll.setViewportView(countryChoices);
 		countryChoices.addListSelectionListener(listener);
 		countryChoices.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setCountriesJList();
 		
-		countriesOnTeam = new JList<Country>();
+		countriesOnTeam = new JList<>();
 		JScrollPane currentCountriesScrollPane = new JScrollPane();
 		currentCountriesScrollPane.setViewportView(countriesOnTeam);
 		countriesOnTeam.addListSelectionListener(listener);
 		countriesOnTeam.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		teamComboBox = new JComboBox<Team>();
+		teamComboBox = new JComboBox<>();
 		//teamComboBox.addActionListener(listener);
 		teamComboBox.setEnabled(false);
 		teamComboBox.setPreferredSize(ComponentFactory.getComboBoxDimensions());
@@ -143,7 +144,7 @@ public class TeamSelectPanel extends JPanel
 	private void setCountriesJList()
 	{
 		int selectedIndex = countryChoices.getSelectedIndex();
-		DefaultListModel<Country> model = new DefaultListModel<Country>();
+		DefaultListModel<Country> model = new DefaultListModel<>();
 		for (Country c : countries)
 		{
 			model.addElement(c);
@@ -163,7 +164,7 @@ public class TeamSelectPanel extends JPanel
 	 */
 	private void setTeamJList(Team team)
 	{
-		DefaultListModel<Country> model = new DefaultListModel<Country>();
+		DefaultListModel<Country> model = new DefaultListModel<>();
 		if (team != null)
 		{
 			for (Country c : team.getCountries())
@@ -495,7 +496,7 @@ public class TeamSelectPanel extends JPanel
 		
 		if (choice == JOptionPane.OK_OPTION)
 		{
-			parent.returnToMenu();
+			parentFrame.returnToMenu();
 		}
 	}
 	
@@ -547,7 +548,7 @@ public class TeamSelectPanel extends JPanel
 					}
 				}
 				
-				parent.startGame(countries, settings);
+				parentFrame.startGame(countries, settings);
 			}
 			else if (event.getSource() == returnToMenu)
 			{

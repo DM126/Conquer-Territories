@@ -20,13 +20,13 @@ public class Leaderboard extends JPanel
 	
 	public Leaderboard(ArrayList<Country> countriesList)
 	{
-		remainingCountries = new ArrayList<Country>(countriesList.size());
+		remainingCountries = new ArrayList<>(countriesList.size());
 		for (Country c: countriesList)
 		{
 			remainingCountries.add(c);
 		}
 		
-		vanquishedCountries = new ArrayList<Country>(countriesList.size());
+		vanquishedCountries = new ArrayList<>(countriesList.size());
 		
 		title = new JLabel("Leaderboard");
 		title.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -93,7 +93,7 @@ public class Leaderboard extends JPanel
 	 */
 	public ArrayList<Country> getResults()
 	{
-		ArrayList<Country> finalResults = new ArrayList<Country>(vanquishedCountries);
+		ArrayList<Country> finalResults = new ArrayList<>(vanquishedCountries);
 		
 		for (int i = 0; i < remainingCountries.size(); i++)
 		{

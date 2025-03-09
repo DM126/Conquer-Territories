@@ -9,7 +9,7 @@ import java.util.InputMismatchException;
  */
 public class InvalidCountryDataException extends InputMismatchException
 {
-	private String countryName;
+	private final String countryName;
 	
 	/**
 	 * @param countryName the name of the country whose data is invalid
@@ -25,6 +25,7 @@ public class InvalidCountryDataException extends InputMismatchException
 	/**
 	 * Returns a description of the exception including the country name and its province data
 	 */
+	@Override
 	public String getMessage()
 	{
 		return "ERROR: the data for " + countryName + " in the countries text file was entered incorrectly.\n"

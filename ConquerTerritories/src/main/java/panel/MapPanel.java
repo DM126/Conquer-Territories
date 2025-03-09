@@ -48,7 +48,7 @@ public class MapPanel extends JPanel
 		//Create the list of provinces by reading the text file.
 		File provinceFile = new File(MAP_FOLDER + game.getProvincesFileName());
 		Scanner scan = new Scanner(provinceFile, "Latin1");
-		provinces = new ArrayList<Province>();
+		provinces = new ArrayList<>();
 		while (scan.hasNext())
 		{
 			provinces.add(new Province(scan.nextLine()));
@@ -82,6 +82,7 @@ public class MapPanel extends JPanel
 		repaint();
 	}
 	
+	@Override
 	public void paintComponent(Graphics page)
 	{
 		super.paintComponent(page);

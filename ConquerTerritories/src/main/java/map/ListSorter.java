@@ -1,7 +1,7 @@
 package map;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Responsible for sorting lists and adding items to sorted lists.
@@ -27,7 +27,7 @@ public class ListSorter
 	 * @param countries the list of countries to sort
 	 * @param method the criteria to compare two countries (alphabetical, size, etc.)
 	 */
-	public static void sortCountries(ArrayList<Country> countries, ComparisonMethods method)
+	public static void sortCountries(List<Country> countries, ComparisonMethods method)
 	{
 		Comparison criteria = getCriteria(method);
 		
@@ -54,7 +54,7 @@ public class ListSorter
 	 * @param country the country to add to the list
 	 * @param method the method for comparing two countries (alphabetical, size, peak size)
 	 */
-	public static void addToCorrectLocation(ArrayList<Country> list, Country country, ComparisonMethods method)
+	public static void addToCorrectLocation(List<Country> list, Country country, ComparisonMethods method)
 	{
 		Comparison criteria = getCriteria(method);
 		

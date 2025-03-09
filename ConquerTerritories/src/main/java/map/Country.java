@@ -93,19 +93,20 @@ public class Country
 	 */
 	public Country(Team teamData)
 	{
-		provinces = new ArrayList<Province>();
+		provinces = new ArrayList<>();
 		name = teamData.getName();
 		color = teamData.getColor();
 		
-		provinceIDs = "";
+		StringBuilder provinceIDsSB = new StringBuilder();
 		for (int i = 0; i < teamData.getCountries().size(); i++)
 		{
-			provinceIDs += teamData.getCountries().get(i).getProvinceIDs();
+			provinceIDsSB.append(teamData.getCountries().get(i).getProvinceIDs());
 			if (i < teamData.getCountries().size() - 1)
 			{
-				provinceIDs += ",";
+				provinceIDsSB.append(",");
 			}
 		}
+		provinceIDs = provinceIDsSB.toString();
 		
 		peakSize = 0;
 		vanquishes = 0;
@@ -117,7 +118,7 @@ public class Country
 	 * 
 	 * @param worldMap the list of all provinces in the world
 	 */
-	public void scanProvinces(ArrayList<Province> worldMap) throws InvalidCountryDataException
+	public void scanProvinces(List<Province> worldMap) throws InvalidCountryDataException
 	{
 		Scanner scan = new Scanner(provinceIDs);
 		scan.useDelimiter(",");
@@ -193,7 +194,7 @@ public class Country
 	 */
 	public ArrayList<Country> getNeighbors()
 	{
-		ArrayList<Country> neighboringCountries = new ArrayList<Country>();
+		ArrayList<Country> neighboringCountries = new ArrayList<>();
 		for (Province p : provinces)
 		{
 			for (Province adjacentProvince : p.getNeighbors())
@@ -226,6 +227,9 @@ public class Country
 		return peakSize;
 	}
 	
+	/**
+	 * @return the most provinces taken in a single attack by this country
+	 */
 	public int getLargestAttack()
 	{
 		return largestAttack;
@@ -484,7 +488,7 @@ public class Country
 	 * @param selectedProvinces the list of provinces to take
 	 * @return a record of the attack
 	 */
-	public Move takeProvinces(ArrayList<Province> selectedProvinces)
+	public Move takeProvinces(List<Province> selectedProvinces)
 	{
 		Move move = new Move(selectedProvinces.get(0).getOwner(), this);
 		
@@ -516,7 +520,7 @@ public class Country
 	public ArrayList<Province> getBorderingProvinces(Country other)
 	{
 		//TODO: perhaps keep track of the border at all times rather than finding a specific border every attack?
-		ArrayList<Province> border = new ArrayList<Province>();
+		ArrayList<Province> border = new ArrayList<>();
 		//p = a province of the defending country
 		//TODO: check the provinces of the country with less provinces
 		for (Province p : other.getProvinces())
@@ -598,19 +602,19 @@ public class Country
 	public String getSaveData()
 	{
 		//get the name and rgb color values
-		String data = name + "/" + color.getRed() + "/" + color.getGreen() + "/" + color.getBlue() + "/";
+		StringBuilder data = new StringBuilder(name + "/" + color.getRed() + "/" + color.getGreen() + "/" + color.getBlue() + "/");
 		
 		//get the provinces
 		for (int i = 0; i < provinces.size(); i++)
 		{
-			data += provinces.get(i).getID();
+			data.append(provinces.get(i).getID());
 			if (i < provinces.size() - 1)
 			{
-				data += ",";
+				data.append(",");
 			}
 		}
 		
-		return data;
+		return data.toString();
 	}
 	
 	public String toString()

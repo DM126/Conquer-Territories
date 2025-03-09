@@ -42,7 +42,7 @@ public class WorldBuilder
 		}
 		
 		//Set up the hashmap of provinces hashed by rgb values
-		HashMap<Integer, Province> rgbProvinces = new HashMap<Integer, Province>(provinces.size());
+		HashMap<Integer, Province> rgbProvinces = new HashMap<>(provinces.size());
 		for (Province p : provinces)
 		{
 			rgbProvinces.put(p.getBMPColor().getRGB(), p);
@@ -69,11 +69,11 @@ public class WorldBuilder
 		int provinceColor = thisProvince.getBMPColor().getRGB();
 		
 		//list of points along the border of this province
-		ArrayList<MapPoint> border = new ArrayList<MapPoint>();
+		ArrayList<MapPoint> border = new ArrayList<>();
 		
 		//rgb values of all colors adjacent to this province
 		//HashSet is used so you don't have to repeatedly check contains().
-		HashSet<Integer> adjColors = new HashSet<Integer>();
+		HashSet<Integer> adjColors = new HashSet<>();
 		
 		//Read each pixel of the map, if it is the province's color and any 
 		//adjacent pixel is not that color, add it to the border.
@@ -81,13 +81,11 @@ public class WorldBuilder
 		{
 			for (int x = 0; x < map.getWidth(); x++)
 			{
-				if (pixels[y][x] == provinceColor)
+				if (pixels[y][x] == provinceColor 
+					&& (isEdgeOfImage(x, y) || isAdjacentToDifferentColor(x, y, provinceColor)))
 				{
-					if (isEdgeOfImage(x, y) || isAdjacentToDifferentColor(x, y, provinceColor))
-					{
-						border.add(new MapPoint(x, y));
-						lookForAdjacentColors(x, y, provinceColor, adjColors);
-					}
+					border.add(new MapPoint(x, y));
+					lookForAdjacentColors(x, y, provinceColor, adjColors);
 				}
 			}
 		}

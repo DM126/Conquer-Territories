@@ -17,7 +17,7 @@ import exception.*;
  */
 public class SimulationPanel extends JPanel
 {
-	private ConquerFrame parent;
+	private ConquerFrame parentFrame;
 	private MapPanel mapPanel;
 	private JScrollPane mapScroll; //for the MapPanel
 	private JComboBox<Country> attackerSelect;
@@ -46,7 +46,7 @@ public class SimulationPanel extends JPanel
 	
 	public SimulationPanel(ConquerFrame parent, ArrayList<Country> countries, Settings settings)
 	{	
-		this.parent = parent;
+		this.parentFrame = parent;
 		this.settings = settings;
 		
 		try
@@ -67,7 +67,7 @@ public class SimulationPanel extends JPanel
 		//							" contains invalid or missing data on a province and could not be read.");
 		//}
 		
-		highlightedProvinces = new ArrayList<Province>();
+		highlightedProvinces = new ArrayList<>();
 		
 		rand = new Random();
 		
@@ -82,14 +82,14 @@ public class SimulationPanel extends JPanel
 		redo = ComponentFactory.createButton("Redo", "Redo the last undone attack", buttonListener, false);
 		
 		displayNeighborsOnly = new JCheckBox("Only display neighboring countries? ", false);
-		attackerSelect = new JComboBox<Country>();
+		attackerSelect = new JComboBox<>();
 		attackerSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
 		ImageIcon swapImage = new ImageIcon("ConquerTerritories/src/main/resources/swap.png");
 		swapCountries = new JButton(swapImage);
 		swapCountries.setPreferredSize(new Dimension(25, 25));
 		swapCountries.addActionListener(buttonListener);
 		swapCountries.setToolTipText("Swap the attacker and defender");
-		defenderSelect = new JComboBox<Country>();
+		defenderSelect = new JComboBox<>();
 		defenderSelect.setPreferredSize(ComponentFactory.getComboBoxDimensions());
 		setComboBoxes();
 		SelectionListener selectionListener = new SelectionListener();
@@ -115,7 +115,7 @@ public class SimulationPanel extends JPanel
 		
 		//Panel to select and take single provinces
 		JPanel provinceChooserInterface = new JPanel(); //right side of interface
-		defenderProvinceList = new JList<Province>();
+		defenderProvinceList = new JList<>();
 		JScrollPane provinceScroll = new JScrollPane();
 		provinceScroll.setViewportView(defenderProvinceList);
 		provinceScroll.setPreferredSize(new Dimension(200, 100));
@@ -180,7 +180,7 @@ public class SimulationPanel extends JPanel
 		//TODO: use removeIf()
 		
 		//Find the empty countries
-		ArrayList<Country> emptyCountries = new ArrayList<Country>();
+		ArrayList<Country> emptyCountries = new ArrayList<>();
 		for (Country country : countries)
 		{
 			if (!country.hasProvinces())
@@ -507,7 +507,7 @@ public class SimulationPanel extends JPanel
 			}
 			catch (IOException e)
 			{
-				//e.printStackTrace();
+				e.printStackTrace();
 				JOptionPane.showMessageDialog(this, "Error: The game could not be saved.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -523,7 +523,7 @@ public class SimulationPanel extends JPanel
 		if (choice == JOptionPane.OK_OPTION)
 		{
 			ArrayList<Country> finalScores = leaderboard.getResults();
-			parent.showFinalResults(finalScores);
+			parentFrame.showFinalResults(finalScores);
 		}
 	}
 	

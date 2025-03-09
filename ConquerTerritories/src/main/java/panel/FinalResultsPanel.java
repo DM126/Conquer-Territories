@@ -1,6 +1,6 @@
 package panel;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -12,31 +12,31 @@ import map.*;
  */
 public class FinalResultsPanel extends JPanel
 {
-	private ConquerFrame parent;
+	private ConquerFrame parentFrame;
 	private JButton returnToMenu;
 	private JButton exit;
 	
-	public FinalResultsPanel(ConquerFrame parent, ArrayList<Country> countries)
+	public FinalResultsPanel(ConquerFrame parent, List<Country> countries)
 	{
-		this.parent = parent;
+		this.parentFrame = parent;
 		
 		ListSorter.sortCountries(countries, ComparisonMethods.ALPHABETICAL);
 		
 		//(Create new arraylists so that alphabetical ordering will be used as a tie breaker)
 		ResultsDisplayPanel endSizesPanel = new ResultsDisplayPanel("End Sizes", 
-																	new ArrayList<Country>(countries),
+																	new ArrayList<>(countries),
 																	ComparisonMethods.SIZE);
 		
 		ResultsDisplayPanel peakSizesPanel = new ResultsDisplayPanel("Peak Sizes", 
-																	new ArrayList<Country>(countries), 
+																	new ArrayList<>(countries), 
 																	ComparisonMethods.PEAK_SIZE);
 		
 		ResultsDisplayPanel vanquishesPanel = new ResultsDisplayPanel("Vanquishes", 
-																	new ArrayList<Country>(countries), 
+																	new ArrayList<>(countries), 
 																	ComparisonMethods.VANQUISHES);
 		
 		ResultsDisplayPanel largestAttackPanel = new ResultsDisplayPanel("Largest Attack", 
-																	new ArrayList<Country>(countries), 
+																	new ArrayList<>(countries), 
 																	ComparisonMethods.LARGEST_ATTACK);
 		
 		ButtonListener listener = new ButtonListener();
@@ -69,7 +69,7 @@ public class FinalResultsPanel extends JPanel
 			}
 			else if (event.getSource() == returnToMenu)
 			{
-				parent.returnToMenu();
+				parentFrame.returnToMenu();
 			}
 		}
 	}

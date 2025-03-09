@@ -1,7 +1,9 @@
 package panel;
 
-import java.awt.*;
-import java.util.ArrayList;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.List;
+
 import javax.swing.*;
 
 import map.*;
@@ -18,7 +20,7 @@ public class ResultsDisplayPanel extends JPanel
 	 * @param countries the list of countries to display
 	 * @param method the criteria to sort the countries and the information to display
 	 */
-	public ResultsDisplayPanel(String title, ArrayList<Country> countries, ComparisonMethods method)
+	public ResultsDisplayPanel(String title, List<Country> countries, ComparisonMethods method)
 	{
 		titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font("Arial", Font.PLAIN, 22));

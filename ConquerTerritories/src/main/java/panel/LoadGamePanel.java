@@ -36,13 +36,13 @@ public class LoadGamePanel extends JPanel
 		loadSave = ComponentFactory.createButton("Load Game", "Load the selected file", listener, false);
 		deleteSave = ComponentFactory.createButton("Delete Save", "Delete the selected file", listener, false);
 		
-		saveFilesList = new JList<File>();
+		saveFilesList = new JList<>();
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(saveFilesList);
 		scrollPane.setPreferredSize(new Dimension(300, 100));
 		saveFilesList.addListSelectionListener(listener);
 		saveFilesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		saveFilesList.setModel(new DefaultListModel<File>());
+		saveFilesList.setModel(new DefaultListModel<>());
 		
 		fileInfo = new JTextArea(8, 20);
 		fileInfo.setEditable(false);
@@ -89,12 +89,11 @@ public class LoadGamePanel extends JPanel
 	 */
 	private void loadSave(File saveFile)
 	{
-		try
+		try (Scanner scan = new Scanner(saveFile))
 		{
-			Scanner scan = new Scanner(saveFile);
 			Settings settings = new Settings(scan.nextLine());
 			
-			ArrayList<Country> countries = new ArrayList<Country>();
+			ArrayList<Country> countries = new ArrayList<>();
 			while (scan.hasNext())
 			{
 				String countryData = scan.nextLine();
@@ -104,7 +103,6 @@ public class LoadGamePanel extends JPanel
 				
 				countries.add(new Country(countryData, peakSize, vanquishes, largestAttack));
 			}
-			scan.close();
 			
 			ListSorter.sortCountries(countries, ComparisonMethods.ALPHABETICAL);
 			

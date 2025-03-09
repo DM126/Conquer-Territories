@@ -27,7 +27,7 @@ public class Province
 	 */
 	public Province(String data) throws NoSuchElementException
 	{
-		neighbors = new ArrayList<Province>();
+		neighbors = new ArrayList<>();
 		
 		Scanner scan = new Scanner(data);
 		scan.useDelimiter("/");
@@ -107,7 +107,7 @@ public class Province
 	 * @param worldProvinces the list of all provinces on the map
 	 * @param adjColors the list of all colors adjacent to this province in the image
 	 */
-	public void setAdjacencies(HashMap<Integer, Province> worldProvinces, HashSet<Integer> adjColors)
+	public void setAdjacencies(Map<Integer, Province> worldProvinces, Set<Integer> adjColors)
 	{
 		for (Integer rgb : adjColors)
 		{

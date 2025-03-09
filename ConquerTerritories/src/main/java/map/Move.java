@@ -26,7 +26,7 @@ public class Move
 		this.newOwner = newOwner;
 		oldPeakSize = newOwner.getPeakSize();
 		oldLargestAttack = newOwner.getLargestAttack();
-		provincesTaken = new ArrayList<Province>();
+		provincesTaken = new ArrayList<>();
 		wasVanquishing = false;
 	}
 	
@@ -43,7 +43,7 @@ public class Move
 		this.newOwner = newOwner;
 		oldPeakSize = newOwner.getPeakSize();
 		oldLargestAttack = newOwner.getLargestAttack();
-		provincesTaken = new ArrayList<Province>();
+		provincesTaken = new ArrayList<>();
 		provincesTaken.add(provinceTaken);
 		wasVanquishing = false;
 	}

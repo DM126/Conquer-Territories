@@ -5,7 +5,8 @@ package map;
  */
 public class MapPoint
 {
-	private int x, y;
+	private int x;
+	private int y;
 	
 	public MapPoint(int x, int y)
 	{

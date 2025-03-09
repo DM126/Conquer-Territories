@@ -13,9 +13,9 @@ import settings.Game;
  */
 public class ColorNotFoundException extends Exception
 {
-	private Province province;
-	private Color provinceColor;
-	private Game game;
+	private final Province province;
+	private final Color provinceColor;
+	private final Game game;
 	
 	/**
 	 * 
@@ -35,6 +35,7 @@ public class ColorNotFoundException extends Exception
 	/**
 	 * Returns a description of the exception including the province and its color.
 	 */
+	@Override
 	public String getMessage()
 	{
 		return "Could not find color: " + provinceColor + " in province " + province + 

@@ -13,7 +13,7 @@ import map.*;
  */
 public class Team
 {
-	private ArrayList<Country> team;
+	private ArrayList<Country> countries;
 	private String name;
 	private Color color;
 	
@@ -27,7 +27,7 @@ public class Team
 	{
 		setName(name);
 		setColor(color);
-		team = new ArrayList<Country>();
+		countries = new ArrayList<>();
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public class Team
 	 */
 	public ArrayList<Country> getCountries()
 	{
-		return team;
+		return countries;
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public class Team
 	 */
 	public void addCountry(Country country)
 	{
-		ListSorter.addToCorrectLocation(team, country, ComparisonMethods.ALPHABETICAL);
+		ListSorter.addToCorrectLocation(countries, country, ComparisonMethods.ALPHABETICAL);
 	}
 	
 	/**
@@ -56,7 +56,7 @@ public class Team
 	 */
 	public boolean removeCountry(Country country)
 	{
-		return team.remove(country);
+		return countries.remove(country);
 	}
 	
 	public String getName()

@@ -1,5 +1,6 @@
 package panel;
 
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
@@ -17,7 +18,7 @@ public class ConquerFrame extends JFrame
 	public ConquerFrame()
 	{
 		super("Conquer Territories");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		setPanel(new MainMenu(this));
 		
@@ -41,7 +42,7 @@ public class ConquerFrame extends JFrame
 		if (newPanel.getPreferredSize().width >= Toolkit.getDefaultToolkit().getScreenSize().width || 
 				newPanel.getPreferredSize().height >= Toolkit.getDefaultToolkit().getScreenSize().height)
 		{
-			this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+			this.setExtendedState(this.getExtendedState() | Frame.MAXIMIZED_BOTH);
 		}
 	}
 	
@@ -94,7 +95,7 @@ public class ConquerFrame extends JFrame
 	 * 
 	 * @param countries the list of every country (sorted by size and order of vanquishing)
 	 */
-	public void showFinalResults(ArrayList<Country> countries)
+	public void showFinalResults(List<Country> countries)
 	{
 		setPanel(new FinalResultsPanel(this, countries));
 	}
@@ -115,20 +116,16 @@ public class ConquerFrame extends JFrame
 	 */
 	private ArrayList<Country> getCountries(Game game)
 	{	
-		ArrayList<Country> countries = new ArrayList<Country>();
+		ArrayList<Country> countries = new ArrayList<>();
 		File countriesFile = new File("ConquerTerritories/src/main/resources/Map Data/" + game.getCountriesFileName());
 		
-		try
-		{
-			Scanner scan = new Scanner(countriesFile, "Latin1");
-			
+		try (Scanner scan = new Scanner(countriesFile, "Latin1"))
+		{	
 			//get the countries
 			while (scan.hasNext())
 			{
 				countries.add(new Country(scan.nextLine()));
 			}
-			
-			scan.close();
 		}
 		catch (FileNotFoundException e)
 		{

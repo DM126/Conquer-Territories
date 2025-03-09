@@ -7,8 +7,8 @@ package exception;
  */
 public class InvalidProvinceIDException extends IndexOutOfBoundsException
 {
-	private String countryName;
-	private int provinceID;
+	private final String countryName;
+	private final int provinceID;
 	
 	/**
 	 * @param countryName the name of the country whose data is invalid
@@ -25,6 +25,7 @@ public class InvalidProvinceIDException extends IndexOutOfBoundsException
 	/**
 	 * Returns a description of the exception including the country name and its province data
 	 */
+	@Override
 	public String getMessage()
 	{
 		return "ERROR: province for " + countryName + " Does not exist: " + provinceID

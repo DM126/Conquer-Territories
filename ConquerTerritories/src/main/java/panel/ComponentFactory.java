@@ -2,7 +2,8 @@ package panel;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 
 import map.*;
@@ -59,7 +60,7 @@ public class ComponentFactory
 	 * @param countries the list of countries to display
 	 * @param comparison the attribute of the countries to display (size, peak size, etc.)
 	 */
-	public static void writeToTextArea(JTextArea textArea, ArrayList<Country> countries, ComparisonMethods comparison)
+	public static void writeToTextArea(JTextArea textArea, List<Country> countries, ComparisonMethods comparison)
 	{
 		Quantity quantityMethod = getCriteria(comparison);
 		
@@ -81,15 +82,15 @@ public class ComponentFactory
 		switch (method)
 		{
 		case SIZE: 
-			return (country) -> country.getSizeAsString();
+			return Country::getSizeAsString;
 		case PEAK_SIZE: 
-			return (country) -> country.getPeakSizeAsString();
+			return Country::getPeakSizeAsString;
 		case VANQUISHES:
-			return (country) -> country.getVanquishesAsString();
+			return Country::getVanquishesAsString;
 		case LARGEST_ATTACK:
-			return (country) -> country.getLargestAttackAsString();
+			return Country::getLargestAttackAsString;
 		default: 
-			return (country) -> country.getName();
+			return Country::getName;
 		}
 	}
 }
