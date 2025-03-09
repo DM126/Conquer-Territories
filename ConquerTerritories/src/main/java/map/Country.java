@@ -525,17 +525,9 @@ public class Country
 		//TODO: check the provinces of the country with less provinces
 		for (Province p : other.getProvinces())
 		{
-			//TODO: put this in Province class?
-			boolean adjacent = false;
-			for (int j = 0; j < p.getNeighbors().size() && !adjacent; j++)
+			if (p.bordersCountry(this))
 			{
-				//check if each of the other country's individual provinces borders a province of this country
-				Country neighborCountry = p.getNeighbors().get(j).getOwner();
-				if (neighborCountry != null && neighborCountry.equals(this))
-				{
-					adjacent = true;
-					border.add(p);
-				}
+				border.add(p);
 			}
 		}
 		
@@ -579,14 +571,9 @@ public class Country
 	{
 		for (Province p : provinces)
 		{
-			//check the neighbors of each province to see if their owner matches the parameter
-			for (Province neighbor : p.getNeighbors())//Refactor?
+			if (p.bordersCountry(otherCountry))
 			{
-				Country neighborCountry = neighbor.getOwner();
-				if (neighborCountry != null && neighborCountry.equals(otherCountry))
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 		

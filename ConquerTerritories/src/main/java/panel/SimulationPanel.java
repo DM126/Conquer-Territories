@@ -28,7 +28,8 @@ public class SimulationPanel extends JPanel
 	private JButton undo;
 	private JButton redo;
 	private JCheckBox displayNeighborsOnly; // if checked, Only display neighboring countries in the defender combobox
-	private Move lastMove; //TODO: maybe add multiple moves to a stack?
+	private Deque<Move> moveHistory; //history of moves to be undone
+	private Deque<Move> redoStack; //added to when moves are undone
 	private Random rand;
 	private JLabel attackDescription;
 	private Leaderboard leaderboard;
@@ -80,6 +81,9 @@ public class SimulationPanel extends JPanel
 		vanquishDefender = ComponentFactory.createButton("Vanquish defender!", "take all provinces from the defender", buttonListener, true);
 		undo = ComponentFactory.createButton("Undo", "Undo the last attack", buttonListener, false);
 		redo = ComponentFactory.createButton("Redo", "Redo the last undone attack", buttonListener, false);
+		
+		moveHistory = new ArrayDeque<>();
+		redoStack = new ArrayDeque<>();
 		
 		displayNeighborsOnly = new JCheckBox("Only display neighboring countries? ", false);
 		attackerSelect = new JComboBox<>();
@@ -177,8 +181,6 @@ public class SimulationPanel extends JPanel
 	 */
 	private void removeEmptyCountries(ArrayList<Country> countries)
 	{
-		//TODO: use removeIf()
-		
 		//Find the empty countries
 		ArrayList<Country> emptyCountries = new ArrayList<>();
 		for (Country country : countries)
@@ -301,7 +303,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void attackSequence(Country attacker, Country defender, int times)
 	{
-		lastMove = attacker.attack(defender, times);
+		moveHistory.push(attacker.attack(defender, times));
+		redoStack.clear();
 		
 		if (times > 1)
 		{
@@ -340,8 +343,6 @@ public class SimulationPanel extends JPanel
 			else //strength == 0 (draw)
 			{
 				attackDescription.setText(c1 + " and " + c2 + " draw!");
-				lastMove = null;
-				undo.setEnabled(false); //TODO: Remove this if an undo stack is added.
 			}
 		}
 	}
@@ -415,8 +416,8 @@ public class SimulationPanel extends JPanel
 		setComboBoxes();
 		leaderboard.sortList();
 		leaderboard.setLeaderboardText();
-		undo.setEnabled(true);
-		redo.setEnabled(false);
+		undo.setEnabled(!moveHistory.isEmpty());
+		redo.setEnabled(!redoStack.isEmpty());
 	}
 	
 	/**
@@ -424,6 +425,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void undo()
 	{
+		Move lastMove = moveHistory.pop();
+		redoStack.push(lastMove);
 		lastMove.undo();
 		
 		//If the original owner was vanquished on the last move, add them back
@@ -442,8 +445,9 @@ public class SimulationPanel extends JPanel
 		
 		leaderboard.sortList();
 		leaderboard.setLeaderboardText();
-		undo.setEnabled(false);
-		redo.setEnabled(true);
+
+		undo.setEnabled(!moveHistory.isEmpty());
+		redo.setEnabled(!redoStack.isEmpty());
 	}
 	
 	/**
@@ -451,6 +455,8 @@ public class SimulationPanel extends JPanel
 	 */
 	private void redo()
 	{
+		Move lastMove = redoStack.pop();
+		moveHistory.push(lastMove);
 		lastMove.redo();
 		endAttack(lastMove.getOriginalOwner());
 		mapPanel.repaint();
@@ -466,7 +472,8 @@ public class SimulationPanel extends JPanel
 		
 		if (canAttack(attacker, defender))
 		{
-			lastMove = attacker.vanquish(defender);
+			moveHistory.push(attacker.vanquish(defender));
+			redoStack.clear();
 			attackDescription.setText(attacker + " vanquishes " + defender + "!");
 			endAttack(defender);
 		}
@@ -479,7 +486,7 @@ public class SimulationPanel extends JPanel
 	 */
 	private void setDefenderJList(Country country) //TODO: Only display provinces that share a border with attacker???
 	{
-		DefaultListModel<Province> model = new DefaultListModel<Province>();
+		DefaultListModel<Province> model = new DefaultListModel<>();
 		if (country != null)
 		{
 			for (Province p : country.getProvinces())
@@ -539,7 +546,8 @@ public class SimulationPanel extends JPanel
 		
 		if (canAttack(attacker, defender)) //TODO: Allow non-adjacent countries to take provinces or no???
 		{
-			lastMove = attacker.takeProvinces(provinces);
+			moveHistory.push(attacker.takeProvinces(provinces));
+			redoStack.clear();
 			
 			if (provinces.size() == 1)
 			{
@@ -627,8 +635,6 @@ public class SimulationPanel extends JPanel
 		{
 			JOptionPane.showMessageDialog(mapScroll, message, "Province", JOptionPane.INFORMATION_MESSAGE);
 		}
-		
-		//TODO: let the user set the attacker/defender by clicking one of their provinces
 	}
 	
 	/**
@@ -644,14 +650,16 @@ public class SimulationPanel extends JPanel
 		if (defender == null) //Colonize an unowned province
 		{
 			attackDescription.setText(attacker + " has colonized " + province.getName() + "!");
-			lastMove = new Move(attacker, province);
+			moveHistory.push(new Move(attacker, province));
 		}
 		else //Take a province from another country
 		{
 			attackDescription.setText(attacker + " took " + province.getName() + " from " + defender + "!");
-			lastMove = new Move(defender, attacker);
+			Move lastMove = new Move(defender, attacker);
 			lastMove.add(province);
+			moveHistory.push(lastMove);
 		}
+		redoStack.clear();
 		endAttack(defender);
 	}
 	
@@ -691,6 +699,7 @@ public class SimulationPanel extends JPanel
 	 */
 	public void setDefender(Country newDefender)
 	{
+		//If the countries are not neighbors, show all countries in the defender combobox
 		if (displayNeighborsOnly.isSelected())
 		{
 			Country currentAttacker = (Country)attackerSelect.getSelectedItem();
